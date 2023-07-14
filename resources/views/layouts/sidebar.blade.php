@@ -49,6 +49,9 @@
           <div class="collapse menu-dropdown {{ Request::is('master*') ? "show" : "" }}" id="masterData">
             <ul class="nav nav-sm flex-column">
               <li class="nav-item">
+                <a href="{{ url('/master/bidang') }}" class="nav-link {{ Request::is('master/bidang') ? "active" : "" }}">Bidang</a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ url('/master/users') }}" class="nav-link {{ Request::is('master/users') ? "active" : "" }}">Users</a>
               </li>
               <li class="nav-item">

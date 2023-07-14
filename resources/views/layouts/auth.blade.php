@@ -61,7 +61,7 @@
               <div class="text-center">
                 <p class="mb-0 text-muted">
                   &copy;
-                  <script>document.write(new Date().getFullYear())</script> SewaBMD. Crafted with <i class="mdi mdi-heart text-danger"></i> by BPKAD Kab. Kediri
+                  <script>document.write(new Date().getFullYear())</script> SIMBAR. Crafted with <i class="mdi mdi-heart text-danger"></i> by Dinas Pendidikan Kab. Kediri
                 </p>
               </div>
             </div>
