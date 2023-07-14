@@ -26,8 +26,6 @@ Route::get('/dashboard', 'DashboardController@index');
 
 Route::group(['prefix' => 'master'], function () {
     Route::get('/users', 'UserController@index');
-    Route::get('/member', 'MemberController@index');
-    Route::get('/barang', 'BarangController@index');
 });
 
-Route::get('/objek-sewa', 'ObjekSewaController@index');
+Route::get('/usulan', 'UsulanController@index');
