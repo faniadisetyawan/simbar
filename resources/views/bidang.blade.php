@@ -36,7 +36,7 @@
         </div>
         <div class="card-body">
           <div class="table-responsive table-card">
-            <table class="table align-middle mb-0">
+            <table class="table table-hover align-middle mb-0">
               <thead class="table-light">
                 <tr>
                   <th scope="col">Action</th>
@@ -50,18 +50,23 @@
                 @foreach ($data as $item)
                   <tr>
                     <td>
-                      <ul class="list-inline hstack gap-2 mb-0">
-                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                          <a href="javascript: void(0);" class="text-primary d-inline-block edit-item-btn">
-                            <i class="ri-pencil-fill fs-16"></i>
-                          </a>
-                        </li>
-                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                          <a href="javascript: void(0);" class="text-danger d-inline-block remove-item-btn">
-                            <i class="ri-delete-bin-5-fill fs-16"></i>
-                          </a>
-                        </li>
-                      </ul>
+                      <div class="dropdown">
+                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="ri-more-fill align-middle"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li>
+                            <button class="dropdown-item">
+                              <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
+                            </button>
+                          </li>
+                          <li>
+                            <button class="dropdown-item">
+                              <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Remove
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
                     </td>
                     <td>{{ $item['id'] }}</td>
                     <td>{{ $item['nama'] }}</td>

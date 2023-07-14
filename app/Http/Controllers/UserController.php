@@ -14,7 +14,9 @@ class UserController extends Controller
                 'username' => 'penggunabarang',
                 'nama' => 'Mokhamat Muhsin',
                 'nip' => '19830208 201001 1 008',
-                'jabatan' => 'Pengguna Barang',
+                'jabatan' => [
+                    'nama' => 'Pengguna Barang',
+                ],
                 'bidang' => 'Sekretariat',
                 'foto' => 'avatar-1.jpg',
             ],
@@ -23,7 +25,9 @@ class UserController extends Controller
                 'username' => 'penatausahaan',
                 'nama' => 'DINA PUSPITAWATI, SKM.',
                 'nip' => '19760610 200901 2 005',
-                'jabatan' => 'Pejabat Penatausahaan Barang',
+                'jabatan' => [
+                    'nama' => 'Pejabat Penatausahaan Barang',
+                ],
                 'bidang' => 'Sekretariat',
                 'foto' => 'avatar-2.jpg',
             ],
@@ -32,7 +36,9 @@ class UserController extends Controller
                 'username' => 'pengurusbarang',
                 'nama' => 'SUPRIYONO, S.Sos',
                 'nip' => '19930103 202211 1 003',
-                'jabatan' => 'Pengurus Barang',
+                'jabatan' => [
+                    'nama' => 'Pengurus Barang',
+                ],
                 'bidang' => 'Sekretariat',
                 'foto' => 'avatar-3.jpg',
             ],
@@ -41,9 +47,11 @@ class UserController extends Controller
                 'username' => 'seksismp',
                 'nama' => 'ADI AKBAR JAYA PRASETIA',
                 'nip' => '19930103 202211 1 003',
-                'jabatan' => 'Pengurus Barang Pembantu',
+                'jabatan' => [
+                    'nama' => 'Pengurus Barang Pembantu',
+                ],
                 'bidang' => 'Bidang Pendidikan Dasar',
-                'foto' => 'avatar-4.jpg',
+                'foto' => NULL,
             ],
         );
 
