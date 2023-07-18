@@ -57,30 +57,6 @@
               <li class="nav-item">
                 <a href="{{ url('/master/persediaan') }}" class="nav-link {{ Request::is('master/persediaan') ? "active" : "" }}">Persediaan</a>
               </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-tetap') }}" class="nav-link {{ Request::is('master/aset-tetap') ? "active" : "" }}">Tanah</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Peralatan dan Mesin</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Gedung dan Bangunan</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Jalan, Irigasi dan Jaringan</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Aset Tetap Lainnya</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Konstruksi Dalam Pengerjaan</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Aset Tidak Berwujud</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/master/aset-lainnya') }}" class="nav-link {{ Request::is('master/aset-lainnya') ? "active" : "" }}">Aset Lain-Lain</a>
-              </li>
             </ul>
           </div>
         </li>
@@ -99,8 +75,47 @@
           <div id="pembukuan" class="menu-dropdown collapse {{ Request::is('pembukuan*') ? "show" : "" }}">
             <ul class="nav nav-sm flex-column">
               <li class="nav-item">
-                <a href="{{ url('/pembukuan/saldo-awal') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal') ? "active" : "" }}">Saldo Awal</a>
+                <a 
+                  href="#pembukuanSaldoAwal" 
+                  class="nav-link {{ Request::is('pembukuan/saldo-awal') ? "active" : "" }}"
+                  data-bs-toggle="collapse" 
+                  role="button" 
+                  aria-expanded="{{ Request::is('pembukuan/saldo-awal') ? true : false }}" 
+                  aria-controls="pembukuanSaldoAwal"
+                >Saldo Awal</a>
+                <div id="pembukuanSaldoAwal" class="menu-dropdown collapse">
+                  <ul class="nav nav-sm flex-column">
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/persediaan') }}" class="nav-link">Persediaan</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/tanah') }}" class="nav-link">Tanah</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/peralatan-mesin') }}" class="nav-link">Peralatan dan Mesin</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/gedung-bangunan') }}" class="nav-link">Gedung dan Bangunan</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/jij') }}" class="nav-link">Jalan, Irigasi dan Jaringan</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/atl') }}" class="nav-link">Aset Tetap Lainnya</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/kdp') }}" class="nav-link">Konstruksi Dalam Pengerjaan</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/atb') }}" class="nav-link">Aset Tidak Berwujud</a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{{ url('pembukuan/saldo-awal/aset-lain') }}" class="nav-link">Aset Lain-Lain</a>
+                    </li>
+                  </ul>
+                </div>
               </li>
+
               <li class="nav-item">
                 <a 
                   href="#pembukuanPerolehan" 

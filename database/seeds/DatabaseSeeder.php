@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RefPenggunaanSeeder::class);
         $this->call(RefKapitalisasiSeeder::class);
         $this->call(RefJenisDokumenSeeder::class);
+        $this->call(KodefikasiSeeder::class);
     }
 }

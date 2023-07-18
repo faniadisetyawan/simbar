@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::get('/login', 'AuthController@login');
+    Route::get('/login', 'AuthController@login')->name('login');
     Route::get('/logout', 'AuthController@logout');
 });
 
