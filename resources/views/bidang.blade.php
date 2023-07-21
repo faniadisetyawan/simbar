@@ -42,7 +42,6 @@
                   <th scope="col">Action</th>
                   <th scope="col">ID</th>
                   <th scope="col">Nama Bidang</th>
-                  <th scope="col">Kepala Bidang</th>
                   <th scope="col">Tgl. Entry</th>
                 </tr>
               </thead>
@@ -70,8 +69,7 @@
                     </td>
                     <td>{{ $item['id'] }}</td>
                     <td>{{ $item['nama'] }}</td>
-                    <td>{{ $item['kabid'] }}</td>
-                    <td>{{ $item['created_at'] }}</td>
+                    <td>{{ date('F d, Y H:i', strtotime($item['created_at'])) }}</td>
                   </tr>
                 @endforeach
               </tbody>

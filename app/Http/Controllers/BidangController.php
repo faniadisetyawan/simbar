@@ -3,43 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Bidang;
 
 class BidangController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        $data = array(
-            [
-                'id' => 1,
-                'nama' => 'Sekretariat',
-                'kabid' => 'John Doe',
-                'created_at' => '2023-07-14 16:32',
-            ],
-            [
-                'id' => 2,
-                'nama' => 'Bidang Pendidikan Dasar',
-                'kabid' => 'John Doe',
-                'created_at' => '2023-07-14 16:32',
-            ],
-            [
-                'id' => 3,
-                'nama' => 'Bidang Ketenagaan',
-                'kabid' => 'John Doe',
-                'created_at' => '2023-07-14 16:32',
-            ],
-            [
-                'id' => 4,
-                'nama' => 'Bidang Pendidikan Anak Usia Dini, Pemuda dan Olahraga',
-                'kabid' => 'John Doe',
-                'created_at' => '2023-07-14 16:32',
-            ],
-            [
-                'id' => 5,
-                'nama' => 'Bidang Sarpras, Fasilitasi dan Pengembangan',
-                'kabid' => 'John Doe',
-                'created_at' => '2023-07-14 16:32',
-            ],
-        );
+        $data = Bidang::orderBy('id')->get();
 
         return view('bidang', [
             'data' => $data,

@@ -20,9 +20,11 @@ Route::get('/', function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::get('/login', 'AuthController@login')->name('login');
     Route::get('/logout', 'AuthController@logout');
+    Route::post('/login', 'AuthController@handleLogin');
+    Route::post('/logout', 'AuthController@handleLogout');
 });
 
-Route::get('/dashboard', 'DashboardController@index');
+Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 Route::group(['prefix' => 'master'], function () {
     Route::get('/bidang', 'BidangController@index');

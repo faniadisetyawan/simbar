@@ -32,9 +32,25 @@
             </div>
           </div>
         </div>
+
+        <div class="card-body bg-light-subtle">
+          <form action="{{ Request::fullUrlWithQuery(['search' => $filter['search']]) }}" method="GET">
+            <div class="search-box">
+              <input 
+                type="text" 
+                name="search"
+                value="{{ $filter['search'] }}"
+                class="form-control search bg-light border-light" 
+                placeholder="Pencarian..." 
+              />
+              <i class="ri-search-line search-icon"></i>
+            </div>
+          </form>
+        </div>
+
         <div class="card-body">
-          <div class="table-responsive table-card">
-            <table class="table table-hover align-middle mb-0">
+          <div class="table-responsive table-card mb-1">
+            <table class="table table-hover align-middle">
               <thead class="table-light">
                 <tr>
                   <th scope="col">Action</th>
@@ -82,7 +98,7 @@
                         @else
                           <div class="flex-shrink-0 avatar-xs me-2">
                             <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13">
-                              {{ substr($item['nama'], 0, 2) }}
+                              {{ strtoupper(substr($item['nama'], 0, 2)) }}
                             </div>
                           </div>
                         @endif
@@ -91,13 +107,17 @@
                       </div>
                     </td>
                     <td>{{ $item['nama'] }}</td>
-                    <td>{{ $item['nip'] }}</td>
-                    <td>{{ $item['jabatan']['nama'] }}</td>
-                    <td>{{ $item['bidang'] }}</td>
+                    <td style="white-space: nowrap;">{{ $item['nip'] }}</td>
+                    <td>{{ $item['role']['nama'] }}</td>
+                    <td>{{ $item['bidang']['nama'] }}</td>
                   </tr>
                 @endforeach
               </tbody>
             </table>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            {{ $data->links() }}
           </div>
         </div>
       </div>

@@ -7,18 +7,20 @@
         <div class="card-body p-4">
           <div class="text-center mt-2">
             <h5 class="text-primary">Welcome Back !</h5>
-            <p class="text-muted">Sign in to continue to Velzon.</p>
+            <p class="text-muted">Sign in to continue to SIMBAR.</p>
           </div>
           <div class="p-2 mt-4">
-            <form action="{{ url('/') }}">
+            <form action="{{ url('/auth/login') }}" method="POST">
+              @csrf
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username">
+                <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" value="{{ old('username') }}" />
               </div>
+
               <div class="mb-3">
                 <label class="form-label" for="password-input">Password</label>
                 <div class="position-relative auth-pass-inputgroup mb-3">
-                  <input type="password" class="form-control pe-5 password-input" placeholder="Enter password" id="password-input">
+                  <input type="password" class="form-control pe-5 password-input" name="password" placeholder="Enter password" id="password-input" value="{{ old('password') }}" />
                   <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
                 </div>
               </div>
