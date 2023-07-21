@@ -3,59 +3,30 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\Persediaan\PersediaanMasterImport;
 use App\PersediaanMaster;
+use App\KodefikasiSubRincianObjek;
 
 class PersediaanMasterController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         $search = $request->query('search');
         $active = $request->boolean('active', TRUE);
-
-        $data = array(
-            [
-                'id' => 1,
-                'kode_barang' => '1.1.7.01.03.02.001',
-                'kode_register' => '000001',
-                'spesifikasi_nama_barang' => 'Kertas F4',
-                'specs' => 'Sinar Dunia',
-                'satuan' => 'Rim',
-                'kodefikasi_sub_sub_rincian_objek' => [
-                    'uraian' => 'Kertas HVS',
-                ],
-            ],
-            [
-                'id' => 2,
-                'kode_barang' => '1.1.7.01.03.01.001',
-                'kode_register' => '000002',
-                'spesifikasi_nama_barang' => 'Ballpoint',
-                'specs' => 'Weiyada',
-                'satuan' => 'Buah',
-                'kodefikasi_sub_sub_rincian_objek' => [
-                    'uraian' => 'Alat Tulis',
-                ],
-            ],
-            [
-                'id' => 3,
-                'kode_barang' => '1.1.7.01.03.06.004',
-                'kode_register' => '000001',
-                'spesifikasi_nama_barang' => 'Tinta Printer Hitam',
-                'specs' => NULL,
-                'satuan' => 'Buah',
-                'kodefikasi_sub_sub_rincian_objek' => [
-                    'uraian' => 'Tinta/Toner Printer',
-                ],
-            ],
-        );
 
         $query = PersediaanMaster::query();
         $query->when($active === FALSE, function ($q) {
             return $q->onlyTrashed();
         });
 
-        $data = $query->paginate()->onEachSide(2);
+        $data = $query->paginate(25);
 
         return view('persediaan.master', [
             'filter' => [
@@ -64,6 +35,33 @@ class PersediaanMasterController extends Controller
             ],
             'data' => $data,
         ]);
+    }
+
+    public function create() 
+    {
+        $queryKodefikasiSubRincianObjek = KodefikasiSubRincianObjek::query();
+        $queryKodefikasiSubRincianObjek->where(DB::raw('LEFT(kode, 5)'), '1.1.7');
+        $queryKodefikasiSubRincianObjek->orderBy('kode');
+        $kodefikasiSubRincianObjek = $queryKodefikasiSubRincianObjek->get();
+
+        return view('persediaan.form', [
+            'kodefikasi' => $kodefikasiSubRincianObjek,
+        ]);
+    }
+
+    public function store(Request $request) 
+    {
+        $validated = $request->validate([
+            'kode_barang' => ['required'],
+            'nama_barang' => ['required'],
+            'spesifikasi' => ['nullable'],
+            'satuan' => ['required'],
+        ]);
+
+        $validated['kode_register'] = '123456';
+        $validated['user_id'] = auth()->id();
+
+        return response()->json($validated);
     }
 
     public function import(Request $request) 

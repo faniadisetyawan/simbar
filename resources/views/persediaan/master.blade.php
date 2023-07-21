@@ -27,9 +27,9 @@
             </div>
             <div class="col-sm-auto">
               <div class="d-flex gap-1 flex-wrap">
-                <button type="button" class="btn btn-success add-btn">
+                <a href="{{ url()->current() . '/create' }}" class="btn btn-success add-btn">
                   <i class="ri-add-line align-bottom me-1"></i> Tambah
-                </button>
+                </a>
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importModal">
                   <i class="ri-upload-line align-bottom me-1"></i> Import
                 </button>
@@ -70,7 +70,7 @@
                 role="tab"
                 aria-selected="{{ $filter['active'] === FALSE ? 'true' : 'false' }}"
               >
-                <i class="ri-close-circle-line me-1 align-bottom"></i> Trash
+                <i class="ri-delete-bin-line me-1 align-bottom"></i> Trash
               </a>
             </li>
           </ul>
@@ -79,8 +79,8 @@
             <table class="table table-hover align-middle">
               <thead class="table-light">
                 <tr>
-                  <th scope="col">Action</th>
-                  <th scope="col">NIBAR</th>
+                  <th scope="col" class="text-center">Action</th>
+                  <th scope="col" class="text-center">ID</th>
                   <th scope="col">Kode Barang</th>
                   <th scope="col">Nama Barang</th>
                   <th scope="col">NUSP</th>
@@ -92,7 +92,7 @@
               <tbody>
                 @foreach ($data as $item)
                   <tr>
-                    <td>
+                    <td class="text-center">
                       <div class="dropdown">
                         <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                           <i class="ri-more-fill align-middle"></i>
@@ -111,7 +111,7 @@
                         </ul>
                       </div>
                     </td>
-                    <td>{{ $item['id'] }}</td>
+                    <td class="text-center">{{ $item['id'] }}</td>
                     <td>{{ $item['kode_barang'] }}</td>
                     <td>{{ $item['kodefikasi']['uraian'] }}</td>
                     <td>{{ $item['kode_register'] }}</td>

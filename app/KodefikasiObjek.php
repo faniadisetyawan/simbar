@@ -15,4 +15,20 @@ class KodefikasiObjek extends Model
     protected $keyType = 'string';
 
     public $timestamps = false;
+
+    protected $fillable = [
+        'kode',
+        'uraian',
+        'kode_jenis',
+    ];
+
+    public function jenis() 
+    {
+        return $this->belongsTo('App\KodefikasiJenis', 'kode_jenis');
+    }
+
+    public function rincian_objek() 
+    {
+        return $this->hasMany('App\KodefikasiRincianObjek', 'kode_objek');
+    }
 }

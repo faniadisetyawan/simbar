@@ -55,7 +55,7 @@
                 <a href="{{ url('/master/users') }}" class="nav-link {{ Request::is('master/users') ? "active" : "" }}">Users</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/master/persediaan') }}" class="nav-link {{ Request::is('master/persediaan') ? "active" : "" }}">Persediaan</a>
+                <a href="{{ url('/master/persediaan') }}" class="nav-link {{ Request::is('master/persediaan*') ? "active" : "" }}">Persediaan</a>
               </li>
             </ul>
           </div>

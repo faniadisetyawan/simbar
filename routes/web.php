@@ -45,6 +45,7 @@ Route::group(['prefix' => 'master'], function () {
 
     Route::group(['prefix' => 'persediaan'], function () {
         Route::get('/', 'PersediaanMasterController@index');
+        Route::get('/create', 'PersediaanMasterController@create');
         Route::post('/', 'PersediaanMasterController@store');
         Route::post('/import', 'PersediaanMasterController@import');
     });

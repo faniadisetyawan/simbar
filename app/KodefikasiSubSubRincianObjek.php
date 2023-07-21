@@ -15,4 +15,17 @@ class KodefikasiSubSubRincianObjek extends Model
     protected $keyType = 'string';
 
     public $timestamps = false;
+
+    protected $fillable = [
+        'kode',
+        'uraian',
+        'kode_sub_rincian_objek',
+        'nilai_kapitalisasi',
+        'masa_manfaat',
+    ];
+
+    public function sub_rincian_objek() 
+    {
+        return $this->belongsTo('App\KodefikasiSubRincianObjek', 'kode_sub_rincian_objek');
+    }
 }
