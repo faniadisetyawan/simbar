@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\Persediaan\PersediaanMasterImport;
+use App\PersediaanMaster;
 
 class PersediaanMasterController extends Controller
 {
@@ -47,15 +50,32 @@ class PersediaanMasterController extends Controller
             ],
         );
 
+        $query = PersediaanMaster::query();
+        $query->when($active === FALSE, function ($q) {
+            return $q->onlyTrashed();
+        });
+
+        $data = $query->paginate()->onEachSide(2);
+
         return view('persediaan.master', [
             'filter' => [
                 'search' => $search,
                 'active' => $active,
             ],
-            'data' => [
-                'total' => count($data),
-                'data' => $data,
-            ],
+            'data' => $data,
         ]);
+    }
+
+    public function import(Request $request) 
+    {
+        $request->validate([
+            'document' => ['required', 'file'],
+        ]);
+
+        if ($request->hasFile('document')) {
+            Excel::import(new PersediaanMasterImport, $request->file('document'));
+        }
+        
+        return redirect('/master/persediaan');
     }
 }

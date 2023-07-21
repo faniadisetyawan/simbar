@@ -21,10 +21,18 @@ class UserController extends Controller
             $q->orWhere('username', 'like', '%'.$search.'%');
             $q->orWhere('nama', 'like', '%'.$search.'%');
             $q->orWhere('nip', 'like', '%'.$search.'%');
+
+            $q->orWhereHas('bidang', function ($qBidang) use ($search) {
+                $qBidang->where('nama', 'like', '%'.$search.'%');
+            });
+            
+            $q->orWhereHas('role', function ($qRole) use ($search) {
+                $qRole->where('nama', 'like', '%'.$search.'%');
+            });
         });
         $query->orderBy('id');
 
-        $data = $query->paginate(25);
+        $data = $query->paginate(15);
 
         return view('user', [
             'filter' => [

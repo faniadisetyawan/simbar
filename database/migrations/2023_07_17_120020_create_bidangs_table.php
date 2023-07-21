@@ -17,6 +17,7 @@ class CreateBidangsTable extends Migration
             $table->id();
             $table->string('nama');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

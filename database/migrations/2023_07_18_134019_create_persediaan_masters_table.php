@@ -18,7 +18,7 @@ class CreatePersediaanMastersTable extends Migration
             $table->char('kode_barang', 18);
             $table->char('kode_register', 6);
             $table->string('nama_barang');
-            $table->string('spesifikasi');
+            $table->string('spesifikasi')->nullable();
             $table->string('satuan');
             $table->foreignId('user_id')->constrained('users')->onUpdate('cascade');
             $table->timestamps();

@@ -30,7 +30,7 @@
                 <button type="button" class="btn btn-success add-btn">
                   <i class="ri-add-line align-bottom me-1"></i> Tambah
                 </button>
-                <button type="button" class="btn btn-info">
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importModal">
                   <i class="ri-upload-line align-bottom me-1"></i> Import
                 </button>
               </div>
@@ -90,7 +90,7 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($data['data'] as $item)
+                @foreach ($data as $item)
                   <tr>
                     <td>
                       <div class="dropdown">
@@ -113,17 +113,17 @@
                     </td>
                     <td>{{ $item['id'] }}</td>
                     <td>{{ $item['kode_barang'] }}</td>
-                    <td>{{ $item['kodefikasi_sub_sub_rincian_objek']['uraian'] }}</td>
+                    <td>{{ $item['kodefikasi']['uraian'] }}</td>
                     <td>{{ $item['kode_register'] }}</td>
-                    <td>{{ $item['spesifikasi_nama_barang'] }}</td>
-                    <td>{{ $item['specs'] }}</td>
+                    <td>{{ $item['nama_barang'] }}</td>
+                    <td>{{ $item['spesifikasi'] }}</td>
                     <td>{{ $item['satuan'] }}</td>
                   </tr>
                 @endforeach
               </tbody>
             </table>
 
-            @if ($data['total'] === 0)
+            @if (count($data) === 0)
               <div class="noresult my-3">
                 <div class="text-center">
                   <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px"></lord-icon>
@@ -135,24 +135,34 @@
           </div>
 
           <div class="d-flex justify-content-end">
-            <div class="pagination-wrap hstack gap-2" style="display: flex;">
-              <a class="page-item pagination-prev disabled" href="#">
-                Previous
-              </a>
-              <ul class="pagination listjs-pagination mb-0">
-                <li class="active">
-                  <a class="page" href="#">1</a>
-                </li>
-                <li>
-                  <a class="page" href="#">2</a>
-                </li>
-              </ul>
-              <a class="page-item pagination-next" href="#">
-                Next
-              </a>
-            </div>
+            {{ $data->withQueryString()->links() }}
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade zoomIn" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header p-3 bg-info-subtle">
+          <h5 class="modal-title" id="exampleModalLabel">Import Master Persediaan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+        </div>
+
+        <form action="{{ url('/master/persediaan/import') }}" method="post" enctype="multipart/form-data" class="tablelist-form" autocomplete="off">
+          @csrf
+
+          <div class="modal-body">
+            <input type="file" name="document" class="form-control form-control-lg" />
+          </div>
+          <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+              <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

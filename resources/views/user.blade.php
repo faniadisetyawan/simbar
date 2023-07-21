@@ -37,11 +37,11 @@
           <form action="{{ Request::fullUrlWithQuery(['search' => $filter['search']]) }}" method="GET">
             <div class="search-box">
               <input 
-                type="text" 
+                type="search" 
                 name="search"
                 value="{{ $filter['search'] }}"
                 class="form-control search bg-light border-light" 
-                placeholder="Pencarian..." 
+                placeholder="Cari berdasarkan username, nama lengkap, jabatan, bidang, dan lainnya..." 
               />
               <i class="ri-search-line search-icon"></i>
             </div>
@@ -117,7 +117,7 @@
           </div>
 
           <div class="d-flex justify-content-end">
-            {{ $data->links() }}
+            {{ $data->withQueryString()->links() }}
           </div>
         </div>
       </div>
