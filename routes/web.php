@@ -39,7 +39,7 @@ Route::group(['prefix' => 'master'], function () {
     });
 
     Route::group(['prefix' => 'users'], function () {
-        Route::get('/', 'UserController@index');
+        Route::get('/', 'UserController@index')->name('master.users.index');
     });
 
     Route::group(['prefix' => 'persediaan'], function () {
@@ -51,6 +51,15 @@ Route::group(['prefix' => 'master'], function () {
         Route::put('/{id}/restore', 'PersediaanMasterController@restore')->name('master.persediaan.restore');
         Route::delete('/{id}', 'PersediaanMasterController@destroy')->name('master.persediaan.destroy');
         Route::delete('/{id}/trash', 'PersediaanMasterController@trash')->name('master.persediaan.trash');
+    });
+});
+
+Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
+    Route::group(['prefix' => 'saldo-awal'], function () {
+        Route::get('/{slug}', 'Pembukuan\SaldoAwalController@index')->name('pembukuan.saldo-awal.index');
+        Route::get('/{slug}/create', 'Pembukuan\SaldoAwalController@create')->name('pembukuan.saldo-awal.create');
+        Route::post('/', 'Pembukuan\SaldoAwalController@store')->name('pembukuan.saldo-awal.store');
+        Route::post('/import', 'Pembukuan\SaldoAwalController@import')->name('pembukuan.saldo-awal.import');
     });
 });
 

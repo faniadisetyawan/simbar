@@ -8,5 +8,7 @@ class Pembukuan extends Model
 {
     protected $table = 'pembukuan';
 
+    protected $primaryKey = 'kode';
+
     protected $fillable = ['kode', 'nama'];
 }

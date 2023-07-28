@@ -34,11 +34,11 @@
               </div>
             </div>
             <div class="col-sm-auto">
-              <div class="d-flex gap-1 flex-wrap">
-                <a href="{{ url()->current() . '/create' }}" class="btn btn-success add-btn">
+              <div class="d-flex gap-2 flex-wrap">
+                <a href="{{ route('master.persediaan.create') }}" class="btn btn-success add-btn waves-effect">
                   <i class="ri-add-line align-bottom me-1"></i> Tambah
                 </a>
-                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#importModal">
+                <button type="button" class="btn btn-info waves-effect" data-bs-toggle="modal" data-bs-target="#importModal">
                   <i class="ri-upload-line align-bottom me-1"></i> Import
                 </button>
               </div>

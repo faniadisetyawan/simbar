@@ -8,5 +8,7 @@ class RefKapitalisasi extends Model
 {
     protected $table = 'ref_kapitalisasi';
 
+    protected $primaryKey = 'kode';
+
     protected $fillable = ['kode', 'nama'];
 }

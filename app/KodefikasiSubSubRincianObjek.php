@@ -28,4 +28,9 @@ class KodefikasiSubSubRincianObjek extends Model
     {
         return $this->belongsTo('App\KodefikasiSubRincianObjek', 'kode_sub_rincian_objek');
     }
+
+    public function persediaan_master() 
+    {
+        return $this->hasMany('App\PersediaanMaster', 'kode_barang');
+    }
 }

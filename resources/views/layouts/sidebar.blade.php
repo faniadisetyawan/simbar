@@ -30,7 +30,7 @@
       <ul class="navbar-nav" id="navbar-nav">
         <li class="menu-title"><span>Menu</span></li>
         <li class="nav-item">
-          <a class="nav-link menu-link {{ Request::is('dashboard') ? "active" : "" }}" href="{{ url('/dashboard') }}">
+          <a class="nav-link menu-link {{ Request::is('dashboard') ? "active" : "" }}" href="{{ route('dashboard') }}">
             <i class="ri-dashboard-2-line"></i> <span>Dashboards</span>
           </a>
         </li>
@@ -52,10 +52,10 @@
                 <a href="{{ route('master.bidang.index') }}" class="nav-link {{ Request::is('master/bidang*') ? "active" : "" }}">Bidang</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/master/users') }}" class="nav-link {{ Request::is('master/users') ? "active" : "" }}">Users</a>
+                <a href="{{ route('master.users.index') }}" class="nav-link {{ Request::is('master/users*') ? "active" : "" }}">Users</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/master/persediaan') }}" class="nav-link {{ Request::is('master/persediaan*') ? "active" : "" }}">Persediaan</a>
+                <a href="{{ route('master.persediaan.index') }}" class="nav-link {{ Request::is('master/persediaan*') ? "active" : "" }}">Persediaan</a>
               </li>
             </ul>
           </div>
@@ -77,40 +77,40 @@
               <li class="nav-item">
                 <a 
                   href="#pembukuanSaldoAwal" 
-                  class="nav-link {{ Request::is('pembukuan/saldo-awal') ? "active" : "" }}"
+                  class="nav-link {{ Request::is('pembukuan/saldo-awal*') ? "active" : "" }}"
                   data-bs-toggle="collapse" 
                   role="button" 
-                  aria-expanded="{{ Request::is('pembukuan/saldo-awal') ? true : false }}" 
+                  aria-expanded="{{ Request::is('pembukuan/saldo-awal*') ? true : false }}" 
                   aria-controls="pembukuanSaldoAwal"
                 >Saldo Awal</a>
-                <div id="pembukuanSaldoAwal" class="menu-dropdown collapse">
+                <div id="pembukuanSaldoAwal" class="menu-dropdown collapse {{ Request::is('pembukuan/saldo-awal*') ? "show" : "" }}">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/persediaan') }}" class="nav-link">Persediaan</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'persediaan') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/persediaan*') ? "active" : "" }}">Persediaan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/tanah') }}" class="nav-link">Tanah</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'tanah') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/tanah*') ? "active" : "" }}">Tanah</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/peralatan-mesin') }}" class="nav-link">Peralatan dan Mesin</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'peralatan-mesin') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/peralatan-mesin*') ? "active" : "" }}">Peralatan dan Mesin</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/gedung-bangunan') }}" class="nav-link">Gedung dan Bangunan</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'gedung-bangunan') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/gedung-bangunan*') ? "active" : "" }}">Gedung dan Bangunan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/jij') }}" class="nav-link">Jalan, Irigasi dan Jaringan</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'jij') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/jij*') ? "active" : "" }}">Jalan, Irigasi dan Jaringan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/atl') }}" class="nav-link">Aset Tetap Lainnya</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'atl') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/atl*') ? "active" : "" }}">Aset Tetap Lainnya</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/kdp') }}" class="nav-link">Konstruksi Dalam Pengerjaan</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'kdp') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/kdp*') ? "active" : "" }}">Konstruksi Dalam Pengerjaan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/atb') }}" class="nav-link">Aset Tidak Berwujud</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'atb') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/atb*') ? "active" : "" }}">Aset Tidak Berwujud</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/saldo-awal/aset-lain') }}" class="nav-link">Aset Lain-Lain</a>
+                      <a href="{{ route('pembukuan.saldo-awal.index', 'aset-lain') }}" class="nav-link {{ Request::is('pembukuan/saldo-awal/aset-lain*') ? "active" : "" }}">Aset Lain-Lain</a>
                     </li>
                   </ul>
                 </div>

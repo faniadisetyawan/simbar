@@ -55,7 +55,7 @@
 
           <div class="card-body">
             <div class="form-group">
-              <label class="form-label">Nama Bidang</label>
+              <label class="form-label">Nama Bidang <code>*</code></label>
               <input type="text" name="nama" class="form-control" value="{{ old('nama', $props['nama']) }}" />
               @error('nama')
               <div class="form-text text-danger">{{ $message }}</div>

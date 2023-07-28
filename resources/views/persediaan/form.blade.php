@@ -34,7 +34,7 @@
             <div class="form-group mb-3">
               <label class="form-label">Kode Barang</label>
               <select name="kode_barang" id="select2" required>
-                <option value=""></option>
+                <option></option>
                 @foreach ($kodefikasi as $item)
                   <optgroup label="{{ $item['kode'] . ' ' . $item['uraian'] }}">
                     @foreach ($item['sub_sub_rincian_objek'] as $sub)
@@ -62,8 +62,8 @@
 
           <div class="card-footer">
             <div class="hstack gap-2 justify-content-end">
-              <button type="submit" class="btn btn-success">Submit</button>
-              <a href="{{ url('/master/persediaan') }}" class="btn btn-light">Kembali</a>
+              <button type="submit" class="btn btn-success waves-effect">Submit</button>
+              <a href="{{ url('/master/persediaan') }}" class="btn btn-light waves-effect">Kembali</a>
             </div>
           </div>
         </div>
@@ -75,7 +75,9 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-    $('#select2').select2();
+    $('#select2').select2({
+      placeholder: 'Select'
+    });
   </script>
   <script src="{{ asset('assets/js/pages/form-validation.init.js') }}"></script>
 @endpush

@@ -25,7 +25,7 @@
             </div>
             <div class="col-sm-auto">
               <div class="d-flex flex-wrap align-items-start gap-2">
-                <button type="button" class="btn btn-success add-btn">
+                <button type="button" class="btn btn-success add-btn waves-effect">
                   <i class="ri-add-line align-bottom me-1"></i> Tambah
                 </button>
               </div>

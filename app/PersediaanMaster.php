@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class PersediaanMaster extends Model
 {
@@ -23,7 +24,13 @@ class PersediaanMaster extends Model
 
     public function kodefikasi() 
     {
-        return $this->belongsTo('App\KodefikasiSubSubRincianObjek', 'kode_barang');
+        return $this->belongsTo('App\KodefikasiSubSubRincianObjek', 'kode_barang')
+            ->select(
+                'kode',
+                'uraian',
+                'kode_sub_rincian_objek',
+                DB::raw('CONCAT(kode, " ", uraian) AS concat')
+            );
     }
 
     public function user() 
