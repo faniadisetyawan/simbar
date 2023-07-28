@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Traits\ProviderTraits;
+use App\Http\Requests\PersediaanMasterRequest;
 use App\Imports\Persediaan\PersediaanMasterImport;
 use App\PersediaanMaster;
 use App\KodefikasiSubRincianObjek;
 
 class PersediaanMasterController extends Controller
 {
+    use ProviderTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -55,19 +59,29 @@ class PersediaanMasterController extends Controller
         ]);
     }
 
-    public function store(Request $request) 
+    public function store(PersediaanMasterRequest $request) 
     {
-        $validated = $request->validate([
-            'kode_barang' => ['required'],
-            'nama_barang' => ['required'],
-            'spesifikasi' => ['nullable'],
-            'satuan' => ['required'],
-        ]);
-
-        $validated['kode_register'] = '123456';
+        $validated = $request->validated();
+        $validated['kode_register'] = $this->_generateNUSP($validated['kode_barang']);
         $validated['user_id'] = auth()->id();
 
-        return response()->json($validated);
+        $data = new PersediaanMaster($validated);
+        $data->save();
+
+        return redirect()->back()->with('success', 'Item berhasil ditambahkan.');
+    }
+
+    public function update(PersediaanMasterRequest $request, $id) 
+    {
+        $validated = $request->validated();
+
+        $data = PersediaanMaster::findOrFail($id);
+        if ($data['kode_barang'] !== $validated['kode_barang']) {
+            $validated['kode_register'] = $this->_generateNUSP($validated['kode_barang']);
+        }
+        $data->update($validated);
+
+        return redirect()->route('master.persediaan.index')->with('success', 'Item berhasil diupdate.');
     }
 
     public function import(Request $request) 
@@ -80,6 +94,6 @@ class PersediaanMasterController extends Controller
             Excel::import(new PersediaanMasterImport, $request->file('document'));
         }
         
-        return redirect('/master/persediaan');
+        return redirect()->back()->with('success', 'Semua data berhasil diimport.');
     }
 }

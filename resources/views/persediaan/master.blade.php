@@ -17,6 +17,14 @@
     </div>
 
     <div class="col-12">
+      @if (session()->has('success'))
+      <div class="alert alert-success alert-border-left alert-dismissible fade show" role="alert">
+        <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success</strong>
+        - {{ session()->get('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      @endif
+
       <div class="card">
         <div class="card-header">
           <div class="row g-4 align-items-center">
@@ -87,6 +95,7 @@
                   <th scope="col">Spesifikasi Nama Barang</th>
                   <th scope="col">Spesifikasi Lainnya</th>
                   <th scope="col">Satuan</th>
+                  <th scope="col">Tgl. Entry</th>
                 </tr>
               </thead>
               <tbody>
@@ -118,6 +127,7 @@
                     <td>{{ $item['nama_barang'] }}</td>
                     <td>{{ $item['spesifikasi'] }}</td>
                     <td>{{ $item['satuan'] }}</td>
+                    <td>{{ date('F d, Y H:i', strtotime($item['created_at'])) }}</td>
                   </tr>
                 @endforeach
               </tbody>

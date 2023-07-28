@@ -13,7 +13,7 @@
               <a href="javascript: void(0);">Master</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="{{ route('bidang.index') }}">Bidang</a>
+              <a href="{{ route('master.bidang.index') }}">Bidang</a>
             </li>
             <li class="breadcrumb-item active">Form</li>
           </ol>
@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <form action="{{ isset($props) ? route('bidang.update', $props['id']) : route('bidang.store') }}" method="POST">
+        <form action="{{ isset($props) ? route('master.bidang.update', $props['id']) : route('master.bidang.store') }}" method="POST">
           @csrf
           @if (isset($props))
             @method("PUT")
@@ -62,8 +62,11 @@
               @enderror
             </div>
           </div>
-          <div class="card-footer text-end">
-            <button type="submit" class="btn btn-success">Submit</button>
+          <div class="card-footer">
+            <div class="d-flex flex-wrap gap-2 justify-content-end">
+              <button type="submit" class="btn btn-success waves-effect">Submit</button>
+              <a href="{{ route('master.bidang.index') }}" class="btn btn-light waves-effect">Kembali</a>
+            </div>
           </div>
         </form>
 

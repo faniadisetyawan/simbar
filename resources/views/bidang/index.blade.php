@@ -41,7 +41,7 @@
             </div>
             <div class="col-sm-auto">
               <div class="d-flex flex-wrap align-items-start gap-2">
-                <a href="{{ route('bidang.create') }}" class="btn btn-success add-btn">
+                <a href="{{ route('master.bidang.create') }}" class="btn btn-success add-btn waves-effect">
                   <i class="ri-add-line align-bottom me-1"></i> Tambah
                 </a>
               </div>
@@ -93,7 +93,7 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                           @if ($filter['active'])
                             <li>
-                              <a href="{{ route('bidang.edit', $item['id']) }}" class="dropdown-item">
+                              <a href="{{ route('master.bidang.edit', $item['id']) }}" class="dropdown-item">
                                 <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
                               </a>
                             </li>
@@ -101,7 +101,7 @@
                               <button class="dropdown-item" onclick="confirmTrash({{ $item }})">
                                 <i class="ri-archive-fill align-bottom me-2 text-muted"></i>Arsipkan
                               </button>
-                              <form id="form-trash-{{ $item['id'] }}" action="{{ route('bidang.trash', $item['id']) }}" method="POST">
+                              <form id="form-trash-{{ $item['id'] }}" action="{{ route('master.bidang.trash', $item['id']) }}" method="POST">
                                 @csrf
                                 @method("DELETE")
                               </form>
@@ -111,7 +111,7 @@
                               <button class="dropdown-item" onclick="confirmRestore({{ $item }})">
                                 <i class="ri-restart-line align-bottom me-2 text-muted"></i>Restore
                               </button>
-                              <form id="form-restore-{{ $item['id'] }}" action="{{ route('bidang.restore', $item['id']) }}" method="POST">
+                              <form id="form-restore-{{ $item['id'] }}" action="{{ route('master.bidang.restore', $item['id']) }}" method="POST">
                                 @csrf
                                 @method("PUT")
                               </form>
@@ -120,7 +120,7 @@
                               <button class="dropdown-item" onclick="confirmDestroy({{ $item }})">
                                 <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Hapus
                               </button>
-                              <form id="form-destroy-{{ $item['id'] }}" action="{{ route('bidang.destroy', $item['id']) }}" method="POST">
+                              <form id="form-destroy-{{ $item['id'] }}" action="{{ route('master.bidang.destroy', $item['id']) }}" method="POST">
                                 @csrf
                                 @method("DELETE")
                               </form>

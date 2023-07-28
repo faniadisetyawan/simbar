@@ -71,7 +71,7 @@ class BidangController extends Controller
         $data = Bidang::findOrFail($id);
         $data->update($validated);
 
-        return redirect()->route('bidang.index')->withInput()->with('success', 'Item berhasil diupdate.');
+        return redirect()->route('master.bidang.index')->withInput()->with('success', 'Item berhasil diupdate.');
     }
 
     public function destroy($id) 
