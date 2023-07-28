@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Imports\Persediaan;
+namespace App\Imports\Seeds;
 
 use App\PersediaanMaster;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -16,6 +16,7 @@ class PersediaanMasterImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new PersediaanMaster([
+            'id' => $row['id'],
             'kode_barang' => $row['kode_barang'],
             'kode_register' => $row['kode_register'],
             'nama_barang' => $row['nama_barang'],

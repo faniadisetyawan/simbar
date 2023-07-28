@@ -12,12 +12,89 @@ class BidangController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = Bidang::orderBy('id')->get();
+        $search = $request->query('search');
+        $active = $request->boolean('active', TRUE);
 
-        return view('bidang', [
+        $query = Bidang::query();
+        $query->when($active === FALSE, function ($q) {
+            return $q->onlyTrashed();
+        });
+        $query->orderBy('id');
+
+        $data = $query->get();
+
+        return view('bidang.index', [
+            'filter' => [
+                'search' => $search,
+                'active' => $active,
+            ],
             'data' => $data,
         ]);
+    }
+
+    public function create() 
+    {
+        return view('bidang.form', [
+            'props' => NULL,
+        ]);
+    }
+
+    public function store(Request $request) 
+    {
+        $validated = $request->validate([
+            'nama' => ['required'],
+        ]);
+
+        $data = new Bidang($validated);
+        $data->save();
+
+        return redirect()->back()->withInput()->with('success', 'Item berhasil ditambahkan.');
+    }
+
+    public function edit($id) 
+    {
+        $props = Bidang::findOrFail($id);
+        
+        return view('bidang.form', [
+            'props' => $props,
+        ]);
+    }
+
+    public function update(Request $request, $id) 
+    {
+        $validated = $request->validate([
+            'nama' => ['required'],
+        ]);
+
+        $data = Bidang::findOrFail($id);
+        $data->update($validated);
+
+        return redirect()->route('bidang.index')->withInput()->with('success', 'Item berhasil diupdate.');
+    }
+
+    public function destroy($id) 
+    {
+        $data = Bidang::onlyTrashed()->findOrFail($id);
+        $data->forceDelete();
+
+        return redirect()->back()->with('success', 'Item berhasil dihapus secara permanen.');
+    }
+
+    public function restore($id) 
+    {
+        $data = Bidang::onlyTrashed()->findOrFail($id);
+        $data->restore();
+
+        return redirect()->back()->with('success', 'Item berhasil direstore.');
+    }
+
+    public function trash($id) 
+    {
+        $data = Bidang::findOrFail($id);
+        $data->delete();
+
+        return redirect()->back()->with('success', 'Item berhasil diarsipkan.');
     }
 }

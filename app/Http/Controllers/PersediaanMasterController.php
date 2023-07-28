@@ -25,6 +25,12 @@ class PersediaanMasterController extends Controller
         $query->when($active === FALSE, function ($q) {
             return $q->onlyTrashed();
         });
+        $query->where(function ($q) use ($search) {
+            $q->orWhere('kode_barang', 'like', '%'.$search.'%');
+            $q->orWhere('kode_register', 'like', '%'.$search.'%');
+            $q->orWhere('nama_barang', 'like', '%'.$search.'%');
+            $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
+        });
 
         $data = $query->paginate(25);
 

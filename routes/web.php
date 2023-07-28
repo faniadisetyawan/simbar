@@ -28,15 +28,14 @@ Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 Route::group(['prefix' => 'master'], function () {
     Route::group(['prefix' => 'bidang'], function () {
-        Route::get('/', 'BidangController@index');
-        Route::get('/create', 'BidangController@create');
-        Route::get('/{id}', 'BidangController@show');
-        Route::get('/{id}/edit', 'BidangController@edit');
-        Route::post('/', 'BidangController@store');
-        Route::put('/{id}', 'BidangController@update');
-        Route::put('/{id}/restore', 'BidangController@restore');
-        Route::delete('/{id}', 'BidangController@destroy');
-        Route::delete('/{id}/trash', 'BidangController@trash');
+        Route::get('/', 'BidangController@index')->name('bidang.index');
+        Route::get('/create', 'BidangController@create')->name('bidang.create');
+        Route::get('/{id}/edit', 'BidangController@edit')->name('bidang.edit');
+        Route::post('/', 'BidangController@store')->name('bidang.store');
+        Route::put('/{id}', 'BidangController@update')->name('bidang.update');
+        Route::put('/{id}/restore', 'BidangController@restore')->name('bidang.restore');
+        Route::delete('/{id}', 'BidangController@destroy')->name('bidang.destroy');
+        Route::delete('/{id}/trash', 'BidangController@trash')->name('bidang.trash');
     });
 
     Route::group(['prefix' => 'users'], function () {

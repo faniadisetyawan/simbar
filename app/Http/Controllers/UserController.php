@@ -15,8 +15,12 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $active = $request->boolean('active', TRUE);
 
         $query = User::query();
+        $query->when($active === FALSE, function ($q) {
+            return $q->onlyTrashed();
+        });
         $query->when(!empty($search), function ($q) use ($search) {
             $q->orWhere('username', 'like', '%'.$search.'%');
             $q->orWhere('nama', 'like', '%'.$search.'%');
@@ -37,6 +41,7 @@ class UserController extends Controller
         return view('user', [
             'filter' => [
                 'search' => $search,
+                'active' => $active,
             ],
             'data' => $data,
         ]);

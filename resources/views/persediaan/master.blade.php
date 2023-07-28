@@ -41,7 +41,7 @@
           <form action="{{ Request::fullUrlWithQuery(['search' => $filter['search']]) }}" method="GET">
             <div class="search-box">
               <input 
-                type="text" 
+                type="search" 
                 name="search"
                 value="{{ $filter['search'] }}"
                 class="form-control search bg-light border-light" 
@@ -124,13 +124,7 @@
             </table>
 
             @if (count($data) === 0)
-              <div class="noresult my-3">
-                <div class="text-center">
-                  <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:75px;height:75px"></lord-icon>
-                  <h5 class="mt-2">Sorry! No Result Found</h5>
-                  <p class="text-muted">We did not find any data for you search.</p>
-                </div>
-              </div>
+              @include('components.empty-record')
             @endif
           </div>
 
@@ -154,7 +148,26 @@
           @csrf
 
           <div class="modal-body">
-            <input type="file" name="document" class="form-control form-control-lg" />
+            <div class="mb-5 list-group">
+              <a href="{{ asset('templates/template-persediaan-master.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template master persediaan</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Pilih file :</label>
+              <input type="file" name="document" class="form-control form-control-lg" />
+            </div>
           </div>
           <div class="modal-footer">
             <div class="hstack gap-2 justify-content-end">

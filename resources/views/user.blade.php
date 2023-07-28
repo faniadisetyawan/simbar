@@ -48,7 +48,30 @@
           </form>
         </div>
 
-        <div class="card-body">
+        <div class="card-body pt-0">
+          <ul class="nav nav-tabs nav-tabs-custom nav-success mb-3" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a 
+                class="nav-link py-3 {{ $filter['active'] ? 'active' : '' }}" 
+                href="{{ Request::fullUrlWithQuery(['active' => 'true']) }}" 
+                role="tab" 
+                aria-selected="{{ $filter['active'] ? 'true' : 'false' }}"
+              >
+                <i class="ri-checkbox-circle-line me-1 align-bottom"></i> Active
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a 
+                class="nav-link py-3 {{ $filter['active'] === FALSE ? 'active' : '' }}" 
+                href={{ Request::fullUrlWithQuery(['active' => 'false']) }}
+                role="tab"
+                aria-selected="{{ $filter['active'] === FALSE ? 'true' : 'false' }}"
+              >
+                <i class="ri-delete-bin-line me-1 align-bottom"></i> Trash
+              </a>
+            </li>
+          </ul>
+
           <div class="table-responsive table-card mb-1">
             <table class="table table-hover align-middle">
               <thead class="table-light">
@@ -115,6 +138,10 @@
               </tbody>
             </table>
           </div>
+
+          @if (count($data) === 0)
+            @include('components.empty-record')
+          @endif
 
           <div class="d-flex justify-content-end">
             {{ $data->withQueryString()->links() }}
