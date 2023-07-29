@@ -9,6 +9,7 @@ class MutasiTambah extends Model
     protected $table = 'mutasi_tambah';
 
     protected $fillable = [
+        'id',
         'kode_pembukuan',
         'kode_perolehan',
         'kode_penggunaan',
@@ -28,6 +29,7 @@ class MutasiTambah extends Model
         'saldo_nilai_perolehan',
         'tgl_expired',
         'keterangan',
+        'opname_id',
         'created_by',
         'updated_by',
     ];

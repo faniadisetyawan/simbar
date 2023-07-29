@@ -85,6 +85,7 @@
                 </tr>
               </thead>
               <tbody>
+                @if (isset($data))
                 @foreach ($data as $item)
                   <tr>
                     <td class="text-center">
@@ -120,18 +121,65 @@
                     <td style="white-space: nowrap;">{{ date('F d, Y H:i', strtotime($item['created_at'])) }}</td>
                   </tr>
                 @endforeach
+                @endif
               </tbody>
             </table>
 
-            @if (count($data) === 0)
+            @if (count(isset($data) ? $data : []) === 0)
               @include('components.empty-record')
             @endif
           </div>
 
+          @if (isset($data))
           <div class="d-flex justify-content-end">
             {{ $data->withQueryString()->links() }}
           </div>
+          @endif
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade zoomIn" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header p-3 bg-info-subtle">
+          <h5 class="modal-title" id="exampleModalLabel">Import Master Persediaan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+        </div>
+
+        <form action="{{ route('pembukuan.saldo-awal.import') }}" method="post" enctype="multipart/form-data" class="tablelist-form" autocomplete="off">
+          @csrf
+
+          <div class="modal-body">
+            <div class="mb-5 list-group">
+              <a href="{{ asset('templates/template-persediaan-master.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template master persediaan</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Pilih file :</label>
+              <input type="file" name="document" class="form-control form-control-lg" />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+              <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

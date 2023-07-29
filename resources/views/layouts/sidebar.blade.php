@@ -119,19 +119,19 @@
               <li class="nav-item">
                 <a 
                   href="#pembukuanPerolehan" 
-                  class="nav-link {{ Request::is('persediaan/perolehan') ? "active" : "" }}"
+                  class="nav-link {{ Request::is('persediaan/perolehan*') ? "active" : "" }}"
                   data-bs-toggle="collapse" 
                   role="button" 
                   aria-expanded="false" 
                   aria-controls="pembukuanPerolehan"
                 >Perolehan / Penerimaan</a>
-                <div id="pembukuanPerolehan" class="menu-dropdown collapse">
+                <div id="pembukuanPerolehan" class="menu-dropdown collapse {{ Request::is('pembukuan/perolehan*') ? "show" : "" }}">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/perolehan/pengadaan') }}" class="nav-link">Pengadaan</a>
+                      <a href="{{ route('pembukuan.perolehan.index', 'pengadaan') }}" class="nav-link {{ Request::is('pembukuan/perolehan/pengadaan*') ? "active" : "" }}">Pengadaan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('pembukuan/perolehan/hibah') }}" class="nav-link">Hibah</a>
+                      <a href="{{ route('pembukuan.perolehan.index', 'hibah') }}" class="nav-link {{ Request::is('pembukuan/perolehan/hibah*') ? "active" : "" }}">Hibah</a>
                     </li>
                   </ul>
                 </div>

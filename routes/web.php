@@ -61,6 +61,10 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::post('/', 'Pembukuan\SaldoAwalController@store')->name('pembukuan.saldo-awal.store');
         Route::post('/import', 'Pembukuan\SaldoAwalController@import')->name('pembukuan.saldo-awal.import');
     });
+
+    Route::group(['prefix' => 'perolehan', 'middleware' => 'auth'], function () {
+        Route::get('/{slug}', 'Pembukuan\PerolehanController@index')->name('pembukuan.perolehan.index');
+    });
 });
 
 Route::get('/usulan', 'UsulanController@index');
