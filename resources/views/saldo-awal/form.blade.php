@@ -51,9 +51,8 @@
           <div class="card-body">
             <div class="form-group mb-3">
               <label class="form-label">Pilih Barang <code>*</code></label>
-              <select name="barang_id" id="select2-barang" class="form-control">
-                <option></option>
-                @foreach ($barang as $group)
+              <select name="barang_id" class="form-control js-example-basic-single">
+                @foreach ($appMasterPersediaan as $group)
                 <optgroup label="{{ $group['key'] }}">
                   @foreach ($group['data'] as $item)
                   <option value="{{ $item['id'] }}" @if(old('barang_id', $props['barang_id']) === $item['id']) @endif>
@@ -108,9 +107,5 @@
 @push('scripts')
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script>
-    $('#select2-bidang, #select2-barang').select2({
-      placeholder: 'Select'
-    });
-  </script>
+  <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
 @endpush

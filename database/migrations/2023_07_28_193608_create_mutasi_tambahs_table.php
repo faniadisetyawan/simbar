@@ -23,7 +23,7 @@ class CreateMutasiTambahsTable extends Migration
             $table->string('no_dokumen', 100)->nullable();
             $table->string('slug_dokumen')->nullable();
             $table->date('tgl_dokumen')->nullable();
-            $table->date('uraian_dokumen')->nullable();
+            $table->text('uraian_dokumen')->nullable();
             $table->foreignId('bidang_id')->nullable()->constrained('bidang')->onUpdate('cascade');
             $table->foreignId('barang_id')->constrained('persediaan_master')->onUpdate('cascade');
             $table->unsignedInteger('jumlah_barang');

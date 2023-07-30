@@ -81,7 +81,7 @@
                   <th scope="col" class="text-end">Harga Satuan</th>
                   <th scope="col" class="text-end">Nilai Perolehan</th>
                   <th scope="col">Keterangan</th>
-                  <th scope="col">Tgl. Entry</th>
+                  <th scope="col">Tgl. Pembukuan</th>
                 </tr>
               </thead>
               <tbody>

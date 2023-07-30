@@ -34,8 +34,30 @@ class MutasiTambah extends Model
         'updated_by',
     ];
 
+    protected $casts = [
+        'jumlah_barang' => 'integer',
+        'harga_satuan' => 'float',
+        'nilai_perolehan' => 'float',
+        'saldo_jumlah_barang' => 'integer',
+        'saldo_harga_satuan' => 'float',
+        'saldo_nilai_perolehan' => 'float',
+    ];
+
+    public function bidang() 
+    {
+        return $this->belongsTo('App\Bidang', 'bidang_id')->withTrashed();
+    }
+
     public function master_persediaan() 
     {
         return $this->belongsTo('App\PersediaanMaster', 'barang_id')->withTrashed();
+    }
+
+    public function get_created_by() 
+    {
+        return $this->belongsTo('App\User', 'created_by')->select(
+            'id',
+            'nama'
+        );
     }
 }

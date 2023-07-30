@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use App\Setting;
+use App\Bidang;
+use App\RefJenisDokumen;
+use App\PersediaanMaster;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,20 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
+    private function _getMasterPersediaan() 
+    {
+        $barang = PersediaanMaster::get();
+
+        $groupedBarang = collect($barang)->groupBy('kodefikasi.concat')->map(function ($item, $key) {
+            return [
+                'key' => $key,
+                'data' => $item,
+            ];
+        })->values();
+
+        return $groupedBarang;
+    }
+
     /**
      * Bootstrap any application services.
      *
@@ -29,6 +46,11 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Paginator::defaultView('vendor.pagination');
 
-        view()->share('appSetting', Setting::first());
+        if (! app()->runningInConsole()) {
+            view()->share('appSetting', Setting::first());
+            view()->share('appBidang', Bidang::get());
+            view()->share('appJenisDokumen', RefJenisDokumen::get());
+            view()->share('appMasterPersediaan', $this->_getMasterPersediaan());
+        }
     }
 }

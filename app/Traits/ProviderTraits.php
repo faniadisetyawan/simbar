@@ -28,6 +28,8 @@ trait ProviderTraits
             case 'kdp': $pageTitle = 'Konstruksi Dalam Pengerjaan'; break;
             case 'atb': $pageTitle = 'Aset Tidak Berwujud'; break;
             case 'aset-lain': $pageTitle = 'Aset Lain-Lain'; break;
+            case 'pengadaan': $pageTitle = 'Pengadaan'; break;
+            case 'hibah': $pageTitle = 'Hibah'; break;
             default: $pageTitle = ''; break;
         }
 

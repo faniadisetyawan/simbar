@@ -10,5 +10,9 @@ class RefKapitalisasi extends Model
 
     protected $primaryKey = 'kode';
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $fillable = ['kode', 'nama'];
 }

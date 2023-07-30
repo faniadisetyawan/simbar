@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use DB;
 use App\Traits\ProviderTraits;
 use App\Http\Requests\SaldoAwal\PersediaanRequest;
-use App\PersediaanMaster;
 use App\MutasiTambah;
 
 class SaldoAwalController extends Controller
@@ -63,19 +62,9 @@ class SaldoAwalController extends Controller
 
     private function _createPersediaan($slug) 
     {
-        $barang = PersediaanMaster::get();
-
-        $groupedBarang = collect($barang)->groupBy('kodefikasi.concat')->map(function ($item, $key) {
-            return [
-                'key' => $key,
-                'data' => $item,
-            ];
-        })->values();
-
         return view('saldo-awal.form', [
             'slug' => $slug,
             'pageTitle' => $this->_pageTitleFromSlug($slug),
-            'barang' => $groupedBarang,
             'props' => NULL,
         ]);
     }

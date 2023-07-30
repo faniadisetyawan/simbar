@@ -64,6 +64,9 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'perolehan', 'middleware' => 'auth'], function () {
         Route::get('/{slug}', 'Pembukuan\PerolehanController@index')->name('pembukuan.perolehan.index');
+        Route::get('/{slug}/create', 'Pembukuan\PerolehanController@create')->name('pembukuan.perolehan.create');
+        Route::get('/{slug}/docs/{docSlug}', 'Pembukuan\PerolehanController@showByDocs')->name('pembukuan.perolehan.showByDocs');
+        Route::post('/{slug}', 'Pembukuan\PerolehanController@store')->name('pembukuan.perolehan.store');
     });
 });
 
