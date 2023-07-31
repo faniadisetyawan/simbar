@@ -80,6 +80,8 @@ class PerolehanController extends Controller
                 'search' => $search,
                 'bidang_id' => $bidangId,
             ],
+            'total_nilai_perolehan' => $query->sum('nilai_perolehan'),
+            'total_jumlah_barang' => $query->sum('jumlah_barang'),
             'paginator' => $paginator,
             'data' => $grouped,
         ]);
@@ -114,10 +116,43 @@ class PerolehanController extends Controller
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 
+        // return response()->json($validated);
+
         $data = new MutasiTambah($validated);
         $data->save();
 
         return redirect()->route('pembukuan.perolehan.showByDocs', [$slug, $data->slug_dokumen])->with('success', 'Data berhasil disimpan.');
+    }
+
+    public function updateBarang(PerolehanRequest $request, $slug, $id) 
+    {
+        if (! $this->_canUpdatedMutasiTambah($id)) {
+            return redirect()->back()->withErrors('Anda tidak bisa melakukan perubahan data karena item ini sudah dilakukan mutasi atau proses lainnya.');
+        }
+
+        $validated = $request->validated();
+        $validated['harga_satuan'] = ($validated['nilai_perolehan'] / $validated['jumlah_barang']);
+        $validated['saldo_jumlah_barang'] = $validated['jumlah_barang'];
+        $validated['saldo_harga_satuan'] = $validated['harga_satuan'];
+        $validated['saldo_nilai_perolehan'] = $validated['nilai_perolehan'];
+        $validated['updated_by'] = auth()->id();
+
+        $data = MutasiTambah::findOrFail($id);
+        $data->update($validated);
+
+        return redirect()->back()->with('success', 'Data berhasil diupdate.');
+    }
+
+    public function destroyBarang($id) 
+    {
+        if (! $this->_canUpdatedMutasiTambah($id)) {
+            return redirect()->back()->withErrors('Anda tidak bisa melakukan perubahan data karena item ini sudah dilakukan mutasi atau proses lainnya.');
+        }
+        
+        $data = MutasiTambah::findOrFail($id);
+        $data->delete();
+
+        return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
 
     public function showByDocs($slug, $docSlug) 

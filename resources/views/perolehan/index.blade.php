@@ -20,6 +20,41 @@
         </div>
       </div>
     </div>
+    
+    <div class="col-sm-6">
+      <div class="card card-animate">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p class="fw-medium text-muted mb-0">Total Nilai {{ $pageTitle }}</p>
+              <h2 class="mt-4 ff-secondary fw-semibold">
+                Rp<span class="counter-value" data-target="{{ $total_nilai_perolehan }}">0</span>
+              </h2>
+            </div>
+            <div>
+              <lord-icon src="https://cdn.lordicon.com/qhviklyi.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:55px;height:55px"></lord-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card card-animate">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div>
+              <p class="fw-medium text-muted mb-0">Total Item</p>
+              <h2 class="mt-4 ff-secondary fw-semibold">
+                <span class="counter-value" data-target="{{ $total_jumlah_barang }}">0</span>
+              </h2>
+            </div>
+            <div>
+              <lord-icon src="https://cdn.lordicon.com/vaeagfzc.json" trigger="loop" colors="primary:#405189,secondary:#0ab39c" style="width:55px;height:55px"></lord-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="col-12">
       @if (session()->has('success'))
@@ -63,7 +98,7 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <div>
+                <div class="search-box">
                   <input 
                     type="text" 
                     name="date_range" 
@@ -72,8 +107,9 @@
                     data-date-format="Y-m-d" 
                     data-range-date="true"
                     {{-- data-deafult-date="{{ '2023-01-01 to ' . date('Y-m-d') }}"  --}}
-                    placeholder="Select date" 
+                    placeholder="Select date range" 
                   />
+                  <i class="ri-calendar-line search-icon"></i>
                 </div>
               </div>
               <div class="col-sm-4">
@@ -106,7 +142,7 @@
 
         <div class="card-body">
           <div class="table-responsive table-card mb-1">
-            <table class="table table-hover align-middle">
+            <table class="table align-middle">
               <thead class="table-light">
                 <tr>
                   <th scope="col" class="text-center">Action</th>
@@ -148,32 +184,14 @@
                       </a>
                     </td>
                     <td class="text-end">
-                      <h6 class="my-0">{{ number_format($doc['total'], 2, ',', '.') }}</h6>
+                      <h6 class="my-0 fw-bold text-primary">{{ number_format($doc['total'], 2, ',', '.') }}</h6>
                     </td>
                     <td></td>
                   </tr>
 
                   @foreach ($doc['data'] as $item)
                   <tr>
-                    <td class="text-center">
-                      <div class="dropdown">
-                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="ri-more-fill align-middle"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li>
-                            <button class="dropdown-item">
-                              <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
-                            </button>
-                          </li>
-                          <li>
-                            <button class="dropdown-item">
-                              <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Remove
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
+                    <td></td>
                     <td>{{ $item['master_persediaan']['kode_barang'] }}</td>
                     <td>{{ $item['master_persediaan']['kodefikasi']['uraian'] }}</td>
                     <td>{{ $item['master_persediaan']['kode_register'] }}</td>

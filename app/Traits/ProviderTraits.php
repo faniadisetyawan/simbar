@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Bidang;
 use App\PersediaanMaster;
+use App\MutasiKurang;
 
 trait ProviderTraits
 {
@@ -39,5 +40,16 @@ trait ProviderTraits
     public function _getBidang() 
     {
         return Bidang::get();
+    }
+
+    public function _canUpdatedMutasiTambah($id) 
+    {
+        $data = MutasiKurang::where('mutasi_tambah_id', $id)->first();
+
+        if ($data === NULL) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 }

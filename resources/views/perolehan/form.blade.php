@@ -62,7 +62,7 @@
               <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Tanggal Pembukuan <code>*</code></label>
                 <div class="col-sm-8">
-                  <input type="date" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', date('Y-m-d')) }}" />
+                  <input type="text" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', date('Y-m-d')) }}" />
                   <div class="form-text">
                     <ul>
                       <li>Tanggal pembukuan secara default menampilkan tanggal hari ini. Anda bisa mengubah tanggal sesuai keperluan.</li>

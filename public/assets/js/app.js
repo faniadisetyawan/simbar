@@ -727,8 +727,8 @@
         var e = document.querySelectorAll(".counter-value");
         function s(e) {
             return new Intl.NumberFormat("id-ID", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
             }).format(e);
         }
         e &&
