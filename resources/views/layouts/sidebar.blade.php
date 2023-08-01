@@ -154,25 +154,25 @@
 
         <li class="nav-item">
           <a 
-            class="nav-link menu-link {{ Request::is('persediaan*') ? "collapsed active" : "" }}" 
-            href="#persediaan" 
+            class="nav-link menu-link {{ Request::is('penyaluran*') ? "collapsed active" : "" }}" 
+            href="#penyaluran" 
             data-bs-toggle="collapse" 
             role="button" 
             aria-expanded="false" 
-            aria-controls="persediaan"
+            aria-controls="penyaluran"
           >
             <i class="ri-gps-line"></i> <span>Penyaluran Persediaan</span>
           </a>
-          <div id="persediaan" class="menu-dropdown collapse {{ Request::is('persediaan*') ? "show" : "" }}">
+          <div id="penyaluran" class="menu-dropdown collapse {{ Request::is('penyaluran*') ? "show" : "" }}">
             <ul class="nav nav-sm flex-column">
               <li class="nav-item">
-                <a href="{{ url('persediaan/nota-permintaan') }}" class="nav-link {{ Request::is('persediaan/nota-permintaan') ? "active" : "" }}">Nota Permintaan</a>
+                <a href="{{ route('penyaluran.nota-permintaan.index') }}" class="nav-link {{ Request::is('penyaluran/nota-permintaan*') ? "active" : "" }}">Nota Permintaan</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('persediaan/spb') }}" class="nav-link {{ Request::is('persediaan/spb') ? "active" : "" }}">Surat Permintaan Barang</a>
+                <a href="{{ route('penyaluran.spb.index') }}" class="nav-link {{ Request::is('penyaluran/spb*') ? "active" : "" }}">Surat Permintaan Barang</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('persediaan/sppb') }}" class="nav-link {{ Request::is('persediaan/sppb') ? "active" : "" }}">Surat Perintah Penyaluran Barang</a>
+                <a href="{{ route('penyaluran.sppb.index') }}" class="nav-link {{ Request::is('penyaluran/sppb*') ? "active" : "" }}">Surat Perintah Penyaluran Barang</a>
               </li>
             </ul>
           </div>

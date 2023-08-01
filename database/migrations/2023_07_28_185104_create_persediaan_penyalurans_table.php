@@ -21,7 +21,7 @@ class CreatePersediaanPenyaluransTable extends Migration
             $table->string('no_dokumen', 100);
             $table->string('slug_dokumen');
             $table->date('tgl_dokumen');
-            $table->date('uraian_dokumen')->nullable();
+            $table->text('uraian_dokumen')->nullable();
             $table->foreignId('bidang_id')->constrained('bidang')->onUpdate('cascade');
             $table->foreignId('barang_id')->constrained('persediaan_master')->onUpdate('cascade');
             $table->unsignedInteger('jumlah_barang_permintaan')->default(0);
