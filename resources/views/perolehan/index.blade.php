@@ -191,7 +191,29 @@
 
                   @foreach ($doc['data'] as $item)
                   <tr>
-                    <td></td>
+                    <td class="text-center">
+                      <div class="dropdown">
+                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="ri-more-fill align-middle"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                          <li>
+                            <button class="dropdown-item" onclick="openFormModal({ slug: '{{ $slug }}', data: {{ $item }} })">
+                              <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
+                            </button>
+                          </li>
+                          <li>
+                            <button class="dropdown-item" onclick="handleDestroy({{ $item }})">
+                              <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Hapus
+                            </button>
+                            <form id="formDestroy" action="{{ route('pembukuan.perolehan.destroyBarang', $item['id']) }}" method="post">
+                              @csrf
+                              @method('DELETE')
+                            </form>
+                          </li>
+                        </ul>
+                      </div>
+                    </td>
                     <td>{{ $item['master_persediaan']['kode_barang'] }}</td>
                     <td>{{ $item['master_persediaan']['kodefikasi']['uraian'] }}</td>
                     <td>{{ $item['master_persediaan']['kode_register'] }}</td>
