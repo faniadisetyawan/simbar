@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Traits\ProviderTraits;
 use App\Http\Requests\Pembukuan\PerolehanRequest;
+use Storage;
 use App\MutasiTambah;
+use App\DokumenUpload;
 
 class PerolehanController extends Controller
 {
@@ -32,6 +34,8 @@ class PerolehanController extends Controller
         $query->when(isset($bidangId), function ($sub) use ($bidangId) {
             $sub->where('bidang_id', $bidangId);
         });
+        $query->orderBy('tgl_pembukuan', 'DESC');
+        $query->orderBy('bidang_id');
         $paginator = $query->paginate(25);
 
         $collections = [];
@@ -185,6 +189,7 @@ class PerolehanController extends Controller
 
         $grouped = collect($collections)->groupBy('slug_dokumen')->map(function ($item, $key) {
             $findDoc = MutasiTambah::where('slug_dokumen', $key)->first();
+            $findUpload = DokumenUpload::where('slug_dokumen_tambah', $key)->first();
 
             return [
                 'kode_pembukuan' => $findDoc['kode_pembukuan'],
@@ -196,6 +201,7 @@ class PerolehanController extends Controller
                 'uraian_dokumen' => $findDoc['uraian_dokumen'],
                 'bidang_id' => $findDoc['bidang_id'],
                 'bidang' => $findDoc['bidang'],
+                'upload' => $findUpload,
                 'total' => collect($item)->sum('nilai_perolehan'),
                 'data' => $item,
             ];
@@ -208,5 +214,39 @@ class PerolehanController extends Controller
             'pageTitle' => $this->_pageTitleFromSlug($slug),
             'data' => $grouped,
         ]);
+    }
+
+    public function uploadDokumen(Request $request, $slug) 
+    {
+        $validated = $request->validate([
+            'slug_dokumen_tambah' => ['required'],
+            'file_upload' => ['required', 'file'],
+        ]);
+        
+        $findDoc = DokumenUpload::where('slug_dokumen_tambah', $validated['slug_dokumen_tambah'])->whereNotNull('file_upload')->first();
+        if ($findDoc) {
+            $filePath = 'public/dokumen/'.$findDoc->file_upload;
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+        }
+
+        if ($request->hasFile('file_upload')) {
+            $extension = $request->file_upload->extension();
+            $validated['file_upload'] = time().'.'.$extension;
+
+            $request->file('file_upload')->storeAs('public/dokumen', $validated['file_upload']);
+        }
+
+        $validated['created_by'] = auth()->id();
+
+        if ($findDoc) {
+            $findDoc->update($validated);
+        } else {
+            $data = new DokumenUpload($validated);
+            $data->save();
+        }
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diupload.');
     }
 }

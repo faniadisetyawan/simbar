@@ -31,8 +31,11 @@ function formatState(e) {
 $(document).ready(function () {
     $(".js-example-basic-single").select2({
         placeholder: "Select...",
-        dropdownParent: "#modal-container",
     }),
+        $(".js-example-basic-single-modal").select2({
+            placeholder: "Select...",
+            dropdownParent: "#modal-container",
+        }),
         $(".js-example-basic-multiple").select2();
     $(".js-example-data-array").select2({
         data: [

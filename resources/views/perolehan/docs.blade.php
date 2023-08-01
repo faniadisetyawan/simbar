@@ -79,23 +79,39 @@
               <p class="mb-0">{{ $data['bidang']['nama'] }}</p>
             </div>
             <div class="my-2 border border-dashed"></div>
+
             <div class="text-muted">
               <small class="d-block fw-bold">No. Dokumen :</small>
               <p class="mb-0">{{ $data['no_dokumen'] }}</p>
             </div>
             <div class="my-2 border border-dashed"></div>
+
             <div class="text-muted">
               <small class="d-block fw-bold">Tgl. Dokumen :</small>
               <p class="mb-0">{{ date('d M, Y', strtotime($data['tgl_dokumen'])) }}</p>
             </div>
             <div class="my-2 border border-dashed"></div>
+
             <div class="text-muted">
               <small class="d-block fw-bold">Uraian Dokumen :</small>
               <p class="mb-0">{{ $data['uraian_dokumen'] ? $data['uraian_dokumen'] : '-' }}</p>
             </div>
             <div class="my-2 border border-dashed"></div>
+
+            <div class="text-muted">
+              <small class="d-block fw-bold">File Upload :</small>
+              @if (is_null($data['upload']))
+                <p class="mb-0">-</p>
+              @else
+                <a href="{{ asset('storage/dokumen/' . $data['upload']['file_upload']) }}" target="_blank" rel="noopener noreferrer">
+                  <i class="ri-download-2-line me-2"></i>{{ $data['upload']['file_upload'] }}
+                </a>
+              @endif
+            </div>
+            <div class="my-2 border border-dashed"></div>
+
             <div class="d-grid">
-              <button type="button" class="btn btn-success btn-label btn-sm waves-effect">
+              <button type="button" class="btn btn-success btn-label btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#uploadModal">
                 <div class="d-flex">
                   <div class="flex-shrink-0">
                     <i class="ri-upload-line label-icon align-middle fs-16 me-2"></i>
@@ -115,7 +131,7 @@
           <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0">Daftar Barang</h5>
             <div class="flex-shrink-0">
-              <button type="button" class="btn btn-success btn-sm waves-effect" onclick="openFormModal({slug: '{{ $slug }}', data: null})">
+              <button type="button" class="btn btn-success btn-sm waves-effect" onclick="openFormModal({ slug: '{{ $slug }}', data: null, doc: {{ json_encode($data) }} })">
                 <i class="ri-add-fill align-middle me-1"></i> Tambah
               </button>
             </div>
@@ -145,7 +161,7 @@
                       </button>
                       <ul class="dropdown-menu dropdown-menu-end">
                         <li>
-                          <button class="dropdown-item" onclick="openFormModal({ slug: '{{ $slug }}', data: {{ $item }} })">
+                          <button class="dropdown-item" onclick="openFormModal({ slug: '{{ $slug }}', data: {{ $item }}, doc: {{ json_encode($data) }} })">
                             <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
                           </button>
                         </li>
@@ -153,7 +169,7 @@
                           <button class="dropdown-item" onclick="handleDestroy({{ $item }})">
                             <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Hapus
                           </button>
-                          <form id="formDestroy" action="{{ route('pembukuan.perolehan.destroyBarang', $item['id']) }}" method="post">
+                          <form id="formDestroy-{{ $item['id'] }}" action="{{ route('pembukuan.perolehan.destroyBarang', $item['id']) }}" method="post">
                             @csrf
                             @method('DELETE')
                           </form>
@@ -194,85 +210,27 @@
     </div>
   </div>
 
-  <div class="modal fade zoomIn" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  @include('components.modal-perolehan', ['slug' => $slug])
+
+  <div class="modal fade zoomIn" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content border-0">
         <div class="modal-header p-3 bg-info-subtle">
-          <h5 class="modal-title" id="exampleModalLabel">Form Barang</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Upload Dokumen</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
         </div>
-
-        <form action="{{ route('pembukuan.perolehan.store', $slug) }}" method="post" class="tablelist-form">
+  
+        <form action="{{ route('pembukuan.perolehan.uploadDokumen', $slug) }}" method="post" enctype="multipart/form-data" class="tablelist-form">
           @csrf
-
-          <input type="hidden" name="_method" value="POST" />
-          <input type="hidden" name="kode_jenis_dokumen" value="{{ $data['kode_jenis_dokumen'] }}" />
-          <input type="hidden" name="no_dokumen" value="{{ $data['no_dokumen'] }}" />
-          <input type="hidden" name="tgl_dokumen" value="{{ $data['tgl_dokumen'] }}" />
-          <input type="hidden" name="uraian_dokumen" value="{{ $data['uraian_dokumen'] }}" />
-          <input type="hidden" name="bidang_id" value="{{ $data['bidang_id'] }}" />
-
+          @method("PUT")
+  
+          <input type="hidden" name="slug_dokumen_tambah" value="{{ $data['slug_dokumen'] }}" />
+  
           <div class="modal-body" id="modal-container">
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Tanggal Pembukuan <code>*</code></label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <span class="input-group-text">
-                    <i class="ri-calendar-line"></i>
-                  </span>
-                  <input type="text" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', date('Y-m-d')) }}" />
-                </div>
-                <div class="form-text">
-                  <ul>
-                    <li>Tanggal pembukuan secara default menampilkan tanggal hari ini. Anda bisa mengubah tanggal sesuai keperluan.</li>
-                    <li>Namun perlu diketahui bahwa tanggal pembukuan ini merupakan parameter hasil pelaporan periodik.</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Pilih Barang <code>*</code></label>
-              <div class="col-sm-8">
-                <select name="barang_id" class="form-control js-example-basic-single">
-                  <option></option>
-                  @foreach ($appMasterPersediaan as $group)
-                  <optgroup label="{{ $group['key'] }}">
-                    @foreach ($group['data'] as $item)
-                    <option value="{{ $item['id'] }}" @if(old('barang_id') === $item['id']) @endif>
-                      {{ $item['kode_barang'] . '.' . $item['kode_register']. ' ' . $item['nama_barang'] . ' ' . $item['spesifikasi'] . ', @' . $item['satuan'] }}
-                    </option>
-                    @endforeach
-                  </optgroup>
-                  @endforeach
-                </select>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Jumlah Barang <code>*</code></label>
-              <div class="col-sm-8">
-                <input type="number" name="jumlah_barang" class="form-control" value="{{ old('jumlah_barang') }}" min="0" />
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Nilai Perolehan <code>*</code></label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <span class="input-group-text">Rp</span>
-                  <input type="text" id="cleaveNilaiPerolehan" class="form-control" value="{{ old('nilai_perolehan') }}" min="0" />
-                  <input type="hidden" name="nilai_perolehan" class="form-control" value="{{ old('nilai_perolehan') }}" />
-                </div>
-                <div class="form-text">Masukkan nilai total belanja, harga satuan akan terhitung otomatis setelah anda submit data ini</div>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Keterangan</label>
-              <div class="col-sm-8">
-                <textarea name="keterangan" class="form-control" rows="3">{{ old('keterangan') }}</textarea>
-              </div>
+            <div class="mb-3">
+              <label class="form-label">Pilih File <code>*</code></label>
+              <input type="file" name="file_upload" class="form-control" />
+              <div class="form-text">Untuk menghemat resource server, upload dokumen dengan ukuran maksimal 1 (satu) MB.</div>
             </div>
           </div>
           <div class="modal-footer">
@@ -295,51 +253,17 @@
   <script src="{{ asset('assets/libs/cleave.js/cleave.min.js') }}"></script>
   <script src="{{ asset('assets/js/pages/form-masks.init.js') }}"></script>
   <script>
-    const formElem = jQuery('#formModal');
-
-    const openFormModal = ({ slug, data }) => {
-      if (!!data) {
-        formElem.find('[name="_method"]').val('PUT');
-        formElem.find('[name="tgl_pembukuan"]').val(data.tgl_pembukuan);
-        formElem.find('[name="tgl_pembukuan"]').attr('data-deafult-date', data.tgl_pembukuan);
-        formElem.find('[name="barang_id"]').val(data.barang_id).change();
-        formElem.find('[name="jumlah_barang"]').val(data.jumlah_barang);
-        formElem.find('#cleaveNilaiPerolehan').val(data.nilai_perolehan);
-        formElem.find('[name="nilai_perolehan"]').val(data.nilai_perolehan);
-        formElem.find('[name="keterangan"]').val(data.keterangan);
-        formElem.find('[type="submit"]').html('Update');
-      }
-
-      let url = !!data ? 
-        `{{ url('pembukuan/perolehan/${slug}/barang/${data.id}') }}` 
-        : 
-        `{{ route('pembukuan.perolehan.store', "${slug}") }}`;
-      formElem.find('form').attr('action', url);
-
-      formElem.modal('show');
-    }
-
-    $(function () {
-      formElem.on('hidden.bs.modal', () => {
-        jQuery(this).find('form').trigger('reset');
-        jQuery(this).find('[name="_method"]').val('POST');
-        jQuery(this).find('[name="barang_id"]').val('').change();
-        jQuery(this).find('[type="submit"]').html('Submit');
-      });
-    });
-  </script>
-  <script>
     const handleDestroy = (data) => {
       Swal.fire({
         title: "Konfirmasi.",
-        html: `<small>Apakah anda yakin menghapus item ini ?</small>`,
+        html: `<small>Apakah anda yakin menghapus item <b>"${data.master_persediaan?.nama_barang}"</b> ?</small>`,
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "Hapus",
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          document.getElementById('formDestroy').submit();
+          document.getElementById('formDestroy-' + data.id).submit();
         }
       });
     }
@@ -357,4 +281,5 @@
       });
     });
   </script>
+  @stack('scripts-modal-perolehan')
 @endpush

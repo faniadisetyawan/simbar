@@ -68,6 +68,7 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::get('/{slug}/docs/{docSlug}', 'Pembukuan\PerolehanController@showByDocs')->name('pembukuan.perolehan.showByDocs');
         Route::post('/{slug}', 'Pembukuan\PerolehanController@store')->name('pembukuan.perolehan.store');
         Route::put('/{slug}/barang/{id}', 'Pembukuan\PerolehanController@updateBarang')->name('pembukuan.perolehan.updateBarang');
+        Route::put('/{slug}/upload', 'Pembukuan\PerolehanController@uploadDokumen')->name('pembukuan.perolehan.uploadDokumen');
         Route::delete('/barang/{id}', 'Pembukuan\PerolehanController@destroyBarang')->name('pembukuan.perolehan.destroyBarang');
     });
 });

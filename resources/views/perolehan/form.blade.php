@@ -62,7 +62,12 @@
               <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Tanggal Pembukuan <code>*</code></label>
                 <div class="col-sm-8">
-                  <input type="text" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', date('Y-m-d')) }}" />
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="ri-calendar-line"></i>
+                    </span>
+                    <input type="text" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', date('Y-m-d')) }}" />
+                  </div>
                   <div class="form-text">
                     <ul>
                       <li>Tanggal pembukuan secara default menampilkan tanggal hari ini. Anda bisa mengubah tanggal sesuai keperluan.</li>
@@ -102,7 +107,12 @@
             <div class="row mb-3">
               <label class="col-sm-4 col-form-label">Tanggal Dokumen <code>*</code></label>
               <div class="col-sm-8">
-                <input type="date" name="tgl_dokumen" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_dokumen') }}" />
+                <div class="input-group">
+                  <span class="input-group-text">
+                    <i class="ri-calendar-line"></i>
+                  </span>
+                  <input type="text" name="tgl_dokumen" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_dokumen') }}" />
+                </div>
                 @error('tgl_dokumen')
                 <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
