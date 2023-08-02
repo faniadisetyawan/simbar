@@ -163,7 +163,7 @@ class PerolehanController extends Controller
     {
         $query = MutasiTambah::query();
         $query->with(['master_persediaan.kodefikasi', 'get_created_by']);
-        $query->where('slug_dokumen', $docSlug)->get();
+        $query->where('slug_dokumen', $docSlug);
         $results = $query->get();
 
         $collections = [];
@@ -206,8 +206,6 @@ class PerolehanController extends Controller
                 'data' => $item,
             ];
         })->values()[0];
-
-        // return response()->json($grouped);
 
         return view('perolehan.docs', [
             'slug' => $slug,

@@ -118,7 +118,7 @@
                     <td class="text-end">{{ number_format($item['harga_satuan'], 2, ',', '.') }}</td>
                     <td class="text-end">{{ number_format($item['nilai_perolehan'], 2, ',', '.') }}</td>
                     <td>{{ $item['keterangan'] }}</td>
-                    <td style="white-space: nowrap;">{{ date('F d, Y H:i', strtotime($item['created_at'])) }}</td>
+                    <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
                   </tr>
                 @endforeach
                 @endif

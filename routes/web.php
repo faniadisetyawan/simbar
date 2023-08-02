@@ -77,7 +77,11 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => 'nota-permintaan'], function () {
         Route::get('/', 'Penyaluran\NotaPermintaanController@index')->name('penyaluran.nota-permintaan.index');
         Route::get('/create', 'Penyaluran\NotaPermintaanController@create')->name('penyaluran.nota-permintaan.create');
+        Route::get('/docs/{docSlug}', 'Penyaluran\NotaPermintaanController@showByDocs')->name('penyaluran.nota-permintaan.showByDocs');
         Route::post('/', 'Penyaluran\NotaPermintaanController@store')->name('penyaluran.nota-permintaan.store');
+        Route::put('/barang/{id}', 'Penyaluran\NotaPermintaanController@updateBarang')->name('penyaluran.nota-permintaan.updateBarang');
+        Route::put('/upload', 'Penyaluran\NotaPermintaanController@uploadDokumen')->name('penyaluran.nota-permintaan.uploadDokumen');
+        Route::delete('/barang/{id}', 'Penyaluran\NotaPermintaanController@destroyBarang')->name('penyaluran.nota-permintaan.destroyBarang');
     });
 
     Route::group(['prefix' => 'spb'], function () {

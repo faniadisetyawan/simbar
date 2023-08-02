@@ -52,6 +52,7 @@
             <div class="form-group mb-3">
               <label class="form-label">Pilih Barang <code>*</code></label>
               <select name="barang_id" class="form-control js-example-basic-single">
+                <option></option>
                 @foreach ($appMasterPersediaan as $group)
                 <optgroup label="{{ $group['key'] }}">
                   @foreach ($group['data'] as $item)
@@ -79,7 +80,8 @@
               <label class="form-label">Nilai Perolehan <code>*</code></label>
               <div class="input-group">
                 <span class="input-group-text">Rp</span>
-                <input type="number" name="nilai_perolehan" class="form-control" value="{{ old('nilai_perolehan', $props['nilai_perolehan']) }}" />
+                <input type="text" id="cleaveNilaiPerolehan" class="form-control" value="{{ old('nilai_perolehan', $props['nilai_perolehan']) }}" min="0" />
+                <input type="hidden" name="nilai_perolehan" class="form-control" />
               </div>
               @error('nilai_perolehan')
               <div class="form-text text-danger">{{ $message }}</div>
@@ -94,8 +96,8 @@
 
           <div class="card-footer">
             <div class="d-flex flex-wrap gap-2 justify-content-end">
-              <button type="submit" class="btn btn-success waves-effect">Submit</button>
               <a href="{{ route('pembukuan.saldo-awal.index', $slug) }}" class="btn btn-light waves-effect">Kembali</a>
+              <button type="submit" class="btn btn-success waves-effect">Submit</button>
             </div>
           </div>
         </form>
@@ -108,4 +110,18 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
+  <script src="{{ asset('assets/libs/cleave.js/cleave.min.js') }}"></script>
+  <script>
+    $(function () {
+      let cleaveNilaiPerolehan = new Cleave('#cleaveNilaiPerolehan', {
+        numeral: true,
+        numeralDecimalMark: ",",
+        delimiter: ".",
+      });
+
+      $('#cleaveNilaiPerolehan').change(function (e) {
+        $('[name="nilai_perolehan"]').val(cleaveNilaiPerolehan.getRawValue());
+      });
+    });
+  </script>
 @endpush

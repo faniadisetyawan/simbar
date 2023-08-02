@@ -101,6 +101,82 @@
             </div>
           </form>
         </div>
+
+        <div class="card-body">
+          <div class="table-responsive table-card mb-1">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th scope="col" class="text-center">Action</th>
+                  <th scope="col">Kode Barang</th>
+                  <th scope="col">Nama Barang</th>
+                  <th scope="col">NUSP</th>
+                  <th scope="col">Spesifikasi Nama Barang</th>
+                  <th scope="col">Spesifikasi Lainnya</th>
+                  <th scope="col">Keperluan</th>
+                  <th scope="col" class="text-end">Jumlah Barang</th>
+                  <th scope="col">Satuan</th>
+                  <th scope="col">Tgl. Pembukuan</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($data as $doc)
+                  @php
+                    $detailUrl = route('penyaluran.nota-permintaan.showByDocs', [$doc['slug_dokumen']]);
+                  @endphp
+
+                  <tr class="table-active fw-bold">
+                    <td class="text-center">
+                      <a href="{{ $detailUrl }}" class="link-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Selengkapnya">
+                        <i class="ri-arrow-right-line align-middle"></i>
+                      </a>
+                    </td>
+                    <td colspan="6">
+                      <a href="{{ $detailUrl }}" class="link-primary">
+                        <div class="d-flex align-items-center">
+                          <h6 class="my-0">{{ $doc['no_dokumen'] . ' - ' }}</h6>
+                          <span class="ms-2 d-flex align-items-center">
+                            <i class="ri-calendar-line me-2"></i>{{ date('M d, Y', strtotime($doc['tgl_dokumen'])) }}
+                          </span>
+                        </div>
+                        <p class="text-muted fs-12 mb-0">
+                          <i class="mdi mdi-circle-medium text-success fs-15 align-middle"></i>{{ $doc['bidang']['nama'] }}
+                        </p>
+                      </a>
+                    </td>
+                    <td class="text-end">
+                      <h6 class="my-0 fw-bold text-primary">{{ $doc['total'] }}</h6>
+                    </td>
+                    <td colspan="2"></td>
+                  </tr>
+
+                  @foreach ($doc['data'] as $item)
+                  <tr>
+                    <td class="text-center"></td>
+                    <td>{{ $item['master_persediaan']['kode_barang'] }}</td>
+                    <td>{{ $item['master_persediaan']['kodefikasi']['uraian'] }}</td>
+                    <td>{{ $item['master_persediaan']['kode_register'] }}</td>
+                    <td>{{ $item['master_persediaan']['nama_barang'] }}</td>
+                    <td>{{ $item['master_persediaan']['spesifikasi'] }}</td>
+                    <td>{{ $item['keperluan'] }}</td>
+                    <td class="text-end">{{ $item['jumlah_barang_permintaan'] }}</td>
+                    <td>{{ $item['master_persediaan']['satuan'] }}</td>
+                    <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
+                  </tr>
+                  @endforeach
+                @endforeach
+              </tbody>
+            </table>
+
+            @if (count($data) === 0)
+              @include('components.empty-record')
+            @endif
+          </div>
+
+          <div class="d-flex justify-content-end">
+            {{ $paginator->withQueryString()->links() }}
+          </div>
+        </div>
       </div>
     </div>
   </div>

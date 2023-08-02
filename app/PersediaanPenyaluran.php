@@ -23,7 +23,26 @@ class PersediaanPenyaluran extends Model
         'jumlah_barang_usulan',
         'keperluan',
         'keterangan',
+        'parent_id',
         'created_by',
         'updated_by',
     ];
+
+    public function bidang() 
+    {
+        return $this->belongsTo('App\Bidang', 'bidang_id')->withTrashed();
+    }
+
+    public function master_persediaan() 
+    {
+        return $this->belongsTo('App\PersediaanMaster', 'barang_id')->withTrashed();
+    }
+
+    public function get_created_by() 
+    {
+        return $this->belongsTo('App\User', 'created_by')->select(
+            'id',
+            'nama'
+        );
+    }
 }

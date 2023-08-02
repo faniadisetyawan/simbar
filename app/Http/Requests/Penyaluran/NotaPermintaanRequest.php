@@ -24,11 +24,11 @@ class NotaPermintaanRequest extends FormRequest
     public function rules()
     {
         return [
+            'bidang_id' => ['required'],
             'tgl_pembukuan' => ['required', 'date'],
             'no_dokumen' => ['required', 'max: 100'],
             'tgl_dokumen' => ['required', 'date'],
             'uraian_dokumen' => ['nullable'],
-            'bidang_id' => ['required'],
             'barang_id' => ['required'],
             'jumlah_barang_permintaan' => ['required', 'gte:0'],
             'keperluan' => ['required'],

@@ -29,6 +29,7 @@ class CreatePersediaanPenyaluransTable extends Migration
             $table->unsignedInteger('jumlah_barang_usulan')->default(0);
             $table->text('keperluan')->nullable();
             $table->text('keterangan')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreignId('created_by')->constrained('users')->onUpdate('cascade');
             $table->foreignId('updated_by')->constrained('users')->onUpdate('cascade');
             $table->timestamps();
@@ -38,6 +39,7 @@ class CreatePersediaanPenyaluransTable extends Migration
             $table->index('tgl_pembukuan');
             $table->index('no_dokumen');
             $table->index('slug_dokumen');
+            $table->index('parent_id');
         });
     }
 

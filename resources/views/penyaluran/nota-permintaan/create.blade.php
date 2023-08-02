@@ -113,7 +113,7 @@
             <div class="row mb-3">
               <label class="col-sm-4 col-form-label">Pilih Barang <code>*</code></label>
               <div class="col-sm-8">
-                <select name="barang_id" class="form-control js-example-basic-single">
+                <select name="barang_id" class="form-select">
                   <option></option>
                 </select>
                 @error('barang_id')
@@ -133,7 +133,7 @@
             <div class="row mb-3">
               <label class="col-sm-4 col-form-label">Keperluan <code>*</code></label>
               <div class="col-sm-8">
-                <textarea name="keterangan" class="form-control" rows="3">{{ old('keperluan') }}</textarea>
+                <textarea name="keperluan" class="form-control" rows="3">{{ old('keperluan') }}</textarea>
                 @error('keperluan')
                 <div class="form-text text-danger">{{ $message }}</div>
                 @enderror
@@ -163,4 +163,37 @@
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
   <script src="{{ asset('assets/js/pages/form-masks.init.js') }}"></script>
+  <script>
+    jQuery(function () {
+      const elemTglPembukuan = jQuery('[name="tgl_pembukuan"]');
+      const elemSelectBarang = jQuery('select[name="barang_id"]');
+
+      let filter = elemTglPembukuan.val();
+      elemTglPembukuan.change(function (e) {
+        elemSelectBarang.val(null).change();
+        filter = e.target.value;
+      });
+
+      elemSelectBarang.select2({
+        placeholder: "Select...",
+        ajax: {
+          url: '/api/master/persediaan/available-stock',
+          dataType: 'json',
+          data: (params) => {
+            return {
+              search: params.term,
+              tgl_pembukuan: filter
+            }
+          },
+          processResults: (response) => {
+            response.map((item) => Object.assign(item, { text: `${item.kode_barang}.${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.jumlah_barang} ${item.satuan}` }));
+
+            return {
+              results: response
+            }
+          },
+        },
+      });
+    });
+  </script>
 @endpush
