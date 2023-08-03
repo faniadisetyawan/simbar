@@ -86,7 +86,11 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'spb'], function () {
         Route::get('/', 'Penyaluran\SpbController@index')->name('penyaluran.spb.index');
+        Route::get('/create', 'Penyaluran\SpbController@create')->name('penyaluran.spb.create');
+        Route::get('/docs/{docSlug}', 'Penyaluran\SpbController@showByDocs')->name('penyaluran.spb.showByDocs');
         Route::post('/', 'Penyaluran\SpbController@store')->name('penyaluran.spb.store');
+        Route::put('/upload', 'Penyaluran\SpbController@uploadDokumen')->name('penyaluran.spb.uploadDokumen');
+        Route::delete('/barang/{id}', 'Penyaluran\SpbController@destroyBarang')->name('penyaluran.spb.destroyBarang');
     });
 
     Route::group(['prefix' => 'sppb'], function () {

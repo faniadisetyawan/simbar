@@ -10,14 +10,14 @@
   <div class="row">
     <div class="col-12">
       <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-        <h4 class="mb-sm-0">Form - Nota Permintaan Barang</h4>
+        <h4 class="mb-sm-0">Form - {{ $pageTitle }}</h4>
         <div class="page-title-right">
           <ol class="breadcrumb m-0">
             <li class="breadcrumb-item">
               <a href="javascript: void(0);">Penyaluran Persediaan</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="{{ route('penyaluran.nota-permintaan.index') }}">Nota Permintaan</a>
+              <a href="{{ route('penyaluran.nota-permintaan.index') }}">{{ $pageTitle }}</a>
             </li>
             <li class="breadcrumb-item active">Create</li>
           </ol>
@@ -38,7 +38,7 @@
               <div class="col-12">
                 <div class="mb-5 alert alert-primary alert-border-left" role="alert">
                   <ul class="mb-0">
-                    <li>Nota Permintaan Barang ini sebagai dasar Pengurus Barang mengajukan Surat Permintaan Barang (SPB) ke Pejabat Penatausahaan Barang.</li>
+                    <li>Surat Permintaan Barang (SPB) ini menjadi dasar pembuatan Surat Perintah Penyaluran Barang (SPPB) dari Pejabat Penatausahaan Barang.</li>
                     <li>Semua inputan dengan label <code>*</code> harus diisi.</li>
                   </ul>
                 </div>
@@ -46,13 +46,10 @@
             </div>
 
             <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Pilih Bidang <code>*</code></label>
+              <label class="col-sm-4 col-form-label">Pilih Nota Permintaan <code>*</code></label>
               <div class="col-sm-8">
                 <select name="bidang_id" class="form-control js-example-basic-single">
                   <option></option>
-                  @foreach ($appBidang as $item)
-                    <option value="{{ $item['id'] }}" @if(old('bidang_id', auth()->user()->bidang_id) == $item['id']) selected @endif>{{ $item['id']. '. ' . $item['nama'] }}</option>
-                  @endforeach
                 </select>
               </div>
             </div>
