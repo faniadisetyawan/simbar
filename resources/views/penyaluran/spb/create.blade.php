@@ -17,7 +17,7 @@
               <a href="javascript: void(0);">Penyaluran Persediaan</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="{{ route('penyaluran.nota-permintaan.index') }}">{{ $pageTitle }}</a>
+              <a href="{{ route('penyaluran.spb.index') }}">{{ $pageTitle }}</a>
             </li>
             <li class="breadcrumb-item active">Create</li>
           </ol>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="col-12">
-      <form action="{{ route('penyaluran.nota-permintaan.store') }}" method="POST">
+      <form action="{{ route('penyaluran.spb.store') }}" method="POST">
         @csrf
 
         <div class="card">
@@ -46,21 +46,13 @@
             </div>
 
             <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Pilih Nota Permintaan <code>*</code></label>
-              <div class="col-sm-8">
-                <select name="bidang_id" class="form-control js-example-basic-single">
-                  <option></option>
-                </select>
-              </div>
-            </div>
-            <div class="row mb-3">
               <label class="col-sm-4 col-form-label">Tanggal Pembukuan <code>*</code></label>
               <div class="col-sm-8">
                 <div class="input-group">
                   <span class="input-group-text">
                     <i class="ri-calendar-line"></i>
                   </span>
-                  <input type="text" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', date('Y-m-d')) }}" />
+                  <input type="text" name="tgl_pembukuan" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_pembukuan', $filter->tgl_pembukuan) }}" />
                 </div>
                 <div class="form-text">
                   <ul>
@@ -70,85 +62,111 @@
                 </div>
               </div>
             </div>
-
-            <div class="border mt-5 mb-3 border-dashed"></div>
-
-            <div class="mb-3 alert alert-primary alert-border-left" role="alert">Kelengkapan Dokumen {{ $pageTitle }}</div>
             <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Nomor Dokumen <code>*</code></label>
+              <label class="col-sm-4 col-form-label">Nota Permintaan <code>*</code></label>
               <div class="col-sm-8">
-                <input type="text" name="no_dokumen" class="form-control" value="{{ old('no_dokumen') }}" />
-                @error('no_dokumen')
-                <div class="form-text text-danger">{{ $message }}</div>
-                @enderror
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Tanggal Dokumen <code>*</code></label>
-              <div class="col-sm-8">
-                <div class="input-group">
-                  <span class="input-group-text">
-                    <i class="ri-calendar-line"></i>
-                  </span>
-                  <input type="text" name="tgl_dokumen" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_dokumen') }}" />
-                </div>
-                @error('tgl_dokumen')
-                <div class="form-text text-danger">{{ $message }}</div>
-                @enderror
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Uraian Dokumen</label>
-              <div class="col-sm-8">
-                <textarea name="uraian_dokumen" class="form-control" rows="3">{{ old('uraian_dokumen') }}</textarea>
-              </div>
-            </div>
-
-            <div class="border mt-5 mb-3 border-dashed"></div>
-
-            <div class="mb-3 alert alert-primary alert-border-left" role="alert">Rincian {{ $pageTitle }}</div>
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Pilih Barang <code>*</code></label>
-              <div class="col-sm-8">
-                <select name="barang_id" class="form-select">
+                <select name="nota_permintaan" class="form-control js-example-basic-single">
                   <option></option>
+                  @foreach ($dokumenNotaPermintaan as $item)
+                  <option value="{{ $item->slug_dokumen }}" @if(isset($filter->nota_permintaan) && $filter->nota_permintaan == $item->slug_dokumen) selected @endif>
+                    {{ $item->no_dokumen . ' . Tgl ' . date('d M, Y', strtotime($item->tgl_dokumen)) . ' . (' . $item->bidang->nama . ')' }}
+                  </option>
+                  @endforeach
                 </select>
-                @error('barang_id')
-                <div class="form-text text-danger">{{ $message }}</div>
-                @enderror
               </div>
             </div>
+
+            @if (count($dokumenNotaPermintaan) > 0 && count($dataNotaPermintaan) > 0)
             <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Jumlah Barang <code>*</code></label>
+              <div class="col-sm-4"></div>
               <div class="col-sm-8">
-                <input type="number" name="jumlah_barang_permintaan" class="form-control" value="{{ old('jumlah_barang_permintaan') }}" min="0" />
-                @error('jumlah_barang_permintaan')
-                <div class="form-text text-danger">{{ $message }}</div>
-                @enderror
+                <div class="table-responsive">
+                  <table class="table caption-top table-nowrap align-middle table-borderless mb-0">
+                    <caption>Rincian Nota Permintaan</caption>
+                    <thead class="table-light text-muted">
+                      <tr>
+                        <th scope="col" class="text-center">ID</th>
+                        <th scope="col">Kodefikasi</th>
+                        <th scope="col">Spesifikasi</th>
+                        <th scope="col" class="text-end">Jumlah Permintaan</th>
+                        <th scope="col">Satuan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($dataNotaPermintaan as $item)
+                        <input type="hidden" name="parent_id[]" value="{{ $item->id }}" />
+                        <input type="hidden" name="bidang_id[]" value="{{ $item->bidang_id }}" />
+                        <input type="hidden" name="barang_id[]" value="{{ $item->barang_id }}" />
+                        <input type="hidden" name="jumlah_barang_permintaan[]" value="{{ $item->jumlah_barang_permintaan }}" />
+                        <input type="hidden" name="keperluan[]" value="{{ $item->keperluan }}" />
+                        <input type="hidden" name="keterangan[]" value="{{ $item->keterangan }}" />
+
+                        <tr>
+                          <td class="text-center">{{ $item->id }}</td>
+                          <td>
+                            <h5 class="fs-15">{{ $item->master_persediaan->kode_barang }}</h5>
+                            <p class="text-muted mb-0">NUSP: <span class="fw-medium">{{ $item->master_persediaan->kode_register }}</span></p>
+                            <p class="text-muted mb-0">Nama: <span class="fw-medium">{{ $item->master_persediaan->kodefikasi->uraian }}</span></p>
+                          </td>
+                          <td>
+                            <h5 class="fs-15">{{ $item->master_persediaan->nama_barang }}</h5>
+                            <p class="text-muted mb-0">Spesifikasi: <span class="fw-medium">{{ $item->master_persediaan->spesifikasi }}</span></p>
+                          </td>
+                          <td class="text-end">{{ $item->jumlah_barang_permintaan }}</td>
+                          <td>{{ $item->master_persediaan->satuan }}</td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Keperluan <code>*</code></label>
-              <div class="col-sm-8">
-                <textarea name="keperluan" class="form-control" rows="3">{{ old('keperluan') }}</textarea>
-                @error('keperluan')
-                <div class="form-text text-danger">{{ $message }}</div>
-                @enderror
+            @endif
+
+            @if (isset($filter->tgl_pembukuan) && isset($filter->nota_permintaan))
+              <div class="border mt-5 mb-3 border-dashed"></div>
+
+              <div class="mb-3 alert alert-primary alert-border-left" role="alert">Kelengkapan Dokumen {{ $pageTitle }}</div>
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Nomor Dokumen <code>*</code></label>
+                <div class="col-sm-8">
+                  <input type="text" name="no_dokumen" class="form-control" value="{{ old('no_dokumen') }}" required />
+                  @error('no_dokumen')
+                  <div class="form-text text-danger">{{ $message }}</div>
+                  @enderror
+                </div>
               </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Keterangan</label>
-              <div class="col-sm-8">
-                <textarea name="keterangan" class="form-control" rows="3">{{ old('keterangan') }}</textarea>
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Tanggal Dokumen <code>*</code></label>
+                <div class="col-sm-8">
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="ri-calendar-line"></i>
+                    </span>
+                    <input type="text" name="tgl_dokumen" class="form-control" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ old('tgl_dokumen') }}" required />
+                  </div>
+                  @error('tgl_dokumen')
+                  <div class="form-text text-danger">{{ $message }}</div>
+                  @enderror
+                </div>
               </div>
-            </div>
+              <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Uraian Dokumen</label>
+                <div class="col-sm-8">
+                  <textarea name="uraian_dokumen" class="form-control" rows="3">{{ old('uraian_dokumen') }}</textarea>
+                </div>
+              </div>
+            @endif
           </div>
+
+          @if (isset($filter->tgl_pembukuan) && isset($filter->nota_permintaan))
           <div class="card-footer">
             <div class="hstack gap-2 justify-content-end">
-              <a href="{{ route('penyaluran.nota-permintaan.index') }}" class="btn btn-light waves-effect">Kembali</a>
+              <a href="{{ route('penyaluran.spb.index') }}" class="btn btn-light waves-effect">Kembali</a>
               <button type="submit" class="btn btn-success waves-effect">Submit</button>
             </div>
           </div>
+          @endif
         </div>
       </form>
     </div>
@@ -159,37 +177,22 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
-  <script src="{{ asset('assets/js/pages/form-masks.init.js') }}"></script>
+  <script src="{{ asset('assets/js/pages/form-input-spin.init.js') }}"></script>
   <script>
-    jQuery(function () {
-      const elemTglPembukuan = jQuery('[name="tgl_pembukuan"]');
-      const elemSelectBarang = jQuery('select[name="barang_id"]');
+    const setParams = (tglPembukuan, slugDokumen) => {
+      window.location.href = "{{ url('penyaluran/spb/create') }}?tgl_pembukuan=" + tglPembukuan + "&nota_permintaan=" + slugDokumen;
+    }
 
-      let filter = elemTglPembukuan.val();
-      elemTglPembukuan.change(function (e) {
-        elemSelectBarang.val(null).change();
-        filter = e.target.value;
+    $(function () {
+      const elemTglPembukuan = $('[name="tgl_pembukuan"]');
+      const elemNotaPermintaan = $('[name="nota_permintaan"]');
+
+      elemTglPembukuan.change(function (e) { 
+        setParams(e.target.value, elemNotaPermintaan.val());
       });
 
-      elemSelectBarang.select2({
-        placeholder: "Select...",
-        ajax: {
-          url: '/api/master/persediaan/available-stock',
-          dataType: 'json',
-          data: (params) => {
-            return {
-              search: params.term,
-              tgl_pembukuan: filter
-            }
-          },
-          processResults: (response) => {
-            response.map((item) => Object.assign(item, { text: `${item.kode_barang}.${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.jumlah_barang} ${item.satuan}` }));
-
-            return {
-              results: response
-            }
-          },
-        },
+      elemNotaPermintaan.change(function (e) { 
+        setParams(elemTglPembukuan.val(), $(this).val());        
       });
     });
   </script>
