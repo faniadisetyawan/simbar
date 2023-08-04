@@ -125,22 +125,8 @@
         <div class="card-header">
           <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0">Daftar Barang</h5>
-            <div class="flex-shrink-0">
-              <button type="button" class="btn btn-success btn-sm waves-effect">
-                <i class="ri-check-fill align-middle me-1"></i> Simpan Perubahan
-              </button>
-            </div>
           </div>
         </div>
-        <div class="card-body bg-light-subtle">
-          <div class="alert alert-info alert-border-left my-0" role="alert">
-            <ul class="my-0">
-              <li>Beri nilai <span class="text-danger">0 (nol)</span> untuk item yang ingin anda <span class="text-danger">tolak</span>.</li>
-              <li>Setelah melakukan perubahan jumlah barang SPB klik button <b>Simpan Perubahan</b></li>
-            </ul>
-          </div>
-        </div>
-
         <div class="card-body">
           <div class="table-responsive table-card">
             <table class="table table-nowrap align-middle table-borderless mb-0">
@@ -148,6 +134,7 @@
                 <tr>
                   <th scope="col">Kodefikasi</th>
                   <th scope="col">Spesifikasi</th>
+                  <th scope="col" class="text-end">Jumlah Permintaan</th>
                   <th scope="col" class="text-end">Jumlah Usulan (SPB)</th>
                   <th scope="col">Satuan</th>
                   <th scope="col">Keperluan</th>
@@ -166,13 +153,8 @@
                     <h5 class="fs-15">{{ $item['master_persediaan']['nama_barang'] }}</h5>
                     <p class="text-muted mb-0">Spesifikasi: <span class="fw-medium">{{ $item['master_persediaan']['spesifikasi'] }}</span></p>
                   </td>
-                  <td class="text-end">
-                    <div class="input-step">
-                      <button type="button" class="minus">–</button>
-                      <input type="number" class="product-quantity" value="{{ $item['jumlah_barang_usulan'] }}" min="0" max="10000">
-                      <button type="button" class="plus">+</button>
-                    </div>
-                  </td>
+                  <td class="text-end">{{ $item['jumlah_barang_permintaan'] }}</td>
+                  <td class="text-end table-active">{{ $item['jumlah_barang_usulan'] }}</td>
                   <td>{{ $item['master_persediaan']['satuan'] }}</td>
                   <td>{{ $item['keperluan'] }}</td>
                   <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
@@ -183,7 +165,7 @@
                 <tr class="border-top border-top-dashed">
                   <td colspan="2"></td>
                   <th class="text-end">Jumlah :</th>
-                  <th class="text-end">
+                  <th class="text-end table-active">
                     <div class="fs-15">{{ $data['total'] }}</div>
                   </th>
                   <td colspan="3"></td>

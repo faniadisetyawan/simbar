@@ -2,12 +2,24 @@
 
 namespace App\Traits;
 
+use DB;
 use App\Bidang;
 use App\PersediaanMaster;
+use App\MutasiTambah;
 use App\MutasiKurang;
+use App\Setting;
 
 trait ProviderTraits
 {
+    private $setting;
+    private $startDate;
+
+    public function __construct() 
+    {
+        $this->setting = Setting::first();
+        $this->startDate = $this->setting->tahun_anggaran . '-01-01';
+    }
+
     public function _generateNUSP($kodeBarang) 
     {
         $maxValue = PersediaanMaster::where('kode_barang', $kodeBarang)->max('kode_register');
@@ -51,5 +63,61 @@ trait ProviderTraits
         } else {
             return FALSE;
         }
+    }
+
+    private function _getMutasiTambahByDate($tglPembukuan) 
+    {
+        $query = MutasiTambah::query();
+        $query->select(
+            'barang_id',
+            DB::raw('SUM(jumlah_barang) AS jumlah_barang')
+        );
+        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+        $query->groupBy('barang_id');
+
+        return $query->get();
+    }
+    
+    public function _availableStock($search, $tglPembukuan) 
+    {
+        $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
+
+        $query = PersediaanMaster::query();
+        $query->with(['kodefikasi']);
+        $query->whereIn('id', $mutasiTambah->pluck('barang_id'));
+        $query->where(function ($q) use ($search) {
+            $q->orWhere('nama_barang', 'like', '%'.$search.'%');
+            $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
+        });
+        $query->orderBy('kode_barang');
+        
+        $data = [];
+        foreach ($query->get() as $barang) {
+            foreach ($mutasiTambah as $mutasi) {
+                if ($mutasi->barang_id == $barang->id) {
+                    $barang->jumlah_barang = $mutasi->jumlah_barang;
+                }
+            }
+
+            array_push($data, $barang);
+        }
+
+        return $data;
+    }
+
+    public function _findAvailableStock($id, $tglPembukuan) 
+    {
+        $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
+
+        $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
+        $data->jumlah_barang = 0;
+        
+        foreach ($mutasiTambah as $mutasi) {
+            if ($mutasi->barang_id == $data->id) {
+                $data->jumlah_barang = $mutasi->jumlah_barang;
+            }
+        }
+
+        return $data->jumlah_barang;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Penyaluran;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Traits\ProviderTraits;
 use App\Http\Requests\Penyaluran\SpbRequest;
 use App\Setting;
 use App\PersediaanPenyaluran as Penyaluran;
@@ -12,6 +13,8 @@ use App\DokumenUpload;
 
 class SpbController extends Controller
 {
+    use ProviderTraits;
+
     private $pageTitle;
     private $setting;
     private $startDate;
@@ -126,8 +129,14 @@ class SpbController extends Controller
         $dataNotaPermintaan = [];
 
         if (isset($filter->nota_permintaan)) {
-            $dataNotaPermintaan = $this->_getNotaPermintaanBySlug($filter->nota_permintaan);
+            foreach ($this->_getNotaPermintaanBySlug($filter->nota_permintaan) as $item) {
+                $sisaStok = $this->_findAvailableStock($item['barang_id'], $filter->tgl_pembukuan);
+                $item->jumlah_barang_sisa = $sisaStok;
+
+                array_push($dataNotaPermintaan, $item);
+            }            
         }
+
 
         return view('penyaluran.spb.create', [
             'pageTitle' => $this->pageTitle,
@@ -142,7 +151,16 @@ class SpbController extends Controller
         $allRequests = $request->all();
 
         $data = [];
-        for ($i=0; $i < count($allRequests['parent_id']); $i++) { 
+        for ($i=0; $i < count($allRequests['parent_id']); $i++) {
+            $jumlahBarangUsulan = $allRequests['jumlah_barang_usulan'][$i];
+
+            $currentStok = $this->_findAvailableStock($allRequests['barang_id'][$i], $allRequests['tgl_pembukuan']);
+            $sisaStok = ($currentStok - $jumlahBarangUsulan);
+
+            if ($jumlahBarangUsulan > $currentStok) {
+                return redirect()->back()->withErrors(['message' => 'Jumlah barang usulan SPB tidak boleh melebihi sisa stok barang.']);
+            }
+
             $data[] = [
                 'kode_pembukuan' => '31',
                 'tgl_pembukuan' => $allRequests['tgl_pembukuan'],
@@ -154,8 +172,8 @@ class SpbController extends Controller
                 'bidang_id' => $allRequests['bidang_id'][$i],
                 'barang_id' => $allRequests['barang_id'][$i],
                 'jumlah_barang_permintaan' => $allRequests['jumlah_barang_permintaan'][$i],
-                'jumlah_barang_sisa' => 0,
-                'jumlah_barang_usulan' => $allRequests['jumlah_barang_permintaan'][$i],
+                'jumlah_barang_sisa' => $sisaStok,
+                'jumlah_barang_usulan' => $jumlahBarangUsulan,
                 'keperluan' => $allRequests['keperluan'][$i],
                 'keterangan' => $allRequests['keterangan'][$i],
                 'parent_id' => $allRequests['parent_id'][$i],

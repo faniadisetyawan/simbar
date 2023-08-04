@@ -25,6 +25,18 @@
       </div>
     </div>
 
+    @if($errors->any())
+    <div class="col-12">
+      {!! implode('', $errors->all('
+        <div class="alert alert-danger alert-border-left alert-dismissible fade show" role="alert">
+          <i class="ri-error-warning-line me-3 align-middle fs-16"></i><strong>Error</strong>
+          - :message
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      ')) !!}
+    </div>
+    @endif
+
     <div class="col-12">
       <form action="{{ route('penyaluran.spb.store') }}" method="POST">
         @csrf
@@ -82,14 +94,18 @@
               <div class="col-sm-8">
                 <div class="table-responsive">
                   <table class="table caption-top table-nowrap align-middle table-borderless mb-0">
-                    <caption>Rincian Nota Permintaan</caption>
+                    <caption>
+                      <div class="fw-bold">Rincian Nota Permintaan</div>
+                      <small class="d-block">Beri nilai <span class="text-danger">0 (nol)</span> untuk item yang <span class="text-danger">tidak disetujui</span>.</small>
+                    </caption>
                     <thead class="table-light text-muted">
                       <tr>
                         <th scope="col" class="text-center">ID</th>
                         <th scope="col">Kodefikasi</th>
                         <th scope="col">Spesifikasi</th>
-                        <th scope="col" class="text-end">Jumlah Permintaan</th>
                         <th scope="col">Satuan</th>
+                        <th scope="col" class="text-end">Jumlah Permintaan</th>
+                        <th scope="col" class="text-end">Jumlah Usulan (SPB)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -112,8 +128,15 @@
                             <h5 class="fs-15">{{ $item->master_persediaan->nama_barang }}</h5>
                             <p class="text-muted mb-0">Spesifikasi: <span class="fw-medium">{{ $item->master_persediaan->spesifikasi }}</span></p>
                           </td>
-                          <td class="text-end">{{ $item->jumlah_barang_permintaan }}</td>
                           <td>{{ $item->master_persediaan->satuan }}</td>
+                          <td class="text-end">{{ $item->jumlah_barang_permintaan }}</td>
+                          <td class="text-end">
+                            <div class="input-step">
+                              <button type="button" class="minus">–</button>
+                              <input type="number" name="jumlah_barang_usulan[]" class="product-quantity" value="{{ $item->jumlah_barang_permintaan }}" min="0" max="{{ $item->jumlah_barang_sisa }}" />
+                              <button type="button" class="plus">+</button>
+                            </div>
+                          </td>
                         </tr>
                       @endforeach
                     </tbody>
