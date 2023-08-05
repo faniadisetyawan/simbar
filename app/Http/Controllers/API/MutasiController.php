@@ -58,7 +58,7 @@ class MutasiController extends Controller
         return $query;
     }
 
-    private function _calculateMutasiKurang($arrayMutasiTambah, $arrayMutasiKurang) 
+    private function _groupedMutasiKurang($arrayMutasiTambah, $arrayMutasiKurang) 
     {
         $breakdown = [];
         foreach ($arrayMutasiTambah as $key => $value) {
@@ -121,8 +121,8 @@ class MutasiController extends Controller
         $sourceMutasiTambah = $this->_getMutasiTambah($tglPembukuan, $barangId)->get();
         $sourceMutasiKurang = $this->_getMutasiKurang($tglPembukuan, $barangId)->get();
 
-        $groupMutasiKurang = $this->_calculateMutasiKurang($sourceMutasiTambah, $sourceMutasiKurang);
-        $collection = array_merge($sourceMutasiTambah->toArray(), $groupMutasiKurang);
+        $groupedMutasiKurang = $this->_groupedMutasiKurang($sourceMutasiTambah, $sourceMutasiKurang);
+        $collection = array_merge($sourceMutasiTambah->toArray(), $groupedMutasiKurang);
         $grouped = collect($collection)->sortBy('tgl_pembukuan')->values()->all();
 
         $items = [];
