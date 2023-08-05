@@ -131,12 +131,11 @@ class SpbController extends Controller
         if (isset($filter->nota_permintaan)) {
             foreach ($this->_getNotaPermintaanBySlug($filter->nota_permintaan) as $item) {
                 $sisaStok = $this->_findAvailableStock($item['barang_id'], $filter->tgl_pembukuan);
-                $item->jumlah_barang_sisa = $sisaStok;
+                $item->jumlah_barang_sisa = $sisaStok->jumlah_barang;
 
                 array_push($dataNotaPermintaan, $item);
-            }            
+            }
         }
-
 
         return view('penyaluran.spb.create', [
             'pageTitle' => $this->pageTitle,
@@ -155,7 +154,7 @@ class SpbController extends Controller
             $jumlahBarangUsulan = $allRequests['jumlah_barang_usulan'][$i];
 
             $currentStok = $this->_findAvailableStock($allRequests['barang_id'][$i], $allRequests['tgl_pembukuan']);
-            $sisaStok = ($currentStok - $jumlahBarangUsulan);
+            $sisaStok = ($currentStok->jumlah_barang - $jumlahBarangUsulan);
 
             if ($jumlahBarangUsulan > $currentStok) {
                 return redirect()->back()->withErrors(['message' => 'Jumlah barang usulan SPB tidak boleh melebihi sisa stok barang.']);
@@ -232,7 +231,7 @@ class SpbController extends Controller
                 'bidang_id' => $findDoc['bidang_id'],
                 'bidang' => $findDoc['bidang'],
                 'upload' => $findUpload,
-                'total' => collect($item)->sum('jumlah_barang_permintaan'),
+                'total' => collect($item)->sum('jumlah_barang_usulan'),
                 'data' => $item,
             ];
         })->values()[0];

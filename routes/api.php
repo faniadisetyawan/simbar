@@ -20,3 +20,5 @@ Route::group(['prefix' => 'master'], function () {
         Route::get('/available-stock/{id}', 'API\PersediaanMasterController@findAvailableStock');
     });
 });
+
+Route::get('/kartu-persediaan', 'API\MutasiController@kartuPersediaan');

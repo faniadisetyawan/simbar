@@ -180,37 +180,4 @@
       </div>
     </div>
   </div>
-
-  <div class="modal fade zoomIn" id="formCreateModal" tabindex="-1" aria-labelledby="formCreateModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content border-0">
-        <div class="modal-header p-3 bg-info-subtle">
-          <h5 class="modal-title" id="exampleModalLabel">Dasar Permintaan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
-        </div>
-  
-        <form action="{{ route('penyaluran.spb.uploadDokumen') }}" method="post" enctype="multipart/form-data" class="tablelist-form">
-          @csrf
-          @method("PUT")
-  
-          {{-- <input type="hidden" name="slug_dokumen_tambah" value="{{ $data['slug_dokumen'] }}" /> --}}
-  
-          <div class="modal-body" id="modal-container">
-            <div class="mb-3">
-              <label class="form-label">Pilih Nota Permintaan <code>*</code></label>
-              <select name="" class="form-select">
-                <option></option>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="hstack gap-2 justify-content-end">
-              <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-success">Submit</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 @endsection

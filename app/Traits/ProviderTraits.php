@@ -70,7 +70,8 @@ trait ProviderTraits
         $query = MutasiTambah::query();
         $query->select(
             'barang_id',
-            DB::raw('SUM(jumlah_barang) AS jumlah_barang')
+            DB::raw('SUM(jumlah_barang) AS jumlah_barang'),
+            DB::raw('SUM(nilai_perolehan) AS nilai_perolehan')
         );
         $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
         $query->groupBy('barang_id');
@@ -111,13 +112,20 @@ trait ProviderTraits
 
         $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
         $data->jumlah_barang = 0;
+        $data->nilai_perolehan = 0;
+        $data->saldo_jumlah_barang = 0;
+        $data->saldo_nilai_perolehan = 0;
         
         foreach ($mutasiTambah as $mutasi) {
             if ($mutasi->barang_id == $data->id) {
                 $data->jumlah_barang = $mutasi->jumlah_barang;
+                $data->harga_satuan = $mutasi->harga_satuan;
+                $data->nilai_perolehan = $mutasi->nilai_perolehan;
+                $data->saldo_jumlah_barang = $mutasi->saldo_jumlah_barang;
+                $data->saldo_nilai_perolehan = $mutasi->saldo_nilai_perolehan;
             }
         }
 
-        return $data->jumlah_barang;
+        return $data;
     }
 }

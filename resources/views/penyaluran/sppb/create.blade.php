@@ -17,7 +17,7 @@
               <a href="javascript: void(0);">Penyaluran Persediaan</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="{{ route('penyaluran.spb.index') }}">{{ $pageTitle }}</a>
+              <a href="{{ route('penyaluran.sppb.index') }}">{{ "SPPB" }}</a>
             </li>
             <li class="breadcrumb-item active">Create</li>
           </ol>
@@ -38,7 +38,7 @@
     @endif
 
     <div class="col-12">
-      <form action="{{ route('penyaluran.spb.store') }}" method="POST">
+      <form action="{{ route('penyaluran.sppb.store') }}" method="POST">
         @csrf
 
         <div class="card">
@@ -50,7 +50,7 @@
               <div class="col-12">
                 <div class="mb-5 alert alert-primary alert-border-left" role="alert">
                   <ul class="mb-0">
-                    <li>Surat Permintaan Barang (SPB) ini menjadi dasar pembuatan Surat Perintah Penyaluran Barang (SPPB) dari Pejabat Penatausahaan Barang.</li>
+                    <li>Surat Perintah Penyaluran Barang (SPPB) dari Pejabat Penatausahaan Barang.</li>
                     <li>Semua inputan dengan label <code>*</code> harus diisi.</li>
                   </ul>
                 </div>
@@ -75,12 +75,12 @@
               </div>
             </div>
             <div class="row mb-3">
-              <label class="col-sm-4 col-form-label">Nota Permintaan <code>*</code></label>
+              <label class="col-sm-4 col-form-label">Surat Permintaan Barang <code>*</code></label>
               <div class="col-sm-8">
-                <select name="nota_permintaan" class="form-control js-example-basic-single">
+                <select name="usulan" class="form-control js-example-basic-single">
                   <option></option>
-                  @foreach ($dokumenNotaPermintaan as $item)
-                  <option value="{{ $item->slug_dokumen }}" @if(isset($filter->nota_permintaan) && $filter->nota_permintaan == $item->slug_dokumen) selected @endif>
+                  @foreach ($dokumenSumber as $item)
+                  <option value="{{ $item->slug_dokumen }}" @if(isset($filter->usulan) && $filter->usulan == $item->slug_dokumen) selected @endif>
                     {{ $item->no_dokumen . ' . Tgl ' . date('d M, Y', strtotime($item->tgl_dokumen)) . ' . (' . $item->bidang->nama . ')' }}
                   </option>
                   @endforeach
@@ -88,13 +88,13 @@
               </div>
             </div>
 
-            @if (count($dokumenNotaPermintaan) > 0 && count($dataNotaPermintaan) > 0)
+            @if (count($dokumenSumber) > 0 && count($dataUsulan) > 0)
             <div class="row mb-3">
               <div class="col-12">
                 <div class="table-responsive">
                   <table class="table caption-top table-nowrap align-middle table-borderless mb-0">
                     <caption>
-                      <div class="fw-bold">Rincian Nota Permintaan</div>
+                      <div class="fw-bold">Rincian Surat Permintaan Barang</div>
                       <small class="d-block">Beri nilai <span class="text-danger">0 (nol)</span> untuk item yang <span class="text-danger">tidak disetujui</span>.</small>
                     </caption>
                     <thead class="table-light text-muted">
@@ -103,16 +103,16 @@
                         <th scope="col">Kodefikasi</th>
                         <th scope="col">Spesifikasi</th>
                         <th scope="col">Satuan</th>
-                        <th scope="col" class="text-end">Jumlah Permintaan</th>
                         <th scope="col" class="text-end">Jumlah Usulan (SPB)</th>
+                        <th scope="col" class="text-end">Jumlah Disetujui</th>
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach ($dataNotaPermintaan as $item)
+                      @foreach ($dataUsulan as $item)
                         <input type="hidden" name="parent_id[]" value="{{ $item->id }}" />
                         <input type="hidden" name="bidang_id[]" value="{{ $item->bidang_id }}" />
                         <input type="hidden" name="barang_id[]" value="{{ $item->barang_id }}" />
-                        <input type="hidden" name="jumlah_barang_permintaan[]" value="{{ $item->jumlah_barang_permintaan }}" />
+                        <input type="hidden" name="jumlah_barang_usulan[]" value="{{ $item->jumlah_barang_usulan }}" />
                         <input type="hidden" name="keperluan[]" value="{{ $item->keperluan }}" />
                         <input type="hidden" name="keterangan[]" value="{{ $item->keterangan }}" />
 
@@ -128,11 +128,11 @@
                             <p class="text-muted mb-0">Spesifikasi: <span class="fw-medium">{{ $item->master_persediaan->spesifikasi }}</span></p>
                           </td>
                           <td>{{ $item->master_persediaan->satuan }}</td>
-                          <td class="text-end">{{ $item->jumlah_barang_permintaan }}</td>
+                          <td class="text-end">{{ $item->jumlah_barang_usulan }}</td>
                           <td class="text-end">
                             <div class="input-step">
                               <button type="button" class="minus">–</button>
-                              <input type="number" name="jumlah_barang_usulan[]" class="product-quantity" value="{{ $item->jumlah_barang_permintaan }}" min="0" max="{{ $item->jumlah_barang_sisa }}" />
+                              <input type="number" name="jumlah_barang_approve[]" class="product-quantity" value="{{ $item->jumlah_barang_usulan }}" min="0" max="{{ $item->jumlah_barang_sisa }}" />
                               <button type="button" class="plus">+</button>
                             </div>
                           </td>
@@ -145,7 +145,7 @@
             </div>
             @endif
 
-            @if (isset($filter->tgl_pembukuan) && isset($filter->nota_permintaan))
+            @if (isset($filter->tgl_pembukuan) && isset($filter->usulan))
               <div class="border mt-5 mb-3 border-dashed"></div>
 
               <div class="mb-3 alert alert-primary alert-border-left" role="alert">Kelengkapan Dokumen {{ $pageTitle }}</div>
@@ -181,10 +181,10 @@
             @endif
           </div>
 
-          @if (isset($filter->tgl_pembukuan) && isset($filter->nota_permintaan))
+          @if (isset($filter->tgl_pembukuan) && isset($filter->usulan))
           <div class="card-footer">
             <div class="hstack gap-2 justify-content-end">
-              <a href="{{ route('penyaluran.spb.index') }}" class="btn btn-light waves-effect">Kembali</a>
+              <a href="{{ route('penyaluran.sppb.index') }}" class="btn btn-light waves-effect">Kembali</a>
               <button type="submit" class="btn btn-success waves-effect">Submit</button>
             </div>
           </div>
@@ -202,18 +202,18 @@
   <script src="{{ asset('assets/js/pages/form-input-spin.init.js') }}"></script>
   <script>
     const setParams = (tglPembukuan, slugDokumen) => {
-      window.location.href = "{{ url('penyaluran/spb/create') }}?tgl_pembukuan=" + tglPembukuan + "&nota_permintaan=" + slugDokumen;
+      window.location.href = "{{ url('penyaluran/sppb/create') }}?tgl_pembukuan=" + tglPembukuan + "&usulan=" + slugDokumen;
     }
 
     $(function () {
       const elemTglPembukuan = $('[name="tgl_pembukuan"]');
-      const elemNotaPermintaan = $('[name="nota_permintaan"]');
+      const elemUsulan = $('[name="usulan"]');
 
       elemTglPembukuan.change(function (e) { 
-        setParams(e.target.value, elemNotaPermintaan.val());
+        setParams(e.target.value, elemUsulan.val());
       });
 
-      elemNotaPermintaan.change(function (e) { 
+      elemUsulan.change(function (e) { 
         setParams(elemTglPembukuan.val(), $(this).val());        
       });
     });
