@@ -1,31 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Traits;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Traits\ProviderTraits;
 use DB;
-use App\Setting;
 use App\MutasiTambah;
 use App\MutasiKurang;
 
-class MutasiController extends Controller
+trait MutasiTraits
 {
-    use ProviderTraits;
-
-    // private $setting;
-    // private $startDate;
-
-    // public function __construct() 
-    // {
-    //     $this->setting = Setting::first();
-    //     $this->startDate = $this->setting->tahun_anggaran . '-01-01';
-    // }
-
     private function _getMutasiTambah($tglPembukuan, $barangId) 
     {
         $query = MutasiTambah::query();
+        $query->with(['pembukuan']);
         $query->select(
             'kode_pembukuan',
             'tgl_pembukuan',
@@ -36,7 +22,7 @@ class MutasiController extends Controller
             DB::raw('TRUE AS is_tambah')
         );
         $query->where('barang_id', $barangId);
-        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+        $query->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan]);
         $query->orderBy('tgl_pembukuan');
 
         return $query;
@@ -45,6 +31,7 @@ class MutasiController extends Controller
     private function _getMutasiKurang($tglPembukuan, $barangId)
     {
         $query = MutasiKurang::query();
+        $query->with(['pembukuan']);
         $query->select(
             'kode_pembukuan',
             'tgl_pembukuan',
@@ -55,7 +42,7 @@ class MutasiController extends Controller
             DB::raw('FALSE AS is_tambah')
         );
         $query->where('barang_id', $barangId);
-        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+        $query->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan]);
         $query->orderBy('tgl_pembukuan');
 
         return $query;
@@ -73,6 +60,7 @@ class MutasiController extends Controller
                     'jumlah_barang' => 1,
                     'harga_satuan' => $value->harga_satuan,
                     'used' => 0,
+                    'pembukuan' => $value->pembukuan,
                 ]);
             }
         }
@@ -103,6 +91,7 @@ class MutasiController extends Controller
             $newObj->jumlah_barang = $mutasi->jumlah_barang;
             $newObj->nilai_perolehan = 0;
             $newObj->is_tambah = $mutasi->is_tambah;
+            $newObj->pembukuan = $mutasi->pembukuan;
 
             foreach ($breakdown as $keyItem => $item) {
                 if (($item->used - 1) == $keyMutasi) {
@@ -116,11 +105,8 @@ class MutasiController extends Controller
         return $data;
     }
 
-    public function kartuPersediaan(Request $request) 
+    public function logMutasiTrait($tglPembukuan, $barangId) 
     {
-        $tglPembukuan = $request->query('tgl_pembukuan');
-        $barangId = $request->query('barang_id');
-
         $sourceMutasiTambah = $this->_getMutasiTambah($tglPembukuan, $barangId)->get();
         $sourceMutasiKurang = $this->_getMutasiKurang($tglPembukuan, $barangId)->get();
 
@@ -142,6 +128,7 @@ class MutasiController extends Controller
             $newObj->is_tambah = $item->is_tambah;
             $newObj->stok = 0;
             $newObj->nilai_akhir = 0;
+            $newObj->pembukuan = $item->pembukuan;
 
             array_push($items, $newObj);
         }
@@ -158,6 +145,7 @@ class MutasiController extends Controller
             $newObj->is_tambah = $item->is_tambah;
             $newObj->stok = 0;
             $newObj->nilai_akhir = 0;
+            $newObj->pembukuan = $item->pembukuan;
 
             if ($key === 0) {
                 $newObj->stok = $item->jumlah_barang;
@@ -175,6 +163,6 @@ class MutasiController extends Controller
             array_push($data, $newObj);
         }
 
-        return response()->json($data);
+        return $data;
     }
 }

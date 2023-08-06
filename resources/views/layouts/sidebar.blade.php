@@ -186,10 +186,17 @@
 
         <li class="menu-title"><i class="ri-more-fill"></i> <span>Output</span></li>
         <li class="nav-item">
-          <a class="nav-link menu-link" href="#report" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="report">
+          <a 
+            class="nav-link menu-link {{ Request::is('laporan*') ? "collapsed active" : "" }}" 
+            href="#report" 
+            data-bs-toggle="collapse" 
+            role="button" 
+            aria-expanded="false" 
+            aria-controls="report"
+          >
           <i class="ri-file-list-3-line"></i> <span>Pelaporan</span>
           </a>
-          <div class="collapse menu-dropdown" id="report">
+          <div class="collapse menu-dropdown {{ Request::is('laporan*') ? "show" : "" }}" id="report">
             <ul class="nav nav-sm flex-column">
               <li class="nav-item">
                 <a 
@@ -212,25 +219,25 @@
                 </div>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/periode-sewa') }}" class="nav-link">Laporan Reklasifikasi</a>
+                <a href="{{ url('/laporan/reklasifikasi') }}" class="nav-link">Laporan Reklasifikasi</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyewa') }}" class="nav-link">Laporan Koreksi</a>
+                <a href="{{ url('/laporan/koreksi') }}" class="nav-link">Laporan Koreksi</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyewa') }}" class="nav-link">Laporan Penghapusan</a>
+                <a href="{{ url('/laporan/penghapusan') }}" class="nav-link">Laporan Penghapusan</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyewa') }}" class="nav-link">Laporan Stock Opname</a>
+                <a href="{{ url('/laporan/stock-opname') }}" class="nav-link">Laporan Stock Opname</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyewa') }}" class="nav-link">Laporan Penyaluran</a>
+                <a href="{{ url('/laporan/penyaluran') }}" class="nav-link">Laporan Penyaluran</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyewa') }}" class="nav-link">Laporan Persediaan Rusak</a>
+                <a href="{{ url('/laporan/persediaan-rusak') }}" class="nav-link">Laporan Persediaan Rusak</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyewa') }}" class="nav-link">Kartu Barang Persediaan</a>
+                <a href="{{ url('/laporan/kartu-persediaan') }}" class="nav-link {{ Request::is('laporan/kartu-persediaan*') ? "active" : "" }}">Kartu Barang Persediaan</a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('/laporan/usulan') }}" class="nav-link">Laporan Usulan</a>

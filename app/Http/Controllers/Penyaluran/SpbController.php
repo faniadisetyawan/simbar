@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Traits\ProviderTraits;
 use App\Http\Requests\Penyaluran\SpbRequest;
-use App\Setting;
 use App\PersediaanPenyaluran as Penyaluran;
 use App\DokumenUpload;
 
@@ -16,14 +15,10 @@ class SpbController extends Controller
     use ProviderTraits;
 
     private $pageTitle;
-    private $setting;
-    private $startDate;
 
     public function __construct() 
     {
         $this->pageTitle = 'Surat Permintaan Barang';
-        $this->setting = Setting::first();
-        $this->startDate = $this->setting->tahun_anggaran . '-01-01';
     }
 
     private function _getNotaPermintaanGroupByDate($tglPembukuan) 
@@ -32,7 +27,7 @@ class SpbController extends Controller
         $query->select('no_dokumen', 'slug_dokumen', 'tgl_dokumen', 'bidang_id');
         $query->where('kode_pembukuan', '31');
         $query->where('kode_jenis_dokumen', '08');
-        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+        $query->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan]);
         $query->groupBy('no_dokumen');
         $query->groupBy('slug_dokumen');
         $query->groupBy('tgl_dokumen');

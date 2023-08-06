@@ -11,13 +11,23 @@ use App\Setting;
 
 trait ProviderTraits
 {
-    private $setting;
-    private $startDate;
+    protected $setting;
+    protected $startDate;
 
     public function __construct() 
     {
         $this->setting = Setting::first();
         $this->startDate = $this->setting->tahun_anggaran . '-01-01';
+    }
+
+    protected function _setting() 
+    {
+        return Setting::first();
+    }
+
+    protected function _startDate() 
+    {
+        return $this->_setting()->tahun_anggaran . '-01-01';
     }
 
     public function _generateNUSP($kodeBarang) 

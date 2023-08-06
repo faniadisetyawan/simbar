@@ -101,3 +101,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
 });
 
 Route::get('/usulan', 'UsulanController@index');
+
+Route::group(['prefix' => 'laporan'], function () {
+    Route::get('/kartu-persediaan', 'PersediaanMasterController@kartuPersediaan')->name('laporan.kartu-persediaan');
+});

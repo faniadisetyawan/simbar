@@ -43,6 +43,11 @@ class MutasiTambah extends Model
         'saldo_nilai_perolehan' => 'float',
     ];
 
+    public function pembukuan() 
+    {
+        return $this->belongsTo('App\Pembukuan', 'kode_pembukuan');
+    }
+
     public function bidang() 
     {
         return $this->belongsTo('App\Bidang', 'bidang_id')->withTrashed();

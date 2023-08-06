@@ -32,4 +32,27 @@ class MutasiKurang extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function pembukuan() 
+    {
+        return $this->belongsTo('App\Pembukuan', 'kode_pembukuan');
+    }
+
+    public function bidang() 
+    {
+        return $this->belongsTo('App\Bidang', 'bidang_id')->withTrashed();
+    }
+
+    public function master_persediaan() 
+    {
+        return $this->belongsTo('App\PersediaanMaster', 'barang_id')->withTrashed();
+    }
+
+    public function get_created_by() 
+    {
+        return $this->belongsTo('App\User', 'created_by')->select(
+            'id',
+            'nama'
+        );
+    }
 }

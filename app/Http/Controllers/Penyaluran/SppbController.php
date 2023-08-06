@@ -17,14 +17,10 @@ class SppbController extends Controller
     use ProviderTraits;
 
     private $pageTitle;
-    private $setting;
-    private $startDate;
 
     public function __construct() 
     {
         $this->pageTitle = 'Surat Perintah Penyaluran Barang (SPPB)';
-        $this->setting = Setting::first();
-        $this->startDate = $this->setting->tahun_anggaran . '-01-01';
     }
 
     private function _getSpbGroupByDate($tglPembukuan) 
@@ -33,7 +29,7 @@ class SppbController extends Controller
         $query->select('no_dokumen', 'slug_dokumen', 'tgl_dokumen', 'bidang_id');
         $query->where('kode_pembukuan', '31');
         $query->where('kode_jenis_dokumen', '09');
-        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+        $query->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan]);
         $query->groupBy('no_dokumen');
         $query->groupBy('slug_dokumen');
         $query->groupBy('tgl_dokumen');
@@ -149,7 +145,7 @@ class SppbController extends Controller
     private function _getMutasiTambah($tglPembukuan) 
     {
         $query = MutasiTambah::query();
-        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+        $query->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan]);
         $query->orderBy('tgl_pembukuan');
 
         return $query->get();
