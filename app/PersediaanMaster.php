@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
+use App\MutasiTambah;
+use App\MutasiKurang;
 
 class PersediaanMaster extends Model
 {
@@ -22,6 +24,10 @@ class PersediaanMaster extends Model
         'user_id',
     ];
 
+    protected $appends = [
+        'stok',
+    ];
+
     public function kodefikasi() 
     {
         return $this->belongsTo('App\KodefikasiSubSubRincianObjek', 'kode_barang')
@@ -36,5 +42,13 @@ class PersediaanMaster extends Model
     public function user() 
     {
         return $this->belongsTo('App\User', 'user_id')->withTrashed();
+    }
+
+    public function getStokAttribute() 
+    {
+        $mt = MutasiTambah::where('barang_id', $this->id)->sum('jumlah_barang');
+        $mk = MutasiKurang::where('barang_id', $this->id)->sum('jumlah_barang');
+
+        return (int)($mt - $mk);
     }
 }

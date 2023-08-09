@@ -104,6 +104,7 @@
                         <th scope="col">Spesifikasi</th>
                         <th scope="col">Satuan</th>
                         <th scope="col" class="text-end">Jumlah Permintaan</th>
+                        <th scope="col" class="text-end">Stok</th>
                         <th scope="col" class="text-end">Jumlah Usulan (SPB)</th>
                       </tr>
                     </thead>
@@ -129,10 +130,11 @@
                           </td>
                           <td>{{ $item->master_persediaan->satuan }}</td>
                           <td class="text-end">{{ $item->jumlah_barang_permintaan }}</td>
+                          <td class="text-end">{{ $item->jumlah_barang_sisa }}</td>
                           <td class="text-end">
                             <div class="input-step">
                               <button type="button" class="minus">–</button>
-                              <input type="number" name="jumlah_barang_usulan[]" class="product-quantity" value="{{ $item->jumlah_barang_permintaan }}" min="0" max="{{ $item->jumlah_barang_sisa }}" />
+                              <input type="number" name="jumlah_barang_usulan[]" class="product-quantity" value="{{ $item->jumlah_barang_permintaan <= $item->jumlah_barang_sisa ? $item->jumlah_barang_permintaan : $item->jumlah_barang_sisa }}" min="0" max="{{ $item->jumlah_barang_sisa }}" />
                               <button type="button" class="plus">+</button>
                             </div>
                           </td>

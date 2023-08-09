@@ -3,12 +3,13 @@
 namespace App\Traits;
 
 use DB;
+use App\PersediaanMaster;
 use App\MutasiTambah;
 use App\MutasiKurang;
 
 trait MutasiTraits
 {
-    private function _getMutasiTambah($tglPembukuan, $barangId) 
+    private function _getMutasiTambahByDate($tglPembukuan, $barangId) 
     {
         $query = MutasiTambah::query();
         $query->with(['pembukuan']);
@@ -28,7 +29,7 @@ trait MutasiTraits
         return $query;
     }
 
-    private function _getMutasiKurang($tglPembukuan, $barangId)
+    private function _getMutasiKurangByDate($tglPembukuan, $barangId)
     {
         $query = MutasiKurang::query();
         $query->with(['pembukuan']);
@@ -107,8 +108,8 @@ trait MutasiTraits
 
     public function logMutasiTrait($tglPembukuan, $barangId) 
     {
-        $sourceMutasiTambah = $this->_getMutasiTambah($tglPembukuan, $barangId)->get();
-        $sourceMutasiKurang = $this->_getMutasiKurang($tglPembukuan, $barangId)->get();
+        $sourceMutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan, $barangId)->get();
+        $sourceMutasiKurang = $this->_getMutasiKurangByDate($tglPembukuan, $barangId)->get();
 
         $groupedMutasiKurang = $this->_groupedMutasiKurang($sourceMutasiTambah, $sourceMutasiKurang);
         $collection = array_merge($sourceMutasiTambah->toArray(), $groupedMutasiKurang);
@@ -164,5 +165,31 @@ trait MutasiTraits
         }
 
         return $data;
+    }
+
+    public function persediaanHasStokTrait($search) 
+    {
+        $mutasiTambah = MutasiTambah::select('barang_id')->groupBy('barang_id')->get();
+
+        $query = PersediaanMaster::query();
+        $query->with(['kodefikasi']);
+        $query->whereIn('id', $mutasiTambah->pluck('barang_id'));
+        $query->where(function ($q) use ($search) {
+            $q->orWhere('kode_barang', 'like', '%'.$search.'%');
+            $q->orWhere('kode_register', 'like', '%'.$search.'%');
+            $q->orWhere('nama_barang', 'like', '%'.$search.'%');
+            $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
+        });
+        $query->orderBy('kode_barang');
+        $collections = $query->get();
+
+        // $data = collect($collections)->where('stok', '>', 0)->values();
+
+        return $collections;
+    }
+
+    public function findPersediaanHasStokTrait($barangId) 
+    {
+        return PersediaanMaster::with(['kodefikasi'])->findOrFail($barangId);
     }
 }

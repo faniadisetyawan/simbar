@@ -82,26 +82,14 @@ class SaldoAwalController extends Controller
     public function store(PersediaanRequest $request) 
     {
         $validated = $request->validated();
-
-        $findParent = MutasiTambah::where('id', $validated['barang_id'])->orderBy('tgl_pembukuan')->first();
-        if (! $findParent) {
-            $saldoJumlahBarang = $validated['jumlah_barang'];
-            $saldoHargaSatuan = $validated['harga_satuan'];
-            $saldoNilaiPerolehan = $validated['nilai_perolehan'];
-        } else {
-            $saldoJumlahBarang = $findParent->saldo_jumlah_barang + $validated['jumlah_barang'];
-            $saldoHargaSatuan = $findParent->harga_satuan;
-            $saldoNilaiPerolehan = $findParent->saldo_nilai_perolehan + $validated['nilai_perolehan'];
-        }
-
         $validated['kode_pembukuan'] = '01';
         $validated['kode_perolehan'] = '00';
         $validated['tgl_pembukuan'] = date('Y') . '-01-01';
         $validated['kode_jenis_dokumen'] = '99';
         $validated['harga_satuan'] = $validated['nilai_perolehan'] / $validated['jumlah_barang'];
-        $validated['saldo_jumlah_barang'] = $saldoJumlahBarang;
-        $validated['saldo_harga_satuan'] = $saldoHargaSatuan;
-        $validated['saldo_nilai_perolehan'] = $saldoNilaiPerolehan;
+        $validated['saldo_jumlah_barang'] = 0;
+        $validated['saldo_harga_satuan'] = 0;
+        $validated['saldo_nilai_perolehan'] = 0;
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 

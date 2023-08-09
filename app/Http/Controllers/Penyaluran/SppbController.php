@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Traits\ProviderTraits;
+use App\Traits\MutasiTraits;
 use App\Setting;
 use App\PersediaanPenyaluran as Penyaluran;
 use App\DokumenUpload;
@@ -14,7 +15,7 @@ use App\MutasiKurang;
 
 class SppbController extends Controller
 {
-    use ProviderTraits;
+    use ProviderTraits, MutasiTraits;
 
     private $pageTitle;
 
@@ -127,8 +128,8 @@ class SppbController extends Controller
 
         if (isset($filter->usulan)) {
             foreach ($this->_getSpbBySlug($filter->usulan) as $item) {
-                $sisaStok = $this->_findAvailableStock($item['barang_id'], $filter->tgl_pembukuan);
-                $item->jumlah_barang_sisa = $sisaStok->jumlah_barang;
+                $sisaStok = $this->findPersediaanHasStokTrait($item['barang_id']);
+                $item->jumlah_barang_sisa = $sisaStok->stok;
 
                 array_push($dataUsulan, $item);
             }
@@ -158,9 +159,9 @@ class SppbController extends Controller
         $data = [];
         for ($i=0; $i < count($allRequests['parent_id']); $i++) {
             $jumlahBarangUsulan = $allRequests['jumlah_barang_usulan'][$i];
-            $currentStok = $this->_findAvailableStock($allRequests['barang_id'][$i], $allRequests['tgl_pembukuan']);
+            $currentStok = $this->findPersediaanHasStokTrait($allRequests['barang_id'][$i]);
 
-            if ($jumlahBarangUsulan > $currentStok->jumlah_barang) {
+            if ($jumlahBarangUsulan > $currentStok->stok) {
                 return redirect()->back()->withErrors(['message' => 'Jumlah barang usulan SPB tidak boleh melebihi sisa stok barang.']);
             }
 

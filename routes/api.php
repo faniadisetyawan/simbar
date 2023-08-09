@@ -16,8 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'master'], function () {
     Route::group(['prefix' => 'persediaan'], function () {
-        Route::get('/available-stock', 'API\PersediaanMasterController@availableStock');
-        Route::get('/available-stock/{id}', 'API\PersediaanMasterController@findAvailableStock');
+        Route::get('/has-stok', 'API\PersediaanMasterController@hasStok');
     });
 });
 

@@ -101,7 +101,7 @@
 
       jQuery.ajax({
         type: 'GET',
-        url: '/api/master/persediaan/available-stock/' + data.barang_id
+        url: '/api/master/persediaan/has-stok/' + data.barang_id
       }).then((value) => {
         let option = new Option(value.nama_barang, value.id, true, true);
         elemSelectBarang.append(option).change();
@@ -151,7 +151,7 @@
       placeholder: "Select...",
       dropdownParent: "#modal-container",
       ajax: {
-        url: '/api/master/persediaan/available-stock',
+        url: '/api/master/persediaan/has-stok',
         dataType: 'json',
         data: (params) => {
           return {
@@ -160,7 +160,7 @@
           }
         },
         processResults: (response) => {
-          response.map((item) => Object.assign(item, { text: `${item.kode_barang}.${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.jumlah_barang} ${item.satuan}` }));
+          response.map((item) => Object.assign(item, { text: `${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.stok} ${item.satuan}` }));
 
           return {
             results: response

@@ -4,14 +4,17 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\MutasiTraits;
+use DB;
 use App\Setting;
 use App\MutasiTambah;
 use App\MutasiKurang;
 use App\PersediaanMaster;
-use DB;
 
 class PersediaanMasterController extends Controller
 {
+    use MutasiTraits;
+
     private $setting;
     private $startDate;
 
@@ -33,41 +36,22 @@ class PersediaanMasterController extends Controller
 
         return $query->get();
     }
-    
-    public function availableStock(Request $request) 
+
+    public function hasStok(Request $request) 
     {
         $search = $request->query('search');
-        $tglPembukuan = $request->query('tgl_pembukuan');
 
-        $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
+        $collections = $this->persediaanHasStokTrait($search);
 
-        $query = PersediaanMaster::query();
-        $query->with(['kodefikasi']);
-        $query->whereIn('id', $mutasiTambah->pluck('barang_id'));
-        $query->where(function ($q) use ($search) {
-            $q->orWhere('nama_barang', 'like', '%'.$search.'%');
-            $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
-        });
-        $query->orderBy('kode_barang');
-        
-        $data = [];
-        foreach ($query->get() as $barang) {
-            foreach ($mutasiTambah as $mutasi) {
-                if ($mutasi->barang_id == $barang->id) {
-                    $barang->jumlah_barang = $mutasi->jumlah_barang;
-                }
-            }
-
-            array_push($data, $barang);
-        }
+        $data = collect($collections)->where('stok', '>', 0)->values();
 
         return response()->json($data);
     }
 
-    public function findAvailableStock($id) 
-    {
-        $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
+    // public function findAvailableStock($id) 
+    // {
+    //     $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
 
-        return response()->json($data);
-    }
+    //     return response()->json($data);
+    // }
 }

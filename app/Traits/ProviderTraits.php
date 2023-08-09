@@ -64,78 +64,78 @@ trait ProviderTraits
         return Bidang::get();
     }
 
-    public function _canUpdatedMutasiTambah($id) 
-    {
-        $data = MutasiKurang::where('mutasi_tambah_id', $id)->first();
+    // public function _canUpdatedMutasiTambah($id) 
+    // {
+    //     $data = MutasiKurang::where('mutasi_tambah_id', $id)->first();
 
-        if ($data === NULL) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
+    //     if ($data === NULL) {
+    //         return TRUE;
+    //     } else {
+    //         return FALSE;
+    //     }
+    // }
 
-    private function _getMutasiTambahByDate($tglPembukuan) 
-    {
-        $query = MutasiTambah::query();
-        $query->select(
-            'barang_id',
-            DB::raw('SUM(jumlah_barang) AS jumlah_barang'),
-            DB::raw('SUM(nilai_perolehan) AS nilai_perolehan')
-        );
-        $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
-        $query->groupBy('barang_id');
+    // private function _getMutasiTambahByDate($tglPembukuan) 
+    // {
+    //     $query = MutasiTambah::query();
+    //     $query->select(
+    //         'barang_id',
+    //         DB::raw('SUM(jumlah_barang) AS jumlah_barang'),
+    //         DB::raw('SUM(nilai_perolehan) AS nilai_perolehan')
+    //     );
+    //     $query->whereBetween('tgl_pembukuan', [$this->startDate, $tglPembukuan]);
+    //     $query->groupBy('barang_id');
 
-        return $query->get();
-    }
+    //     return $query->get();
+    // }
     
-    public function _availableStock($search, $tglPembukuan) 
-    {
-        $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
+    // public function _availableStock($search, $tglPembukuan) 
+    // {
+    //     $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
 
-        $query = PersediaanMaster::query();
-        $query->with(['kodefikasi']);
-        $query->whereIn('id', $mutasiTambah->pluck('barang_id'));
-        $query->where(function ($q) use ($search) {
-            $q->orWhere('nama_barang', 'like', '%'.$search.'%');
-            $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
-        });
-        $query->orderBy('kode_barang');
+    //     $query = PersediaanMaster::query();
+    //     $query->with(['kodefikasi']);
+    //     $query->whereIn('id', $mutasiTambah->pluck('barang_id'));
+    //     $query->where(function ($q) use ($search) {
+    //         $q->orWhere('nama_barang', 'like', '%'.$search.'%');
+    //         $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
+    //     });
+    //     $query->orderBy('kode_barang');
         
-        $data = [];
-        foreach ($query->get() as $barang) {
-            foreach ($mutasiTambah as $mutasi) {
-                if ($mutasi->barang_id == $barang->id) {
-                    $barang->jumlah_barang = $mutasi->jumlah_barang;
-                }
-            }
+    //     $data = [];
+    //     foreach ($query->get() as $barang) {
+    //         foreach ($mutasiTambah as $mutasi) {
+    //             if ($mutasi->barang_id == $barang->id) {
+    //                 $barang->jumlah_barang = $mutasi->jumlah_barang;
+    //             }
+    //         }
 
-            array_push($data, $barang);
-        }
+    //         array_push($data, $barang);
+    //     }
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
-    public function _findAvailableStock($id, $tglPembukuan) 
-    {
-        $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
+    // public function _findAvailableStock($id, $tglPembukuan) 
+    // {
+    //     $mutasiTambah = $this->_getMutasiTambahByDate($tglPembukuan);
 
-        $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
-        $data->jumlah_barang = 0;
-        $data->nilai_perolehan = 0;
-        $data->saldo_jumlah_barang = 0;
-        $data->saldo_nilai_perolehan = 0;
+    //     $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
+    //     $data->jumlah_barang = 0;
+    //     $data->nilai_perolehan = 0;
+    //     $data->saldo_jumlah_barang = 0;
+    //     $data->saldo_nilai_perolehan = 0;
         
-        foreach ($mutasiTambah as $mutasi) {
-            if ($mutasi->barang_id == $data->id) {
-                $data->jumlah_barang = $mutasi->jumlah_barang;
-                $data->harga_satuan = $mutasi->harga_satuan;
-                $data->nilai_perolehan = $mutasi->nilai_perolehan;
-                $data->saldo_jumlah_barang = $mutasi->saldo_jumlah_barang;
-                $data->saldo_nilai_perolehan = $mutasi->saldo_nilai_perolehan;
-            }
-        }
+    //     foreach ($mutasiTambah as $mutasi) {
+    //         if ($mutasi->barang_id == $data->id) {
+    //             $data->jumlah_barang = $mutasi->jumlah_barang;
+    //             $data->harga_satuan = $mutasi->harga_satuan;
+    //             $data->nilai_perolehan = $mutasi->nilai_perolehan;
+    //             $data->saldo_jumlah_barang = $mutasi->saldo_jumlah_barang;
+    //             $data->saldo_nilai_perolehan = $mutasi->saldo_nilai_perolehan;
+    //         }
+    //     }
 
-        return $data;
-    }
+    //     return $data;
+    // }
 }
