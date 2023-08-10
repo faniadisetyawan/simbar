@@ -177,7 +177,7 @@
       elemSelectBarang.select2({
         placeholder: "Select...",
         ajax: {
-          url: '/api/master/persediaan/available-stock',
+          url: '/api/master/persediaan/has-stok',
           dataType: 'json',
           data: (params) => {
             return {
@@ -186,7 +186,7 @@
             }
           },
           processResults: (response) => {
-            response.map((item) => Object.assign(item, { text: `${item.kode_barang}.${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.jumlah_barang} ${item.satuan}` }));
+            response.map((item) => Object.assign(item, { text: `${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.stok} ${item.satuan}` }));
 
             return {
               results: response

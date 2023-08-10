@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-animate">
   <div class="card-body">
     <div class="d-flex align-items-center">
       <div class="avatar-sm flex-shrink-0">

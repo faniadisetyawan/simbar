@@ -113,7 +113,6 @@
                   <th scope="col">NUSP</th>
                   <th scope="col">Spesifikasi Nama Barang</th>
                   <th scope="col">Spesifikasi Lainnya</th>
-                  <th scope="col">Keperluan</th>
                   <th scope="col" class="text-end">Jumlah Barang</th>
                   <th scope="col">Satuan</th>
                   <th scope="col">Tgl. Pembukuan</th>
@@ -131,10 +130,10 @@
                         <i class="ri-arrow-right-line align-middle"></i>
                       </a>
                     </td>
-                    <td colspan="6">
+                    <td colspan="5">
                       <a href="{{ $detailUrl }}" class="link-primary">
                         <div class="d-flex align-items-center">
-                          <h6 class="my-0">{{ $doc['no_dokumen'] . ' - ' }}</h6>
+                          <h6 class="my-0">{{ $doc['no_dokumen'] . ' . ' }}</h6>
                           <span class="ms-2 d-flex align-items-center">
                             <i class="ri-calendar-line me-2"></i>{{ date('M d, Y', strtotime($doc['tgl_dokumen'])) }}
                           </span>
@@ -158,8 +157,7 @@
                     <td>{{ $item['master_persediaan']['kode_register'] }}</td>
                     <td>{{ $item['master_persediaan']['nama_barang'] }}</td>
                     <td>{{ $item['master_persediaan']['spesifikasi'] }}</td>
-                    <td>{{ $item['keperluan'] }}</td>
-                    <td class="text-end">{{ $item['jumlah_barang_permintaan'] }}</td>
+                    <td class="text-end">{{ $item['jumlah_barang'] }}</td>
                     <td>{{ $item['master_persediaan']['satuan'] }}</td>
                     <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
                   </tr>

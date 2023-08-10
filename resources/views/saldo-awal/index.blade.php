@@ -38,12 +38,17 @@
             </div>
             <div class="col-sm-auto">
               <div class="d-flex flex-wrap align-items-start gap-2">
-                <a href="{{ route('pembukuan.saldo-awal.create', $slug) }}" class="btn btn-success add-btn waves-effect">
-                  <i class="ri-add-line align-bottom me-1"></i> Tambah
-                </a>
-                <button type="button" class="btn btn-info waves-effect" data-bs-toggle="modal" data-bs-target="#importModal">
-                  <i class="ri-upload-line align-bottom me-1"></i> Import
-                </button>
+                @if ($slug == 'persediaan')
+                  <a href="{{ route('pembukuan.saldo-awal.create', $slug) }}" class="btn btn-success add-btn waves-effect">
+                    <i class="ri-add-line align-bottom me-1"></i> Tambah
+                  </a>
+                @endif
+
+                @if ($slug !== 'aset-lain')
+                  <button type="button" class="btn btn-info waves-effect" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <i class="ri-upload-line align-bottom me-1"></i> Import
+                  </button>
+                @endif
               </div>
             </div>
           </div>
@@ -66,73 +71,46 @@
 
         <div class="card-body">
           <div class="table-responsive table-card mb-1">
-            <table class="table table-hover align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th scope="col" class="text-center">Action</th>
-                  <th scope="col" class="text-center">ID</th>
-                  <th scope="col">Kode Barang</th>
-                  <th scope="col">Nama Barang</th>
-                  <th scope="col">NUSP</th>
-                  <th scope="col">Spesifikasi Nama Barang</th>
-                  <th scope="col">Spesifikasi Lainnya</th>
-                  <th scope="col" class="text-center">Jumlah Barang</th>
-                  <th scope="col">Satuan</th>
-                  <th scope="col" class="text-end">Harga Satuan</th>
-                  <th scope="col" class="text-end">Nilai Perolehan</th>
-                  <th scope="col">Keterangan</th>
-                  <th scope="col">Tgl. Pembukuan</th>
-                </tr>
-              </thead>
-              <tbody>
-                @if (isset($data))
-                @foreach ($data as $item)
-                  <tr>
-                    <td class="text-center">
-                      <div class="dropdown">
-                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                          <i class="ri-more-fill align-middle"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li>
-                            <button class="dropdown-item">
-                              <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
-                            </button>
-                          </li>
-                          <li>
-                            <button class="dropdown-item">
-                              <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Remove
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </td>
-                    <td class="text-center">{{ $item['id'] }}</td>
-                    <td>{{ $item['master_persediaan']['kode_barang'] }}</td>
-                    <td>{{ $item['master_persediaan']['kodefikasi']['uraian'] }}</td>
-                    <td>{{ $item['master_persediaan']['kode_register'] }}</td>
-                    <td>{{ $item['master_persediaan']['nama_barang'] }}</td>
-                    <td>{{ $item['master_persediaan']['spesifikasi'] }}</td>
-                    <td class="text-center">{{ $item['jumlah_barang'] }}</td>
-                    <td>{{ $item['master_persediaan']['satuan'] }}</td>
-                    <td class="text-end">{{ number_format($item['harga_satuan'], 2, ',', '.') }}</td>
-                    <td class="text-end">{{ number_format($item['nilai_perolehan'], 2, ',', '.') }}</td>
-                    <td>{{ $item['keterangan'] }}</td>
-                    <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
-                  </tr>
-                @endforeach
-                @endif
-              </tbody>
-            </table>
+            @switch($slug)
+              @case("persediaan")
+                @include('components.tabel-barang.persediaan', ['data' => $data])
+                @break
+              @case("tanah")
+                @include('components.tabel-barang.tanah', ['data' => $data])
+                @break
+              @case("peralatan-mesin")
+                @include('components.tabel-barang.peralatan-mesin', ['data' => $data])
+                @break
+              @case("gedung-bangunan")
+                @include('components.tabel-barang.gedung-bangunan', ['data' => $data])
+                @break
+              @case("jij")
+                @include('components.tabel-barang.jij', ['data' => $data])
+                @break
+              @case("atl")
+                @include('components.tabel-barang.atl', ['data' => $data])
+                @break
+              @case("kdp")
+                @include('components.tabel-barang.kdp', ['data' => $data])
+                @break
+              @case("atb")
+                @include('components.tabel-barang.atb', ['data' => $data])
+                @break
+              @case("aset-lain")
+                @include('components.tabel-barang.aset-lain', ['data' => $data])
+                @break
+              @default
+                @include('components.tabel-barang.tanah', ['data' => $data])
+            @endswitch
 
             @if (count(isset($data) ? $data : []) === 0)
               @include('components.empty-record')
             @endif
           </div>
 
-          @if (isset($data))
+          @if (isset($paginator))
           <div class="d-flex justify-content-end">
-            {{ $data->withQueryString()->links() }}
+            {{ $paginator->withQueryString()->links() }}
           </div>
           @endif
         </div>
@@ -144,16 +122,17 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0">
         <div class="modal-header p-3 bg-info-subtle">
-          <h5 class="modal-title" id="exampleModalLabel">Import Master Persediaan</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Import Saldo Awal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
         </div>
 
         <form action="{{ route('pembukuan.saldo-awal.import') }}" method="post" enctype="multipart/form-data" class="tablelist-form" autocomplete="off">
           @csrf
+          <input type="hidden" name="slug" value="{{ $slug }}" />
 
           <div class="modal-body">
-            <div class="mb-5 list-group">
-              <a href="{{ asset('templates/template-persediaan-master.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+            <div data-simplebar style="max-height: 250px;" class="mb-5 list-group">
+              <a href="{{ asset('templates/template-persediaan-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
                 <div class="d-flex">
                   <div class="flex-shrink-0 avatar-xs">
                     <div class="avatar-title bg-success-subtle text-success rounded">
@@ -161,7 +140,98 @@
                     </div>
                   </div>
                   <div class="flex-shrink-0 ms-2">
-                    <h6 class="fs-14 mb-0">Download template master persediaan</h6>
+                    <h6 class="fs-14 mb-0">Download template Persediaan</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-tanah-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Tanah</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-peralatan_mesin-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Peralatan dan Mesin</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-gedung_bangunan-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Gedung dan Bangunan</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-jij-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Jalan, Irigasi dan Jaringan</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-atl-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Aset Tetap Lainnya</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-kdp-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Konstruksi Dalam Pengerjaan</h6>
+                    <small class="text-muted">File Excel</small>
+                  </div>
+                </div>
+              </a>
+              <a href="{{ asset('templates/template-atb-saldo_awal.xlsx') }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action list-group-item-light">
+                <div class="d-flex">
+                  <div class="flex-shrink-0 avatar-xs">
+                    <div class="avatar-title bg-success-subtle text-success rounded">
+                      <i class="ri-file-excel-2-fill"></i>
+                    </div>
+                  </div>
+                  <div class="flex-shrink-0 ms-2">
+                    <h6 class="fs-14 mb-0">Download template Aset Tidak Berwujud</h6>
                     <small class="text-muted">File Excel</small>
                   </div>
                 </div>
@@ -170,7 +240,7 @@
 
             <div class="form-group">
               <label class="form-label">Pilih file :</label>
-              <input type="file" name="document" class="form-control form-control-lg" />
+              <input type="file" name="document" class="form-control form-control-lg" required />
             </div>
           </div>
           <div class="modal-footer">

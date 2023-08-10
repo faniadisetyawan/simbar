@@ -3,7 +3,7 @@
 @section('content')
   <div class="mb-3 d-flex align-items-lg-center flex-lg-row flex-column">
     <div class="flex-grow-1">
-      <h4 class="fs-16 mb-1">Selamat datang, Supriyono!</h4>
+      <h4 class="fs-16 mb-1">Selamat datang, {{ auth()->user()->nama }}!</h4>
       <p class="text-muted mb-0">Berikut ringkasan nilai dan aktivitas pada aplikasi SIMBAR.</p>
     </div>
   </div>

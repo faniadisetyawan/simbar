@@ -96,6 +96,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => 'sppb'], function () {
         Route::get('/', 'Penyaluran\SppbController@index')->name('penyaluran.sppb.index');
         Route::get('/create', 'Penyaluran\SppbController@create')->name('penyaluran.sppb.create');
+        Route::get('/docs/{docSlug}', 'Penyaluran\SppbController@showByDocs')->name('penyaluran.sppb.showByDocs');
         Route::post('/', 'Penyaluran\SppbController@store')->name('penyaluran.sppb.store');
     });
 });

@@ -27,11 +27,11 @@ class CreateMutasiTambahsTable extends Migration
             $table->foreignId('bidang_id')->nullable()->constrained('bidang')->onUpdate('cascade');
             $table->foreignId('barang_id')->constrained('persediaan_master')->onUpdate('cascade');
             $table->unsignedInteger('jumlah_barang');
-            $table->decimal('harga_satuan', 19, 2);
-            $table->decimal('nilai_perolehan', 19, 2);
-            $table->unsignedInteger('saldo_jumlah_barang');
-            $table->decimal('saldo_harga_satuan', 19, 2);
-            $table->decimal('saldo_nilai_perolehan', 19, 2);
+            $table->decimal('harga_satuan', 19, 2)->default(0);
+            $table->decimal('nilai_perolehan', 19, 2)->default(0);
+            $table->unsignedInteger('saldo_jumlah_barang')->default(0);
+            $table->decimal('saldo_harga_satuan', 19, 2)->default(0);
+            $table->decimal('saldo_nilai_perolehan', 19, 2)->default(0);
             $table->date('tgl_expired')->nullable();
             $table->text('keterangan')->nullable();
             $table->foreignId('opname_id')->nullable()->constrained('persediaan_opname')->onUpdate('cascade');

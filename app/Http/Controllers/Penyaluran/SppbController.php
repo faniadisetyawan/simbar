@@ -87,7 +87,7 @@ class SppbController extends Controller
         }
 
         $grouped = collect($collections)->groupBy('slug_dokumen')->map(function ($item, $key) {
-            $findDoc = Penyaluran::where('slug_dokumen', $key)->first();
+            $findDoc = MutasiKurang::where('slug_dokumen', $key)->first();
 
             return [
                 'kode_pembukuan' => $findDoc['kode_pembukuan'],
@@ -143,15 +143,6 @@ class SppbController extends Controller
         ]);
     }
 
-    private function _getMutasiTambah($tglPembukuan) 
-    {
-        $query = MutasiTambah::query();
-        $query->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan]);
-        $query->orderBy('tgl_pembukuan');
-
-        return $query->get();
-    }
-
     public function store(Request $request) 
     {
         $allRequests = $request->all();
@@ -176,6 +167,11 @@ class SppbController extends Controller
                 'bidang_id' => $allRequests['bidang_id'][$i],
                 'barang_id' => $allRequests['barang_id'][$i],
                 'jumlah_barang' => $jumlahBarangUsulan,
+                'harga_satuan' => 0,
+                'nilai_perolehan' => 0,
+                'saldo_jumlah_barang' => 0,
+                'saldo_harga_satuan' => 0,
+                'saldo_nilai_perolehan' => 0,
                 'keterangan' => $allRequests['keterangan'][$i],
                 'dasar_penyaluran_id' => $allRequests['parent_id'][$i],
                 'created_by' => auth()->id(),
@@ -183,6 +179,62 @@ class SppbController extends Controller
             ];
         }
 
-        return response()->json($data);
+        foreach ($data as $item) {
+            MutasiKurang::create($item);
+        }
+
+        return redirect()->route('penyaluran.sppb.index')->with('success', 'Data berhasil disimpan.');
+    }
+
+    public function showByDocs($docSlug) 
+    {
+        $query = MutasiKurang::query();
+        $query->with(['master_persediaan.kodefikasi', 'get_created_by']);
+        $query->where('slug_dokumen', $docSlug);
+        $results = $query->get();
+
+        $collections = [];
+        foreach ($results as $item) {
+            $collection = collect($item);
+            $filtered = $collection->only([
+                'id',
+                'tgl_pembukuan',
+                'no_dokumen',
+                'slug_dokumen',
+                'barang_id',
+                'master_persediaan',
+                'jumlah_barang',
+                'keperluan',
+                'keterangan',
+                'get_created_by',
+                'created_at',
+            ]);
+            array_push($collections, $filtered);
+        }
+
+        $grouped = collect($collections)->groupBy('slug_dokumen')->map(function ($item, $key) {
+            $findDoc = MutasiKurang::where('slug_dokumen', $key)->first();
+            $findUpload = DokumenUpload::where('slug_dokumen_tambah', $key)->first();
+
+            return [
+                'kode_pembukuan' => $findDoc['kode_pembukuan'],
+                'kode_perolehan' => $findDoc['kode_perolehan'],
+                'kode_jenis_dokumen' => $findDoc['kode_jenis_dokumen'],
+                'no_dokumen' => $findDoc['no_dokumen'],
+                'slug_dokumen' => $findDoc['slug_dokumen'],
+                'tgl_dokumen' => $findDoc['tgl_dokumen'],
+                'uraian_dokumen' => $findDoc['uraian_dokumen'],
+                'bidang_id' => $findDoc['bidang_id'],
+                'bidang' => $findDoc['bidang'],
+                'upload' => $findUpload,
+                'total' => collect($item)->sum('jumlah_barang'),
+                'data' => $item,
+            ];
+        })->values()[0];
+
+        return view('penyaluran.sppb.docs', [
+            'pageTitle' => $this->pageTitle,
+            'data' => $grouped,
+        ]);
     }
 }

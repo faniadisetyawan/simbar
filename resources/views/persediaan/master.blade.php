@@ -127,7 +127,9 @@
                     <td>{{ $item['nama_barang'] }}</td>
                     <td>{{ $item['spesifikasi'] }}</td>
                     <td>{{ $item['satuan'] }}</td>
-                    <td>{{ date('F d, Y H:i', strtotime($item['created_at'])) }}</td>
+                    <td>
+                      <div class="nowrap">{{ date('d M, Y H:i', strtotime($item['created_at'])) }}</div>
+                    </td>
                   </tr>
                 @endforeach
               </tbody>
