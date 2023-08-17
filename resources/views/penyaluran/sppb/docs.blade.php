@@ -18,7 +18,7 @@
               <a href="javascript: void(0);">Penyaluran</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="{{ route('penyaluran.nota-permintaan.index') }}">{{ $pageTitle }}</a>
+              <a href="{{ route('penyaluran.sppb.index') }}">{{ $pageTitle }}</a>
             </li>
             <li class="breadcrumb-item active">Dokumen</li>
           </ol>
@@ -96,30 +96,6 @@
               <small class="d-block fw-bold">Uraian Dokumen :</small>
               <p class="mb-0">{{ $data['uraian_dokumen'] ? $data['uraian_dokumen'] : '-' }}</p>
             </div>
-            <div class="my-2 border border-dashed"></div>
-
-            <div class="text-muted">
-              <small class="d-block fw-bold">File Upload :</small>
-              @if (is_null($data['upload']))
-                <p class="mb-0">-</p>
-              @else
-                <a href="{{ asset('storage/dokumen/' . $data['upload']['file_upload']) }}" target="_blank" rel="noopener noreferrer">
-                  <i class="ri-download-2-line me-2"></i>{{ $data['upload']['file_upload'] }}
-                </a>
-              @endif
-            </div>
-            <div class="my-2 border border-dashed"></div>
-
-            <div class="d-grid">
-              <button type="button" class="btn btn-success btn-label btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                <div class="d-flex">
-                  <div class="flex-shrink-0">
-                    <i class="ri-upload-line label-icon align-middle fs-16 me-2"></i>
-                  </div>
-                  <div class="flex-grow-1">Upload Dokumen</div>
-                </div>
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -190,7 +166,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
         </div>
   
-        <form action="{{ route('penyaluran.nota-permintaan.uploadDokumen') }}" method="post" enctype="multipart/form-data" class="tablelist-form">
+        <form action="" method="post" enctype="multipart/form-data" class="tablelist-form">
           @csrf
           @method("PUT")
   

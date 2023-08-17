@@ -5,13 +5,17 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
+use App\Traits\MutasiTraits;
 use App\Setting;
 use App\Bidang;
 use App\RefJenisDokumen;
 use App\PersediaanMaster;
+use App\MutasiTambah;
 
 class AppServiceProvider extends ServiceProvider
 {
+    use MutasiTraits;
+
     /**
      * Register any application services.
      *
@@ -36,6 +40,21 @@ class AppServiceProvider extends ServiceProvider
         return $groupedBarang;
     }
 
+    private function _getMasterPersediaanGroupMutasi() 
+    {
+        $groupMutasiTambah = MutasiTambah::groupBy('barang_id')->get(['barang_id'])->pluck('barang_id');
+        $master = PersediaanMaster::with(['kodefikasi'])->whereIn('id', $groupMutasiTambah)->get();
+
+        $grouped = $master->groupBy('kode_barang')->map(function ($item, $key) {
+            return (object)[
+                'key' => $item[0]['kodefikasi'],
+                'data' => $item,
+            ];
+        })->values();
+
+        return $grouped;
+    }
+
     /**
      * Bootstrap any application services.
      *
@@ -51,6 +70,8 @@ class AppServiceProvider extends ServiceProvider
             view()->share('appBidang', Bidang::get());
             view()->share('appJenisDokumen', RefJenisDokumen::get());
             view()->share('appMasterPersediaan', $this->_getMasterPersediaan());
+            view()->share('appMasterPersediaanGroupMutasi', $this->_getMasterPersediaanGroupMutasi());
+            view()->share('appPersediaanHasStok', $this->persediaanHasStokTrait());
         }
     }
 }

@@ -29,22 +29,6 @@
         </div>
         <div class="card-body">
           <div class="row mb-3">
-            <label class="col-sm-4 col-form-label">Pilih Barang <code>*</code></label>
-            <div class="col-sm-8">
-              <select name="barang_id" class="form-control js-example-basic-single" required>
-                <option></option>
-                @foreach ($appMasterPersediaanGroupMutasi as $group)
-                  <optgroup label="{{ $group->key->kode . ' ' . $group->key->uraian }}">
-                    @foreach ($group->data as $item)
-                      <option value="{{ $item->id }}">{{ $item->kode_barang . '.' . $item->kode_register . ' . ' . $item->nama_barang . ' . ' . $item->spesifikasi }}</option>
-                    @endforeach
-                  </optgroup>
-                @endforeach
-              </select>
-            </div>
-          </div>
-
-          <div class="row mb-3">
             <label class="col-sm-4 col-form-label">Per Tanggal <code>*</code></label>
             <div class="col-sm-8">
               <div class="input-group">
@@ -75,10 +59,9 @@
   <script>
     const printReport = () => {
       let tglPembukuan = $('[name="tgl_pembukuan"]').val();
-      let barangId = $('[name="barang_id"]').val();
 
-      if (!!tglPembukuan && !!barangId) {
-        window.open(`{{ route('laporan.kartu-persediaan') }}?tgl_pembukuan=${tglPembukuan}&barang_id=${barangId}`, '_blank');
+      if (!!tglPembukuan) {
+        window.open(`{{ route('laporan.mutasi-persediaan') }}?tgl_pembukuan=${tglPembukuan}`, '_blank');
       }
     }
   </script>

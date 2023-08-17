@@ -167,25 +167,24 @@ trait MutasiTraits
         return $data;
     }
 
-    public function persediaanHasStokTrait($search) 
+    public function persediaanHasStokTrait() 
     {
         $mutasiTambah = MutasiTambah::select('barang_id')->groupBy('barang_id')->get();
 
         $query = PersediaanMaster::query();
         $query->with(['kodefikasi']);
         $query->whereIn('id', $mutasiTambah->pluck('barang_id'));
-        $query->where(function ($q) use ($search) {
-            $q->orWhere('kode_barang', 'like', '%'.$search.'%');
-            $q->orWhere('kode_register', 'like', '%'.$search.'%');
-            $q->orWhere('nama_barang', 'like', '%'.$search.'%');
-            $q->orWhere('spesifikasi', 'like', '%'.$search.'%');
-        });
         $query->orderBy('kode_barang');
         $collections = $query->get();
 
-        // $data = collect($collections)->where('stok', '>', 0)->values();
+        $grouped = collect($collections)->where('stok', '>', 0)->groupBy('kode_barang')->map(function ($item, $key) {
+            return (object)[
+                'key' => $item[0]['kodefikasi'],
+                'data' => $item,
+            ];
+        })->values();
 
-        return $collections;
+        return $grouped;
     }
 
     public function findPersediaanHasStokTrait($barangId) 

@@ -12,6 +12,7 @@ use App\Http\Requests\PersediaanMasterRequest;
 use App\Imports\Persediaan\PersediaanMasterImport;
 use App\PersediaanMaster;
 use App\KodefikasiSubRincianObjek;
+use App\MutasiTambah;
 
 class PersediaanMasterController extends Controller
 {
@@ -106,7 +107,6 @@ class PersediaanMasterController extends Controller
     {
         $tglPembukuan = $request->query('tgl_pembukuan');
         $barangId = $request->query('barang_id');
-
         
         if (!empty($tglPembukuan) && !empty($barangId)) {
             $master = PersediaanMaster::findOrFail($barangId);

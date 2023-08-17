@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Barang;
+use DB;
 
 class DashboardController extends Controller
 {
@@ -11,8 +13,24 @@ class DashboardController extends Controller
         $this->middleware('auth');
     }
 
+    private function _barangGroupPerJenis() 
+    {
+        return Barang::select(
+                DB::raw('LEFT(kode_neraca, 5) AS kode_jenis'),
+                DB::raw('SUM(nilai_perolehan) AS nilai_perolehan')
+            )
+            ->where('kode_kapitalisasi', '01')
+            ->where('jumlah_barang', '>', 0)
+            ->groupBy(DB::raw('LEFT(kode_neraca, 5)'))
+            ->get();
+    }
+
     public function index() 
     {
+        $groupJenis = $this->_barangGroupPerJenis();
+
+        return response()->json($groupJenis);
+
         $rekapPerJenis = array(
             [
                 'title' => 'Persediaan',

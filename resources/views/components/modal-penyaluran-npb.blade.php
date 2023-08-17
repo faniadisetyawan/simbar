@@ -38,8 +38,15 @@
           <div class="row mb-3">
             <label class="col-sm-4 col-form-label">Pilih Barang <code>*</code></label>
             <div class="col-sm-8">
-              <select name="barang_id" class="form-select">
+              <select name="barang_id" class="form-select js-example-basic-single-modal">
                 <option></option>
+                @foreach ($appPersediaanHasStok as $group)
+                  <optgroup label="{{ $group->key->kode . ' ' . $group->key->uraian }}">
+                    @foreach ($group->data as $item)
+                      <option value="{{ $item->id }}">{{ $item->kode_register . ' . ' . $item->nama_barang . ' . ' . (is_null($item->spesifikasi) ? '-' : $item->spesifikasi) . ' . Stok ' . $item->stok . ' ' . $item->satuan }}</option>
+                    @endforeach
+                  </optgroup>
+                @endforeach
               </select>
             </div>
           </div>
@@ -98,21 +105,6 @@
       formElem.find('[name="keperluan"]').val(data.keperluan);
       formElem.find('[name="keterangan"]').val(data.keterangan);
       formElem.find('[type="submit"]').html('Update');
-
-      jQuery.ajax({
-        type: 'GET',
-        url: '/api/master/persediaan/has-stok/' + data.barang_id
-      }).then((value) => {
-        let option = new Option(value.nama_barang, value.id, true, true);
-        elemSelectBarang.append(option).change();
-  
-        elemSelectBarang.trigger({
-          type: 'select2:select',
-          params: {
-            data: value
-          }
-        });
-      });
     } else {
       formElem.find('[name="tgl_pembukuan"]').val(doc.data[0].tgl_pembukuan);
       formElem.find('[name="tgl_pembukuan"]').attr('data-deafult-date', doc.data[0].tgl_pembukuan);
@@ -133,40 +125,6 @@
       jQuery(this).find('[name="_method"]').val('POST');
       jQuery(this).find('[name="barang_id"]').val('').change();
       jQuery(this).find('[type="submit"]').html('Submit');
-    });
-  });
-</script>
-<script>
-  jQuery(function () {
-    const elemTglPembukuan = jQuery('[name="tgl_pembukuan"]');
-    const elemSelectBarang = jQuery('select[name="barang_id"]');
-
-    let filter = elemTglPembukuan.val();
-    elemTglPembukuan.change(function (e) {
-      elemSelectBarang.val(null).change();
-      filter = e.target.value;
-    });
-
-    elemSelectBarang.select2({
-      placeholder: "Select...",
-      dropdownParent: "#modal-container",
-      ajax: {
-        url: '/api/master/persediaan/has-stok',
-        dataType: 'json',
-        data: (params) => {
-          return {
-            search: params.term,
-            tgl_pembukuan: filter
-          }
-        },
-        processResults: (response) => {
-          response.map((item) => Object.assign(item, { text: `${item.kode_register} ${item.nama_barang} ${item.spesifikasi || ''}, Stok: ${item.stok} ${item.satuan}` }));
-
-          return {
-            results: response
-          }
-        },
-      },
     });
   });
 </script>

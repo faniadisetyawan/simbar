@@ -240,6 +240,9 @@
                 <a href="{{ url('/laporan/kartu-persediaan') }}" class="nav-link {{ Request::is('laporan/kartu-persediaan*') ? "active" : "" }}">Kartu Barang Persediaan</a>
               </li>
               <li class="nav-item">
+                <a href="{{ url('/laporan/mutasi-persediaan') }}" class="nav-link {{ Request::is('laporan/mutasi-persediaan*') ? "active" : "" }}">Mutasi Persediaan</a>
+              </li>
+              <li class="nav-item">
                 <a href="{{ url('/laporan/usulan') }}" class="nav-link">Laporan Usulan</a>
               </li>
             </ul>

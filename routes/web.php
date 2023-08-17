@@ -80,7 +80,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
         Route::get('/docs/{docSlug}', 'Penyaluran\NotaPermintaanController@showByDocs')->name('penyaluran.nota-permintaan.showByDocs');
         Route::post('/', 'Penyaluran\NotaPermintaanController@store')->name('penyaluran.nota-permintaan.store');
         Route::put('/barang/{id}', 'Penyaluran\NotaPermintaanController@updateBarang')->name('penyaluran.nota-permintaan.updateBarang');
-        Route::put('/upload', 'Penyaluran\NotaPermintaanController@uploadDokumen')->name('penyaluran.nota-permintaan.uploadDokumen');
+        Route::put('/docs/{docSlug}', 'Penyaluran\NotaPermintaanController@updateDoc')->name('penyaluran.nota-permintaan.updateDoc');
         Route::delete('/barang/{id}', 'Penyaluran\NotaPermintaanController@destroyBarang')->name('penyaluran.nota-permintaan.destroyBarang');
     });
 
@@ -103,6 +103,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
 
 Route::get('/usulan', 'UsulanController@index');
 
-Route::group(['prefix' => 'laporan'], function () {
+Route::group(['prefix' => 'laporan', 'middleware' => 'auth'], function () {
     Route::get('/kartu-persediaan', 'PersediaanMasterController@kartuPersediaan')->name('laporan.kartu-persediaan');
+    Route::get('/mutasi-persediaan', 'MutasiController@index')->name('laporan.mutasi-persediaan');
 });
