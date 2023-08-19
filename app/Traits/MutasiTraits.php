@@ -49,6 +49,32 @@ trait MutasiTraits
         return $query;
     }
 
+    private function _getSumSaldoAwalByDate($tglPembukuan, $barangId) 
+    {
+        return MutasiTambah::where('kode_pembukuan', '01')
+            ->where('kode_perolehan', '00')
+            ->where('barang_id', $barangId)
+            ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
+            ->sum('jumlah_barang');
+    }
+
+    private function _getSumMutasiTambahByDate($tglPembukuan, $barangId) 
+    {
+        return MutasiTambah::whereIn('kode_pembukuan', ['01', '32'])
+            ->where('kode_perolehan', '!=', '00')
+            ->where('barang_id', $barangId)
+            ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
+            ->sum('jumlah_barang');
+    }
+
+    private function _getSumMutasiKurangByDate($tglPembukuan, $barangId) 
+    {
+        return MutasiKurang::whereIn('kode_pembukuan', ['14', '31', '32'])
+            ->where('barang_id', $barangId)
+            ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
+            ->sum('jumlah_barang');
+    }
+
     private function _groupedMutasiKurang($arrayMutasiTambah, $arrayMutasiKurang) 
     {
         $breakdown = [];

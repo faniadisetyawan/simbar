@@ -12,8 +12,8 @@
     @foreach ($rekapPerJenis as $item)
       <div class="col-lg-4 col-md-6">
         @include('components.card-widget', [
-          'title' => $item['title'],
-          'value' => $item['value'],
+          'title' => $item['jenis']['uraian'],
+          'value' => $item['nilai_perolehan'],
           'icon' => $item['icon'],
         ])
       </div>

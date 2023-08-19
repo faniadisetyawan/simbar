@@ -4,14 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use Hash;
+use Storage;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
     public function index(Request $request)
     {
         $search = $request->query('search');
@@ -45,5 +42,71 @@ class UserController extends Controller
             ],
             'data' => $data,
         ]);
+    }
+
+    public function profile() 
+    {
+        $data = auth()->user();
+
+        return view('profile', [
+            'pageTitle' => 'Profile',
+            'data' => $data,
+        ]);
+    }
+
+    public function update(Request $request, $id) 
+    {
+        $validated = $request->validate([
+            'username' => ['required'],
+            'nama' => ['required'],
+            'nip' => ['required'],
+            'bidang_id' => ['required'],
+            'role_id' => ['required'],
+        ]);
+
+        $data = User::findOrFail($id);
+        $data->update($validated);
+
+        return redirect()->back()->with('success', 'Profile berhasil diupdate.');
+    }
+
+    public function changePassword(Request $request, $id) 
+    {
+        $validated = $request->validate([
+            'password' => ['required', 'min:6', 'confirmed'],
+        ]);
+        $validated['password'] = Hash::make($validated['password']);
+
+        $data = User::findOrFail($id);
+        $data->update($validated);
+
+        return redirect()->back()->with('success', 'Password berhasil diubah.');
+    }
+
+    public function uploadPhoto(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'foto' => ['required', 'image'],
+        ]);
+
+        $data = User::findOrFail($id);
+
+        if ($data) {
+            $filePath = 'public/users/'.$data->foto;
+            if (Storage::exists($filePath)) {
+                Storage::delete($filePath);
+            }
+        }
+
+        if ($request->hasFile('foto')) {
+            $extension = $request->foto->extension();
+            $validated['foto'] = time().'.'.$extension;
+
+            $request->file('foto')->storeAs('public/users', $validated['foto']);
+        }
+
+        $data->update($validated);
+
+        return redirect()->back()->with('success', 'Foto profile berhasil diupdate.');
     }
 }

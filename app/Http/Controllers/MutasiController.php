@@ -20,32 +20,6 @@ class MutasiController extends Controller
         $this->pageTitle = 'Mutasi Persediaan';
     }
 
-    private function _getSumSaldoAwalByDate($tglPembukuan, $barangId) 
-    {
-        return MutasiTambah::where('kode_pembukuan', '01')
-            ->where('kode_perolehan', '00')
-            ->where('barang_id', $barangId)
-            ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
-            ->sum('jumlah_barang');
-    }
-
-    private function _getSumMutasiTambahByDate($tglPembukuan, $barangId) 
-    {
-        return MutasiTambah::whereIn('kode_pembukuan', ['01', '32'])
-            ->where('kode_perolehan', '!=', '00')
-            ->where('barang_id', $barangId)
-            ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
-            ->sum('jumlah_barang');
-    }
-
-    private function _getSumMutasiKurangByDate($tglPembukuan, $barangId) 
-    {
-        return MutasiKurang::whereIn('kode_pembukuan', ['14', '31', '32'])
-            ->where('barang_id', $barangId)
-            ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
-            ->sum('jumlah_barang');
-    }
-
     private function _laporan($tglPembukuan) 
     {
         $groupMutasiTambah = MutasiTambah::groupBy('barang_id')->get(['barang_id'])->pluck('barang_id');
@@ -98,11 +72,6 @@ class MutasiController extends Controller
                 'data' => $item,
             ];
         })->values();
-
-        // return response()->json([
-        //     'total' => $total,
-        //     'data' => $grouped,
-        // ]);
 
         return Pdf::loadView('laporan.pdf.mutasi-persediaan', [
             'pageTitle' => 'Rekapitulasi Mutasi Barang Persediaan',

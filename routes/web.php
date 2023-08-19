@@ -20,13 +20,14 @@ Route::get('/', function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::get('/login', 'AuthController@login')->name('login');
     Route::get('/logout', 'AuthController@logout');
+    Route::get('/profile', 'UserController@profile')->middleware('auth')->name('auth.profile');
     Route::post('/login', 'AuthController@handleLogin');
     Route::post('/logout', 'AuthController@handleLogout');
 });
 
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 
-Route::group(['prefix' => 'master'], function () {
+Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => 'bidang'], function () {
         Route::get('/', 'BidangController@index')->name('master.bidang.index');
         Route::get('/create', 'BidangController@create')->name('master.bidang.create');
@@ -40,6 +41,9 @@ Route::group(['prefix' => 'master'], function () {
 
     Route::group(['prefix' => 'users'], function () {
         Route::get('/', 'UserController@index')->name('master.users.index');
+        Route::put('/{id}', 'UserController@update')->name('master.users.update');
+        Route::put('/{id}/change-password', 'UserController@changePassword')->name('master.users.change-password');
+        Route::put('/{id}/upload-photo', 'UserController@uploadPhoto')->name('master.users.upload-photo');
     });
 
     Route::group(['prefix' => 'persediaan'], function () {

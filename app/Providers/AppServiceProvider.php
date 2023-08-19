@@ -11,6 +11,7 @@ use App\Bidang;
 use App\RefJenisDokumen;
 use App\PersediaanMaster;
 use App\MutasiTambah;
+use App\UserRole;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -55,6 +56,11 @@ class AppServiceProvider extends ServiceProvider
         return $grouped;
     }
 
+    private function _getUserRoles() 
+    {
+        return UserRole::get();
+    }
+
     /**
      * Bootstrap any application services.
      *
@@ -67,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
 
         if (! app()->runningInConsole()) {
             view()->share('appSetting', Setting::first());
+            view()->share('appUserRoles', $this->_getUserRoles());
             view()->share('appBidang', Bidang::get());
             view()->share('appJenisDokumen', RefJenisDokumen::get());
             view()->share('appMasterPersediaan', $this->_getMasterPersediaan());

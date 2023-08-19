@@ -44,7 +44,7 @@
                   <img src="{{ asset('assets/images/logo-light.png') }}" alt="LogoLight" height="25">
                   </a>
                 </div>
-                <p class="mt-3 fs-15 fw-medium">Aplikasi Sewa BMD Pemerintah Kabupaten Kediri</p>
+                <p class="mt-3 fs-15 fw-medium">{{ $appSetting->app_description }}</p>
               </div>
             </div>
           </div>

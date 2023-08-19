@@ -7,7 +7,7 @@
         </span>
       </div>
       <div class="flex-grow-1 ms-3">
-        <p class="text-uppercase fw-semibold fs-12 text-muted mb-1"> {{ $title }}</p>
+        <p class="fw-semibold fs-12 text-muted mb-1"> {{ $title }}</p>
         <h4 class=" mb-0">Rp<span class="counter-value" data-target="{{ $value }}">0</span></h4>
       </div>
     </div>

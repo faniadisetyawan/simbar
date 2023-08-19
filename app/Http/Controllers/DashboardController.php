@@ -3,19 +3,58 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Barang;
 use DB;
+use App\Traits\ProviderTraits;
+use App\Traits\MutasiTraits;
+use App\Barang;
+use App\KodefikasiJenis;
+use App\PersediaanMaster;
+use App\MutasiTambah;
 
 class DashboardController extends Controller
 {
+    use ProviderTraits, MutasiTraits;
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
+    private function _saldoAkhirPersediaan() 
+    {
+        $tglPembukuan = $this->_setting()->tahun_anggaran . '-12-31';
+
+        $groupMutasiTambah = MutasiTambah::groupBy('barang_id')->get(['barang_id'])->pluck('barang_id');
+        $master = PersediaanMaster::with(['kodefikasi'])->whereIn('id', $groupMutasiTambah)->get();
+
+        $collections = [];
+        foreach ($master as $barang) {
+            $logMutasi = $this->logMutasiTrait($tglPembukuan, $barang->id);
+            $latest = collect($logMutasi)->last();
+
+            $barang->saldo_akhir = (object)[
+                'stok' => $latest->stok,
+                'nilai_perolehan' => $latest->nilai_akhir,
+            ];
+
+            array_push($collections, $barang);
+        }
+
+        $kodeJenis = '1.1.7';
+        $jenis = KodefikasiJenis::find($kodeJenis);
+        $nilaiPerolehan = collect($collections)->sum('saldo_akhir.nilai_perolehan');
+
+        return [
+            'kode_jenis' => $kodeJenis,
+            'nilai_perolehan' => $nilaiPerolehan,
+            'jenis' => $jenis,
+            'icon' => 'ri-newspaper-fill',
+        ];
+    }
+
     private function _barangGroupPerJenis() 
     {
-        return Barang::select(
+        $collections = Barang::select(
                 DB::raw('LEFT(kode_neraca, 5) AS kode_jenis'),
                 DB::raw('SUM(nilai_perolehan) AS nilai_perolehan')
             )
@@ -23,61 +62,43 @@ class DashboardController extends Controller
             ->where('jumlah_barang', '>', 0)
             ->groupBy(DB::raw('LEFT(kode_neraca, 5)'))
             ->get();
+
+        return collect($collections)->map(function ($item, $key) {
+            $jenis = KodefikasiJenis::find($item->kode_jenis);
+
+            $icon = '';
+            switch ($item->kode_jenis) {
+                case '1.3.1': $icon = 'ri-map-2-fill'; break;
+                case '1.3.2': $icon = 'ri-car-fill'; break;
+                case '1.3.3': $icon = 'ri-building-2-fill'; break;
+                case '1.3.4': $icon = 'ri-road-map-fill'; break;
+                case '1.3.5': $icon = 'ri-book-read-fill'; break;
+                case '1.3.6': $icon = 'ri-rocket-2-fill'; break;
+                case '1.5.3': $icon = 'ri-android-fill'; break;
+                case '1.5.4': $icon = 'ri-delete-bin-5-fill'; break;
+                default: $icon = 'ri-map-2-fill'; break;
+            }
+
+            return [
+                'kode_jenis' => $item->kode_jenis,
+                'nilai_perolehan' => $item->nilai_perolehan,
+                'jenis' => $jenis,
+                'icon' => $icon,
+            ];
+        })->values();
     }
 
     public function index() 
     {
-        $groupJenis = $this->_barangGroupPerJenis();
+        $saldoAkhirPersediaan = $this->_saldoAkhirPersediaan();
+        $rekapPerJenis = $this->_barangGroupPerJenis();
 
-        return response()->json($groupJenis);
+        $mergePerJenis = [];
+        foreach ($rekapPerJenis as $row) {
+            array_push($mergePerJenis, $row);
+        }
 
-        $rekapPerJenis = array(
-            [
-                'title' => 'Persediaan',
-                'value' => 0,
-                'icon' => 'ri-newspaper-fill',
-            ],
-            [
-                'title' => 'Tanah',
-                'value' => 6319753761.58,
-                'icon' => 'ri-map-2-fill',
-            ],
-            [
-                'title' => 'Peralatan dan Mesin',
-                'value' => 17404938070.33,
-                'icon' => 'ri-car-fill',
-            ],
-            [
-                'title' => 'Gedung dan Bangunan',
-                'value' => 9668949720.15,
-                'icon' => 'ri-building-2-fill',
-            ],
-            [
-                'title' => 'Jalan, Irigasi dan Jaringan',
-                'value' => 17611419.10,
-                'icon' => 'ri-road-map-fill',
-            ],
-            [
-                'title' => 'Aset Tetap Lainnya',
-                'value' => 5070291766,
-                'icon' => 'ri-book-read-fill',
-            ],
-            [
-                'title' => 'Konstruksi Dalam Pengerjaan',
-                'value' => 0,
-                'icon' => 'ri-rocket-2-fill',
-            ],
-            [
-                'title' => 'Aset Tidak Berwujud',
-                'value' => 294150000,
-                'icon' => 'ri-android-fill',
-            ],
-            [
-                'title' => 'Aset Lain-Lain',
-                'value' => 136330000,
-                'icon' => 'ri-delete-bin-5-fill',
-            ],
-        );
+        array_unshift($mergePerJenis, $saldoAkhirPersediaan);
 
         $recentActivity = array(
             [
@@ -122,10 +143,8 @@ class DashboardController extends Controller
             ],
         );
 
-        // return response()->json($recentActivity);
-
         return view('dashboard', [
-            'rekapPerJenis' => $rekapPerJenis,
+            'rekapPerJenis' => $mergePerJenis,
             'recentActivity' => $recentActivity,
         ]);
     }
