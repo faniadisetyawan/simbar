@@ -143,7 +143,7 @@
                 <a href="{{ url('pembukuan/koreksi') }}" class="nav-link">Koreksi</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('pembukuan/penghapusan') }}" class="nav-link">Penghapusan</a>
+                <a href="{{ url('pembukuan/penghapusan') }}" class="nav-link {{ Request::is('pembukuan/penghapusan*') ? "active" : "" }}">Penghapusan</a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('pembukuan/stock-opname') }}" class="nav-link {{ Request::is('pembukuan/stock-opname') ? "active" : "" }}">Stock Opname</a>

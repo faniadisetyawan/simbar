@@ -66,7 +66,7 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::post('/import', 'Pembukuan\SaldoAwalController@import')->name('pembukuan.saldo-awal.import');
     });
 
-    Route::group(['prefix' => 'perolehan', 'middleware' => 'auth'], function () {
+    Route::group(['prefix' => 'perolehan'], function () {
         Route::get('/{slug}', 'Pembukuan\PerolehanController@index')->name('pembukuan.perolehan.index');
         Route::get('/{slug}/create', 'Pembukuan\PerolehanController@create')->name('pembukuan.perolehan.create');
         Route::get('/{slug}/docs/{docSlug}', 'Pembukuan\PerolehanController@showByDocs')->name('pembukuan.perolehan.showByDocs');
@@ -74,6 +74,21 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::put('/{slug}/barang/{id}', 'Pembukuan\PerolehanController@updateBarang')->name('pembukuan.perolehan.updateBarang');
         Route::put('/{slug}/upload', 'Pembukuan\PerolehanController@uploadDokumen')->name('pembukuan.perolehan.uploadDokumen');
         Route::delete('/barang/{id}', 'Pembukuan\PerolehanController@destroyBarang')->name('pembukuan.perolehan.destroyBarang');
+    });
+
+    Route::group(['prefix' => 'penghapusan'], function () {
+        Route::get('/', 'Pembukuan\PenghapusanController@index')->name('pembukuan.penghapusan.index');
+        Route::get('/create', 'Pembukuan\PenghapusanController@create')->name('pembukuan.penghapusan.create');
+        Route::get('/docs/{docSlug}', 'Pembukuan\PenghapusanController@showByDocs')->name('pembukuan.penghapusan.showByDocs');
+        Route::post('/', 'Pembukuan\PenghapusanController@store')->name('pembukuan.penghapusan.store');
+        Route::put('/upload', 'Pembukuan\PenghapusanController@uploadDokumen')->name('pembukuan.penghapusan.uploadDokumen');
+        Route::put('/barang/{id}', 'Pembukuan\PenghapusanController@updateBarang')->name('pembukuan.penghapusan.updateBarang');
+        Route::delete('/{id}', 'Pembukuan\PenghapusanController@destroyBarang')->name('pembukuan.penghapusan.destroyBarang');
+    });
+
+    Route::group(['prefix' => 'stock-opname'], function () {
+        Route::get('/', 'Pembukuan\StockOpnameController@index')->name('pembukuan.stock-opname.index');
+        Route::get('/create', 'Pembukuan\StockOpnameController@create')->name('pembukuan.stock-opname.create');
     });
 });
 

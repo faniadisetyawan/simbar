@@ -136,7 +136,7 @@
                   @foreach ($appMasterPersediaan as $group)
                   <optgroup label="{{ $group['key'] }}">
                     @foreach ($group['data'] as $item)
-                    <option value="{{ $item['id'] }}" @if(old('barang_id', $props['barang_id']) === $item['id']) @endif>
+                    <option value="{{ $item['id'] }}" @if(old('barang_id', $props['barang_id']) === $item['id']) selected @endif>
                       {{ $item['kode_barang'] . '.' . $item['kode_register']. ' ' . $item['nama_barang'] . ' ' . $item['spesifikasi'] }}
                     </option>
                     @endforeach
