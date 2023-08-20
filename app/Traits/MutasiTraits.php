@@ -217,4 +217,24 @@ trait MutasiTraits
     {
         return PersediaanMaster::with(['kodefikasi'])->findOrFail($barangId);
     }
+
+    public function currentPrice($barangId)
+    {
+        $master = PersediaanMaster::findOrFail($barangId);
+        $mutasiTambah = MutasiTambah::where('barang_id', $barangId)->orderBy('tgl_pembukuan', 'ASC')->get();
+        $mutasiKurang = MutasiKurang::where('barang_id', $barangId)->orderBy('tgl_pembukuan', 'ASC')->get();
+
+        $i = 0;
+        $stop = 0;
+        $totalMT = $mutasiKurang->sum('jumlah_barang');
+        $latest = 0;
+
+        while ($stop < $totalMT) {
+            $stop += $mutasiTambah[$i]->jumlah_barang;
+            $latest = $mutasiTambah[$i];
+            $i++;
+        }
+
+        return $latest->harga_satuan;
+    }
 }

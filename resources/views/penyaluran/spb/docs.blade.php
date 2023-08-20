@@ -198,7 +198,7 @@
             <div class="mb-3">
               <label class="form-label">Pilih File <code>*</code></label>
               <input type="file" name="file_upload" class="form-control" />
-              <div class="form-text">Untuk menghemat resource server, upload dokumen dengan ukuran maksimal 1 (satu) MB.</div>
+              <div class="form-text">Upload dokumen dengan ukuran maksimal 1 (satu) MB.</div>
             </div>
           </div>
           <div class="modal-footer">

@@ -7,21 +7,13 @@ use Illuminate\Http\Request;
 use App\Traits\ProviderTraits;
 use DB;
 use App\Setting;
+use App\PersediaanMaster;
 use App\MutasiTambah;
 use App\MutasiKurang;
 
 class MutasiController extends Controller
 {
     use ProviderTraits;
-
-    // private $setting;
-    // private $startDate;
-
-    // public function __construct() 
-    // {
-    //     $this->setting = Setting::first();
-    //     $this->startDate = $this->setting->tahun_anggaran . '-01-01';
-    // }
 
     private function _getMutasiTambah($tglPembukuan, $barangId) 
     {
@@ -176,5 +168,25 @@ class MutasiController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    public function currentPrice($id) 
+    {
+        $master = PersediaanMaster::findOrFail($id);
+        $mutasiTambah = MutasiTambah::where('barang_id', $id)->orderBy('tgl_pembukuan', 'ASC')->get();
+        $mutasiKurang = MutasiKurang::where('barang_id', $id)->orderBy('tgl_pembukuan', 'ASC')->get();
+
+        $i = 0;
+        $stop = 0;
+        $totalMT = $mutasiKurang->sum('jumlah_barang');
+        $latest = 0;
+
+        while ($stop < $totalMT) {
+            $stop += $mutasiTambah[$i]->jumlah_barang;
+            $latest = $mutasiTambah[$i];
+            $i++;
+        }
+
+        return response()->json($latest->harga_satuan);
     }
 }

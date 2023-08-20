@@ -16,7 +16,7 @@ class CreateMutasiTambahsTable extends Migration
         Schema::create('mutasi_tambah', function (Blueprint $table) {
             $table->id();
             $table->char('kode_pembukuan', 2);
-            $table->char('kode_perolehan', 2);
+            $table->char('kode_perolehan', 2)->nullable();
             $table->char('kode_penggunaan', 2)->nullable();
             $table->date('tgl_pembukuan');
             $table->char('kode_jenis_dokumen', 2)->nullable();
@@ -34,7 +34,7 @@ class CreateMutasiTambahsTable extends Migration
             $table->decimal('saldo_nilai_perolehan', 19, 2)->default(0);
             $table->date('tgl_expired')->nullable();
             $table->text('keterangan')->nullable();
-            $table->foreignId('opname_id')->nullable()->constrained('persediaan_opname')->onUpdate('cascade');
+            $table->foreignId('opname_id')->nullable()->constrained('persediaan_opname')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('created_by')->constrained('users')->onUpdate('cascade');
             $table->foreignId('updated_by')->constrained('users')->onUpdate('cascade');
             $table->timestamps();

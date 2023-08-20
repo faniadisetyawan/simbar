@@ -21,3 +21,4 @@ Route::group(['prefix' => 'master'], function () {
 });
 
 Route::get('/kartu-persediaan', 'API\MutasiController@kartuPersediaan');
+Route::get('/current-price/{id}', 'API\MutasiController@currentPrice');

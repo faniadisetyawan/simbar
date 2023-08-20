@@ -89,6 +89,10 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => 'stock-opname'], function () {
         Route::get('/', 'Pembukuan\StockOpnameController@index')->name('pembukuan.stock-opname.index');
         Route::get('/create', 'Pembukuan\StockOpnameController@create')->name('pembukuan.stock-opname.create');
+        Route::get('/docs/{docSlug}', 'Pembukuan\StockOpnameController@showByDocs')->name('pembukuan.stock-opname.showByDocs');
+        Route::post('/store', 'Pembukuan\StockOpnameController@store')->name('pembukuan.stock-opname.store');
+        Route::put('/upload', 'Pembukuan\StockOpnameController@uploadDokumen')->name('pembukuan.stock-opname.uploadDokumen');
+        Route::delete('/{id}', 'Pembukuan\StockOpnameController@destroyBarang')->name('pembukuan.stock-opname.destroyBarang');
     });
 });
 

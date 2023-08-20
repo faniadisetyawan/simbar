@@ -23,4 +23,9 @@ class PersediaanOpname extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function master_persediaan() 
+    {
+        return $this->belongsTo('App\PersediaanMaster', 'barang_id')->withTrashed();
+    }
 }

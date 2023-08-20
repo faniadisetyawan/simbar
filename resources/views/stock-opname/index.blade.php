@@ -15,6 +15,14 @@
     </div>
   </div>
 
+  @if (session()->has('success'))
+    <div class="alert alert-success alert-border-left alert-dismissible fade show" role="alert">
+      <i class="ri-check-double-line me-3 align-middle fs-16"></i><strong>Success</strong>
+      - {{ session()->get('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+
   <div class="card">
     <div class="card-header">
       <div class="row g-4 align-items-center">
@@ -25,7 +33,7 @@
         </div>
         <div class="col-sm-auto">
           <div class="d-flex gap-2 flex-wrap">
-            <a href="{{ route('pembukuan.penghapusan.create') }}" class="btn btn-success add-btn waves-effect">
+            <a href="{{ route('pembukuan.stock-opname.create') }}" class="btn btn-success add-btn waves-effect">
               <i class="ri-add-line align-bottom me-1"></i> Tambah
             </a>
           </div>
@@ -71,7 +79,7 @@
           </div>
           <div class="col-6 col-lg-2">
             <div>
-              <a href="{{ route('pembukuan.penghapusan.index') }}" class="btn btn-soft-danger waves-effect w-100"> 
+              <a href="{{ route('pembukuan.stock-opname.index') }}" class="btn btn-soft-danger waves-effect w-100"> 
                 <i class="ri-filter-off-fill me-1 align-bottom"></i> Reset
               </a>
             </div>

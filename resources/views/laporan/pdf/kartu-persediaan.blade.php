@@ -166,7 +166,7 @@
 
       @if (count($data) === 0)
         <tr>
-          <td colspan="7" class="empty">NIHIL</td>
+          <td colspan="8" class="empty">NIHIL</td>
         </tr>
       @endif
     </tbody>

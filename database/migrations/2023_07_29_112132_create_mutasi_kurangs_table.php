@@ -34,7 +34,7 @@ class CreateMutasiKurangsTable extends Migration
             $table->decimal('saldo_nilai_perolehan', 19, 2)->default(0);
             $table->text('keterangan')->nullable();
             $table->foreignId('dasar_penyaluran_id')->nullable()->constrained('persediaan_penyaluran')->onUpdate('cascade');
-            $table->foreignId('opname_id')->nullable()->constrained('persediaan_opname')->onUpdate('cascade');
+            $table->foreignId('opname_id')->nullable()->constrained('persediaan_opname')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('created_by')->constrained('users')->onUpdate('cascade');
             $table->foreignId('updated_by')->constrained('users')->onUpdate('cascade');
             $table->timestamps();

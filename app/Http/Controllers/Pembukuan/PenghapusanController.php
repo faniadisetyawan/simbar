@@ -99,7 +99,7 @@ class PenghapusanController extends Controller
             'keterangan' => ['nullable'],
         ]);
         $validated['kode_pembukuan'] = '14';
-        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');;
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
 

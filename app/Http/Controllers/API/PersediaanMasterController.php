@@ -48,10 +48,5 @@ class PersediaanMasterController extends Controller
         return response()->json($data);
     }
 
-    // public function findAvailableStock($id) 
-    // {
-    //     $data = PersediaanMaster::with(['kodefikasi'])->findOrFail($id);
-
-    //     return response()->json($data);
-    // }
+    
 }

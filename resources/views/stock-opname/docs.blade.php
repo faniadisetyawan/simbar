@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Pembukuan - Perolehan - Dokumen')
+@section('page-title', 'Pembukuan - ' . $pageTitle . ' - Dokumen')
 
 @push('styles')
   <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -15,10 +15,10 @@
         <div class="page-title-right">
           <ol class="breadcrumb m-0">
             <li class="breadcrumb-item">
-              <a href="javascript: void(0);">Perolehan</a>
+              <a href="javascript: void(0);">Pembukuan</a>
             </li>
             <li class="breadcrumb-item">
-              <a href="{{ route('pembukuan.perolehan.index', $slug) }}">Pengadaan</a>
+              <a href="{{ route('pembukuan.stock-opname.index') }}">{{ $pageTitle }}</a>
             </li>
             <li class="breadcrumb-item active">Dokumen</li>
           </ol>
@@ -75,12 +75,6 @@
 
           <div class="mt-2">
             <div class="text-muted">
-              <small class="d-block fw-bold">Bidang :</small>
-              <p class="mb-0">{{ $data['bidang']['nama'] }}</p>
-            </div>
-            <div class="my-2 border border-dashed"></div>
-
-            <div class="text-muted">
               <small class="d-block fw-bold">No. Dokumen :</small>
               <p class="mb-0">{{ $data['no_dokumen'] }}</p>
             </div>
@@ -131,7 +125,7 @@
           <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0">Daftar Barang</h5>
             <div class="flex-shrink-0">
-              <button type="button" class="btn btn-success btn-sm waves-effect" onclick="openFormModal({ slug: '{{ $slug }}', data: null, doc: {{ json_encode($data) }} })">
+              <button type="button" class="btn btn-success btn-sm waves-effect" onclick="openFormModal({ data: null, doc: {{ json_encode($data) }} })">
                 <i class="ri-add-fill align-middle me-1"></i> Tambah
               </button>
             </div>
@@ -145,9 +139,8 @@
                   <th scope="col" class="text-center">Action</th>
                   <th scope="col">Kodefikasi</th>
                   <th scope="col">Spesifikasi Nama Barang</th>
-                  <th scope="col" class="text-end">Harga Satuan</th>
                   <th scope="col" class="text-end">Jumlah Barang</th>
-                  <th scope="col" class="text-end">Nilai Perolehan</th>
+                  <th scope="col">Satuan</th>
                   <th scope="col">Tgl. Pembukuan</th>
                 </tr>
               </thead>
@@ -155,27 +148,17 @@
                 @foreach ($data['data'] as $item)
                 <tr>
                   <td class="text-center">
-                    <div class="dropdown">
-                      <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="ri-more-fill align-middle"></i>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                          <button class="dropdown-item" onclick="openFormModal({ slug: '{{ $slug }}', data: {{ $item }}, doc: {{ json_encode($data) }} })">
-                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>Edit
-                          </button>
-                        </li>
-                        <li>
-                          <button class="dropdown-item" onclick="handleDestroy({{ $item }})">
-                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>Hapus
-                          </button>
-                          <form id="formDestroy-{{ $item['id'] }}" action="{{ route('pembukuan.perolehan.destroyBarang', $item['id']) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                          </form>
-                        </li>
-                      </ul>
-                    </div>
+                    <a href="javascript: void(0);" class="link-danger fs-15" 
+                      data-bs-toggle="tooltip"
+                      title="Hapus"
+                      onclick="handleDestroy({{ $item }})"
+                    >
+                      <i class="ri-delete-bin-line"></i>
+                    </a>
+                    <form id="formDestroy-{{ $item['id'] }}" action="{{ route('pembukuan.stock-opname.destroyBarang', $item['id']) }}" method="post">
+                      @csrf
+                      @method('DELETE')
+                    </form>
                   </td>
                   <td>
                     <h5 class="fs-15">{{ $item['master_persediaan']['kode_barang'] }}</h5>
@@ -186,20 +169,20 @@
                     <h5 class="fs-15">{{ $item['master_persediaan']['nama_barang'] }}</h5>
                     <p class="text-muted mb-0">Spesifikasi: <span class="fw-medium">{{ $item['master_persediaan']['spesifikasi'] }}</span></p>
                   </td>
-                  <td class="fw-medium text-end">{{ number_format($item['harga_satuan'], 2, ',', '.') }}</td>
-                  <td class="text-end">{{ $item['jumlah_barang'] . ' ' . $item['master_persediaan']['satuan'] }}</td>
-                  <td class="fw-medium text-end">{{ number_format($item['nilai_perolehan'], 2, ',', '.') }}</td>
+                  <td class="text-end">{{ $item['jumlah_barang'] }}</td>
+                  <td>{{ $item['master_persediaan']['satuan'] }}</td>
                   <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
                 </tr>
                 @endforeach
               </tbody>
               <tfoot class="border-top border-top-dashed">
                 <tr class="border-top border-top-dashed">
-                  <td colspan="4"></td>
+                  <td colspan="2"></td>
                   <th class="text-end">Total :</th>
                   <th class="text-end">
-                    <div class="fs-15">{{ number_format($data['total'], 2, ',', '.') }}</div>
+                    <div class="fs-15">{{ $data['total'] }}</div>
                   </th>
+                  <td></td>
                   <td></td>
                 </tr>
               </tfoot>
@@ -210,7 +193,7 @@
     </div>
   </div>
 
-  @include('components.modal-perolehan', ['slug' => $slug])
+  @include('components.modal-stock-opname')
 
   <div class="modal fade zoomIn" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -220,11 +203,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
         </div>
   
-        <form action="{{ route('pembukuan.perolehan.uploadDokumen', $slug) }}" method="post" enctype="multipart/form-data" class="tablelist-form">
+        <form action="{{ route('pembukuan.stock-opname.uploadDokumen') }}" method="post" enctype="multipart/form-data" class="tablelist-form">
           @csrf
           @method("PUT")
   
-          <input type="hidden" name="slug_dokumen_tambah" value="{{ $data['slug_dokumen'] }}" />
+          <input type="hidden" name="slug_dokumen_kurang" value="{{ $data['slug_dokumen'] }}" />
   
           <div class="modal-body" id="modal-container">
             <div class="mb-3">
@@ -250,8 +233,6 @@
   <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="{{ asset('assets/js/pages/select2.init.js') }}"></script>
-  <script src="{{ asset('assets/libs/cleave.js/cleave.min.js') }}"></script>
-  <script src="{{ asset('assets/js/pages/form-masks.init.js') }}"></script>
   <script>
     const handleDestroy = (data) => {
       Swal.fire({
@@ -268,18 +249,5 @@
       });
     }
   </script>
-  <script>
-    $(function () {
-      let cleaveNilaiPerolehan = new Cleave('#cleaveNilaiPerolehan', {
-        numeral: true,
-        numeralDecimalMark: ",",
-        delimiter: ".",
-      });
-
-      $('#cleaveNilaiPerolehan').change(function (e) {
-        $('[name="nilai_perolehan"]').val(cleaveNilaiPerolehan.getRawValue());
-      });
-    });
-  </script>
-  @stack('scripts-modal-perolehan')
+  @stack('scripts-modal-stock-opname')
 @endpush

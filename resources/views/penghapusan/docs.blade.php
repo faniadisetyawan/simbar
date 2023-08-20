@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('page-title', 'Pembukuan - Perolehan - Dokumen')
+@section('page-title', 'Pembukuan - ' . $pageTitle . ' - Dokumen')
 
 @push('styles')
   <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -74,12 +74,6 @@
           </div>
 
           <div class="mt-2">
-            <div class="text-muted">
-              <small class="d-block fw-bold">Bidang :</small>
-              <p class="mb-0">{{ $data['bidang']['nama'] }}</p>
-            </div>
-            <div class="my-2 border border-dashed"></div>
-
             <div class="text-muted">
               <small class="d-block fw-bold">No. Dokumen :</small>
               <p class="mb-0">{{ $data['no_dokumen'] }}</p>
