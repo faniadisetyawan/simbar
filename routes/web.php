@@ -137,6 +137,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
 Route::get('/usulan', 'UsulanController@index');
 
 Route::group(['prefix' => 'laporan', 'middleware' => 'auth'], function () {
-    Route::get('/kartu-persediaan', 'PersediaanMasterController@kartuPersediaan')->name('laporan.kartu-persediaan');
+    Route::get('/perolehan/{slug}', 'MutasiController@perolehan')->name('laporan.perolehan');
+    Route::get('/kartu-persediaan', 'MutasiController@kartuPersediaan')->name('laporan.kartu-persediaan');
     Route::get('/mutasi-persediaan', 'MutasiController@index')->name('laporan.mutasi-persediaan');
 });

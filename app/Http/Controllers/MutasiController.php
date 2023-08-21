@@ -93,4 +93,72 @@ class MutasiController extends Controller
 
         return $this->_laporan($tglPembukuan);
     }
+
+    public function kartuPersediaan(Request $request) 
+    {
+        $tglPembukuan = $request->query('tgl_pembukuan');
+        $barangId = $request->query('barang_id');
+        
+        if (!empty($tglPembukuan) && !empty($barangId)) {
+            $master = PersediaanMaster::findOrFail($barangId);
+            $data = $this->logMutasiTrait($tglPembukuan, $barangId);
+
+            return Pdf::loadView('laporan.pdf.kartu-persediaan', [
+                'pageTitle' => $this->pageTitle,
+                'tglPembukuan' => $tglPembukuan,
+                'master' => $master,
+                'data' => $data,
+            ])->setPaper('a4', 'landscape')->stream();
+        }
+
+        return view('laporan.kartu-persediaan', [
+            'pageTitle' => $this->pageTitle,
+        ]);
+    }
+
+    public function perolehan(Request $request, $slug) 
+    {
+        $tglPembukuan = $request->query('tgl_pembukuan');
+
+        $pageTitle = '';
+        $kodePerolehan = '';
+
+        if ($slug === 'pengadaan') {
+            $pageTitle = 'Pengadaan';
+            $kodePerolehan = '01';
+        } elseif ($slug === 'hibah') {
+            $pageTitle = 'Hibah';
+            $kodePerolehan = '02';
+        }
+
+        if (isset($tglPembukuan)) {
+            $collections = MutasiTambah::where('kode_perolehan', $kodePerolehan)
+                ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
+                ->orderBy('tgl_pembukuan', 'ASC')
+                ->get();
+
+            $data = $collections->groupBy('slug_dokumen')->map(function ($item, $key) {
+                return (object)[
+                    'tgl_dokumen' => $item[0]['tgl_dokumen'],
+                    'no_dokumen' => $item[0]['no_dokumen'],
+                    'jenis_dokumen' => $item[0]['jenis_dokumen'],
+                    'total' => $item->sum('nilai_perolehan'),
+                    'data' => $item,
+                ];
+            })->values();
+    
+            // return response()->json($data);
+            return Pdf::loadView('laporan.pdf.perolehan', [
+                'pageTitle' => $pageTitle,
+                'tglPembukuan' => $tglPembukuan,
+                'totalNilaiPerolehan' => $collections->sum('nilai_perolehan'),
+                'data' => $data,
+            ])->setPaper('a4', 'landscape')->stream();
+        }
+
+        return view('laporan.perolehan', [
+            'pageTitle' => $pageTitle,
+            'slug' => $slug,
+        ]);
+    }
 }

@@ -204,13 +204,13 @@
                   aria-expanded="false" 
                   aria-controls="laporanPerolehan"
                 >Laporan Perolehan</a>
-                <div id="laporanPerolehan" class="menu-dropdown collapse">
+                <div id="laporanPerolehan" class="menu-dropdown collapse {{ Request::is('laporan/perolehan*') ? "show" : "" }}">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a href="{{ url('laporan/perolehan/pengadaan') }}" class="nav-link">Pengadaan</a>
+                      <a href="{{ url('laporan/perolehan/pengadaan') }}" class="nav-link {{ Request::is('laporan/perolehan/pengadaan*') ? "active" : "" }}">Pengadaan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('laporan/perolehan/hibah') }}" class="nav-link">Hibah</a>
+                      <a href="{{ url('laporan/perolehan/hibah') }}" class="nav-link {{ Request::is('laporan/perolehan/hibah*') ? "active" : "" }}">Hibah</a>
                     </li>
                   </ul>
                 </div>

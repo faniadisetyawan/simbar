@@ -69,7 +69,7 @@ trait MutasiTraits
 
     private function _getSumMutasiKurangByDate($tglPembukuan, $barangId) 
     {
-        return MutasiKurang::whereIn('kode_pembukuan', ['14', '31', '32'])
+        return MutasiKurang::whereIn('kode_pembukuan', ['06', '14', '31', '32'])
             ->where('barang_id', $barangId)
             ->whereBetween('tgl_pembukuan', [$this->_startDate(), $tglPembukuan])
             ->sum('jumlah_barang');

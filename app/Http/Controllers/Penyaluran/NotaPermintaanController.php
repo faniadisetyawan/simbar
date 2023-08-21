@@ -124,8 +124,10 @@ class NotaPermintaanController extends Controller
         return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
 
-    public function showByDocs($docSlug) 
+    public function showByDocs(Request $request, $docSlug) 
     {
+        $print = $request->boolean('print');
+
         $query = Penyaluran::query();
         $query->with(['master_persediaan.kodefikasi', 'get_created_by']);
         $query->where('slug_dokumen', $docSlug);
@@ -171,6 +173,13 @@ class NotaPermintaanController extends Controller
                 'data' => $item,
             ];
         })->values()[0];
+
+        if (isset($print) && $print === TRUE) {
+            return view('penyaluran.nota-permintaan.print', [
+                'pageTitle' => $this->pageTitle,
+                'data' => $grouped,
+            ]);
+        }
 
         return view('penyaluran.nota-permintaan.docs', [
             'pageTitle' => $this->pageTitle,

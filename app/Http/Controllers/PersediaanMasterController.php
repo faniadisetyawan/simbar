@@ -5,25 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade\Pdf;
 use App\Traits\ProviderTraits;
 use App\Traits\MutasiTraits;
 use App\Http\Requests\PersediaanMasterRequest;
 use App\Imports\Persediaan\PersediaanMasterImport;
 use App\PersediaanMaster;
 use App\KodefikasiSubRincianObjek;
-use App\MutasiTambah;
 
 class PersediaanMasterController extends Controller
 {
     use ProviderTraits, MutasiTraits;
 
-    private $pageTitle;
-
     public function __construct()
     {
         $this->middleware('auth');
-        $this->pageTitle = 'Kartu Barang Persediaan';
     }
 
     public function index(Request $request)
@@ -101,29 +96,5 @@ class PersediaanMasterController extends Controller
         }
         
         return redirect()->back()->with('success', 'Semua data berhasil diimport.');
-    }
-
-    public function kartuPersediaan(Request $request) 
-    {
-        $tglPembukuan = $request->query('tgl_pembukuan');
-        $barangId = $request->query('barang_id');
-        
-        if (!empty($tglPembukuan) && !empty($barangId)) {
-            $master = PersediaanMaster::findOrFail($barangId);
-            $data = $this->logMutasiTrait($tglPembukuan, $barangId);
-
-            // return response()->json($data);
-
-            return Pdf::loadView('laporan.pdf.kartu-persediaan', [
-                'pageTitle' => $this->pageTitle,
-                'tglPembukuan' => $tglPembukuan,
-                'master' => $master,
-                'data' => $data,
-            ])->setPaper('a4', 'landscape')->stream();
-        }
-
-        return view('laporan.kartu-persediaan', [
-            'pageTitle' => $this->pageTitle,
-        ]);
     }
 }

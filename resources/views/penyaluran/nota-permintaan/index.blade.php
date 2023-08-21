@@ -127,6 +127,9 @@
 
                   <tr class="table-active fw-bold">
                     <td class="text-center">
+                      <a href="javascript: void(0);" class="link-primary me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Cetak">
+                        <i class="ri-printer-fill align-middle"></i>
+                      </a>
                       <a href="{{ $detailUrl }}" class="link-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Selengkapnya">
                         <i class="ri-arrow-right-line align-middle"></i>
                       </a>
