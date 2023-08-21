@@ -54,7 +54,10 @@ class DashboardController extends Controller
 
     private function _barangGroupPerJenis() 
     {
-        $collections = Barang::select(
+        $kodefikasi = KodefikasiJenis::whereIn('kode', ['1.3.1','1.3.2','1.3.3','1.3.4','1.3.5','1.3.6','1.5.3','1.5.4'])->get();
+
+        $collections = [];
+        $grouped = Barang::select(
                 DB::raw('LEFT(kode_neraca, 5) AS kode_jenis'),
                 DB::raw('SUM(nilai_perolehan) AS nilai_perolehan')
             )
@@ -62,6 +65,20 @@ class DashboardController extends Controller
             ->where('jumlah_barang', '>', 0)
             ->groupBy(DB::raw('LEFT(kode_neraca, 5)'))
             ->get();
+
+        foreach ($kodefikasi as $jenis) {
+            $obj = (object)[];
+            $obj->kode_jenis = $jenis->kode;
+            $obj->nilai_perolehan = 0;
+
+            foreach ($grouped as $group) {
+                if ($group->kode_jenis == $jenis->kode) {
+                    $obj->nilai_perolehan = $group->nilai_perolehan;
+                }
+            }
+
+            array_push($collections, $obj);
+        }
 
         return collect($collections)->map(function ($item, $key) {
             $jenis = KodefikasiJenis::find($item->kode_jenis);
@@ -99,6 +116,8 @@ class DashboardController extends Controller
         }
 
         array_unshift($mergePerJenis, $saldoAkhirPersediaan);
+
+        // return response()->json($mergePerJenis);
 
         $recentActivity = array(
             [
