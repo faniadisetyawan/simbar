@@ -178,9 +178,11 @@
                             <i class="ri-calendar-line me-2"></i>{{ date('M d, Y', strtotime($doc['tgl_dokumen'])) }}
                           </span>
                         </div>
-                        <p class="text-muted fs-12 mb-0">
-                          <i class="mdi mdi-circle-medium text-success fs-15 align-middle"></i>{{ $doc['bidang']['nama'] }}
-                        </p>
+                        @if (!is_null($doc['bidang']))
+                          <p class="text-muted fs-12 mb-0">
+                            <i class="mdi mdi-circle-medium text-success fs-15 align-middle"></i>{{ $doc['bidang']['nama'] }}
+                          </p>
+                        @endif
                       </a>
                     </td>
                     <td class="text-end">

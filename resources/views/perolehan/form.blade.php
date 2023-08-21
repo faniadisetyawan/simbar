@@ -48,17 +48,20 @@
             </div>
 
             <div class="mb-3">
-              <div class="row mb-3">
-                <label class="col-sm-4 col-form-label">Pilih Bidang <code>*</code></label>
-                <div class="col-sm-8">
-                  <select name="bidang_id" class="form-control js-example-basic-single">
-                    <option></option>
-                    @foreach ($appBidang as $item)
-                      <option value="{{ $item['id'] }}" @if(old('bidang_id', auth()->user()->bidang_id) == $item['id']) selected @endif>{{ $item['id']. '. ' . $item['nama'] }}</option>
-                    @endforeach
-                  </select>
+              @if ($slug !== 'hibah')
+                <div class="row mb-3">
+                  <label class="col-sm-4 col-form-label">Pilih Bidang <code>*</code></label>
+                  <div class="col-sm-8">
+                    <select name="bidang_id" class="form-control js-example-basic-single">
+                      <option></option>
+                      @foreach ($appBidang as $item)
+                        <option value="{{ $item['id'] }}" @if(old('bidang_id', auth()->user()->bidang_id) == $item['id']) selected @endif>{{ $item['id']. '. ' . $item['nama'] }}</option>
+                      @endforeach
+                    </select>
+                  </div>
                 </div>
-              </div>
+              @endif
+
               <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Tanggal Pembukuan <code>*</code></label>
                 <div class="col-sm-8">
@@ -137,7 +140,7 @@
                   <optgroup label="{{ $group['key'] }}">
                     @foreach ($group['data'] as $item)
                     <option value="{{ $item['id'] }}" @if(old('barang_id', $props['barang_id']) === $item['id']) selected @endif>
-                      {{ $item['kode_barang'] . '.' . $item['kode_register']. ' ' . $item['nama_barang'] . ' ' . $item['spesifikasi'] }}
+                      {{ $item->kode_register . ' ' . $item->nama_barang . ' ' . $item->spesifikasi . ' @' . $item->satuan }}
                     </option>
                     @endforeach
                   </optgroup>
@@ -180,8 +183,8 @@
 
           <div class="card-footer">
             <div class="hstack gap-2 justify-content-end">
-              <button type="submit" class="btn btn-success waves-effect">Submit</button>
               <a href="{{ route('pembukuan.perolehan.index', $slug) }}" class="btn btn-light waves-effect">Kembali</a>
+              <button type="submit" class="btn btn-success waves-effect">Submit</button>
             </div>
           </div>
         </div>

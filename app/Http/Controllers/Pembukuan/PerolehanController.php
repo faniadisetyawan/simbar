@@ -156,6 +156,18 @@ class PerolehanController extends Controller
         $data = MutasiTambah::findOrFail($id);
         $data->delete();
 
+        $count = MutasiTambah::where('kode_pembukuan', $data->kode_pembukuan)->where('slug_dokumen', $data['slug_dokumen'])->count();
+        if ($count === 0) {
+            $slug = 'pengadaan';
+            if ($data->kode_perolehan == '01') {
+                $slug = 'pengadaan';
+            } elseif ($data->kode_perolehan == '02') {
+                $slug = 'hibah';
+            }
+
+            return redirect()->route('pembukuan.perolehan.index', $slug)->with('success', 'Data berhasil dihapus.');
+        }
+
         return redirect()->back()->with('success', 'Data berhasil dihapus.');
     }
 

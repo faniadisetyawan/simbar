@@ -36,7 +36,7 @@
                 @foreach ($appMasterPersediaanGroupMutasi as $group)
                   <optgroup label="{{ $group->key->kode . ' ' . $group->key->uraian }}">
                     @foreach ($group->data as $item)
-                      <option value="{{ $item->id }}">{{ $item->kode_barang . '.' . $item->kode_register . ' . ' . $item->nama_barang . ' . ' . $item->spesifikasi }}</option>
+                      <option value="{{ $item->id }}">{{ $item->kode_register . ' . ' . $item->nama_barang . ' . ' . $item->spesifikasi }}</option>
                     @endforeach
                   </optgroup>
                 @endforeach

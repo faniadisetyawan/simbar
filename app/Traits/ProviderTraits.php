@@ -64,16 +64,16 @@ trait ProviderTraits
         return Bidang::get();
     }
 
-    // public function _canUpdatedMutasiTambah($id) 
-    // {
-    //     $data = MutasiKurang::where('mutasi_tambah_id', $id)->first();
+    public function _canUpdatedMutasiTambah($id) 
+    {
+        $data = MutasiKurang::where('mutasi_tambah_id', $id)->first();
 
-    //     if ($data === NULL) {
-    //         return TRUE;
-    //     } else {
-    //         return FALSE;
-    //     }
-    // }
+        if ($data === NULL) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 
     // private function _getMutasiTambahByDate($tglPembukuan) 
     // {

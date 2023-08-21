@@ -29,7 +29,7 @@ class PerolehanRequest extends FormRequest
             'no_dokumen' => ['required', 'max: 100'],
             'tgl_dokumen' => ['required', 'date'],
             'uraian_dokumen' => ['nullable'],
-            'bidang_id' => ['required'],
+            'bidang_id' => ['nullable'],
             'barang_id' => ['required'],
             'jumlah_barang' => ['required', 'gte:0'],
             'nilai_perolehan' => ['required', 'gte:0'],

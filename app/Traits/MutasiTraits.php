@@ -229,6 +229,10 @@ trait MutasiTraits
         $totalMT = $mutasiKurang->sum('jumlah_barang');
         $latest = 0;
 
+        if ($totalMT === 0) {
+            return $mutasiTambah[0]->harga_satuan;
+        }
+
         while ($stop < $totalMT) {
             $stop += $mutasiTambah[$i]->jumlah_barang;
             $latest = $mutasiTambah[$i];

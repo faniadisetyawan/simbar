@@ -137,10 +137,7 @@
                 </div>
               </li>
               <li class="nav-item">
-                <a href="{{ url('pembukuan/reklasifikasi') }}" class="nav-link">Reklasifikasi</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('pembukuan/koreksi') }}" class="nav-link">Koreksi</a>
+                <a href="{{ url('pembukuan/reklasifikasi') }}" class="nav-link {{ Request::is('pembukuan/reklasifikasi*') ? "active" : "" }}">Reklasifikasi</a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('pembukuan/penghapusan') }}" class="nav-link {{ Request::is('pembukuan/penghapusan*') ? "active" : "" }}">Penghapusan</a>
@@ -220,9 +217,6 @@
               </li>
               <li class="nav-item">
                 <a href="{{ url('/laporan/reklasifikasi') }}" class="nav-link">Laporan Reklasifikasi</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/laporan/koreksi') }}" class="nav-link">Laporan Koreksi</a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('/laporan/penghapusan') }}" class="nav-link">Laporan Penghapusan</a>

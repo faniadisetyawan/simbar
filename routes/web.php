@@ -76,6 +76,16 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::delete('/barang/{id}', 'Pembukuan\PerolehanController@destroyBarang')->name('pembukuan.perolehan.destroyBarang');
     });
 
+    Route::group(['prefix' => 'reklasifikasi'], function () {
+        Route::get('/', 'Pembukuan\ReklasifikasiController@index')->name('pembukuan.reklasifikasi.index');
+        Route::get('/create', 'Pembukuan\ReklasifikasiController@create')->name('pembukuan.reklasifikasi.create');
+        Route::get('/docs/{docSlug}', 'Pembukuan\ReklasifikasiController@showByDocs')->name('pembukuan.reklasifikasi.showByDocs');
+        Route::post('/', 'Pembukuan\ReklasifikasiController@store')->name('pembukuan.reklasifikasi.store');
+        Route::put('/barang/{id}', 'Pembukuan\ReklasifikasiController@updateBarang')->name('pembukuan.reklasifikasi.updateBarang');
+        Route::put('/upload', 'Pembukuan\ReklasifikasiController@uploadDokumen')->name('pembukuan.reklasifikasi.uploadDokumen');
+        Route::delete('/barang/{id}', 'Pembukuan\ReklasifikasiController@destroyBarang')->name('pembukuan.reklasifikasi.destroyBarang');
+    });
+
     Route::group(['prefix' => 'penghapusan'], function () {
         Route::get('/', 'Pembukuan\PenghapusanController@index')->name('pembukuan.penghapusan.index');
         Route::get('/create', 'Pembukuan\PenghapusanController@create')->name('pembukuan.penghapusan.create');

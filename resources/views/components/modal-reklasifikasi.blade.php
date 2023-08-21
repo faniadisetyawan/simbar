@@ -6,7 +6,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
       </div>
 
-      <form action="{{ route('pembukuan.perolehan.store', $slug) }}" method="post" class="tablelist-form">
+      <form action="{{ route('pembukuan.reklasifikasi.store') }}" method="post" class="tablelist-form">
         @csrf
 
         <input type="hidden" name="_method" value="POST" />
@@ -14,7 +14,6 @@
         <input type="hidden" name="no_dokumen" />
         <input type="hidden" name="tgl_dokumen" />
         <input type="hidden" name="uraian_dokumen" />
-        <input type="hidden" name="bidang_id" />
 
         <div class="modal-body" id="modal-container">
           <div class="row mb-3">
@@ -40,11 +39,11 @@
             <div class="col-sm-8">
               <select name="barang_id" class="form-control js-example-basic-single-modal">
                 <option></option>
-                @foreach ($appMasterPersediaan as $group)
-                <optgroup label="{{ $group['key'] }}">
-                  @foreach ($group['data'] as $item)
-                  <option value="{{ $item['id'] }}" @if(old('barang_id') === $item['id']) @endif>
-                    {{ $item['kode_barang'] . '.' . $item['kode_register']. ' ' . $item['nama_barang'] . ' ' . $item['spesifikasi'] . ', @' . $item['satuan'] }}
+                @foreach ($appMasterPersediaanGroupMutasi as $group)
+                <optgroup label="{{ $group->key->kode . ' ' . $group->key->uraian }}">
+                  @foreach ($group->data as $item)
+                  <option value="{{ $item->id }}" @if(old('barang_id') == $item->id) selected @endif>
+                    {{ $item->kode_register . ' ' . $item->nama_barang . ' ' . $item->spesifikasi . ', Stok : ' . $item->stok . ' ' . $item->satuan }}
                   </option>
                   @endforeach
                 </optgroup>
@@ -57,18 +56,6 @@
             <label class="col-sm-4 col-form-label">Jumlah Barang <code>*</code></label>
             <div class="col-sm-8">
               <input type="number" name="jumlah_barang" class="form-control" value="{{ old('jumlah_barang') }}" min="0" />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <label class="col-sm-4 col-form-label">Nilai Perolehan <code>*</code></label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <span class="input-group-text">Rp</span>
-                <input type="text" id="cleaveNilaiPerolehan" class="form-control" value="{{ old('nilai_perolehan') }}" min="0" />
-                <input type="hidden" name="nilai_perolehan" class="form-control" value="{{ old('nilai_perolehan') }}" />
-              </div>
-              <div class="form-text">Masukkan nilai total barang, harga satuan akan terhitung otomatis setelah anda submit data ini</div>
             </div>
           </div>
 
@@ -90,16 +77,15 @@
   </div>
 </div>
 
-@push('scripts-modal-perolehan')
+@push('scripts-modal-reklasifikasi')
 <script>
   const formElem = jQuery('#formModal');
 
-  const openFormModal = ({ slug, data, doc }) => {
+  const openFormModal = ({ data, doc }) => {
     formElem.find('[name="kode_jenis_dokumen"]').val(doc.kode_jenis_dokumen);
     formElem.find('[name="no_dokumen"]').val(doc.no_dokumen);
     formElem.find('[name="tgl_dokumen"]').val(doc.tgl_dokumen);
     formElem.find('[name="uraian_dokumen"]').val(doc.uraian_dokumen);
-    formElem.find('[name="bidang_id"]').val(doc.bidang_id);
 
     if (!!data) {
       formElem.find('[name="_method"]').val('PUT');
@@ -107,8 +93,6 @@
       formElem.find('[name="tgl_pembukuan"]').attr('data-deafult-date', data.tgl_pembukuan);
       formElem.find('[name="barang_id"]').val(data.barang_id).change();
       formElem.find('[name="jumlah_barang"]').val(data.jumlah_barang);
-      formElem.find('#cleaveNilaiPerolehan').val(data.nilai_perolehan);
-      formElem.find('[name="nilai_perolehan"]').val(data.nilai_perolehan);
       formElem.find('[name="keterangan"]').val(data.keterangan);
       formElem.find('[type="submit"]').html('Update');
     } else {
@@ -117,9 +101,9 @@
     }
 
     let url = !!data ? 
-      `{{ url('pembukuan/perolehan/${slug}/barang/${data.id}') }}` 
+      `{{ url('pembukuan/reklasifikasi/barang/${data.id}') }}` 
       : 
-      `{{ route('pembukuan.perolehan.store', "${slug}") }}`;
+      `{{ route('pembukuan.reklasifikasi.store') }}`;
     formElem.find('form').attr('action', url);
 
     formElem.modal('show');
