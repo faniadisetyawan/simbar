@@ -92,21 +92,18 @@ trait MutasiTraits
             }
         }
 
+        $index = 0;
         $startRow = 0;
         $endRow = 0;
-        foreach ($arrayMutasiKurang as $key => $mutasi) {
-            $usedBy = $key + 1;
+        while ($index < count($arrayMutasiKurang)) {
+            $endRow += $arrayMutasiKurang[$index]->jumlah_barang;
 
-            if ($key === 0) {
-                $endRow = $mutasi->jumlah_barang;
-            } else {
-                $endRow = $arrayMutasiKurang[$key - 1]->jumlah_barang + $arrayMutasiKurang[$key]->jumlah_barang;
-            }
-
-            for ($i=$startRow; $i < $endRow; $i++) { 
-                $breakdown[$i]->used = $usedBy;
+            for ($i=$startRow; $i <= $endRow - 1; $i++) {
+                $breakdown[$i]->used = $index + 1;
                 $startRow++;
             }
+
+            $index++;
         }
 
         $data = [];

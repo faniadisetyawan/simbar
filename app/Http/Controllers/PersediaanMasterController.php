@@ -112,6 +112,8 @@ class PersediaanMasterController extends Controller
             $master = PersediaanMaster::findOrFail($barangId);
             $data = $this->logMutasiTrait($tglPembukuan, $barangId);
 
+            // return response()->json($data);
+
             return Pdf::loadView('laporan.pdf.kartu-persediaan', [
                 'pageTitle' => $this->pageTitle,
                 'tglPembukuan' => $tglPembukuan,
