@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Pembukuan;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Traits\MutasiTraits;
 use App\MutasiKurang;
 use App\DokumenUpload;
 
 class PenghapusanController extends Controller
 {
+    use MutasiTraits;
+
     private $pageTitle;
     private $kodePembukuan;
 
@@ -65,7 +68,7 @@ class PenghapusanController extends Controller
                 'uraian_dokumen' => $findDoc['uraian_dokumen'],
                 'bidang_id' => $findDoc['bidang_id'],
                 'bidang' => $findDoc['bidang'],
-                'total' => collect($item)->sum('jumlah_barang'),
+                'total' => collect($item)->sum('nilai_perolehan'),
                 'data' => $item,
             ];
         })->values();
@@ -98,11 +101,17 @@ class PenghapusanController extends Controller
             'jumlah_barang' => ['required', 'gt:0'],
             'keterangan' => ['nullable'],
         ]);
+
+        $hargaSatuan = $this->currentPrice($validated['barang_id']);
+        $nilaiPerolehan = $validated['jumlah_barang'] * $hargaSatuan;
+
         $validated['kode_pembukuan'] = '14';
         $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
+        $validated['harga_satuan'] = $hargaSatuan;
+        $validated['nilai_perolehan'] = $nilaiPerolehan;
         $validated['created_by'] = auth()->id();
         $validated['updated_by'] = auth()->id();
-
+        
         MutasiKurang::create($validated);
 
         return redirect()->route('pembukuan.penghapusan.showByDocs', $validated['slug_dokumen'])->with('success', 'Data berhasil ditambahkan.');

@@ -117,7 +117,7 @@
                     <td>
                       <div class="d-flex align-items-center">
                         @if (isset($item['foto']))
-                          <img src="{{ asset('assets/images/users/' . $item['foto']) }}" class="avatar-xs rounded-circle me-2" alt="" />
+                          <img src="{{ asset('storage/users/' . $item['foto']) }}" class="avatar-xs rounded-circle me-2" alt="" style="object-fit: cover; object-position: center center;" />
                         @else
                           <div class="flex-shrink-0 avatar-xs me-2">
                             <div class="avatar-title bg-success-subtle text-success rounded-circle fs-13">

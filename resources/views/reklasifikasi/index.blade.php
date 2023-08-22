@@ -101,6 +101,7 @@
               <th scope="col">Spesifikasi Lainnya</th>
               <th scope="col" class="text-end">Jumlah Barang</th>
               <th scope="col">Satuan</th>
+              <th scope="col" class="text-end">Nilai Perolehan</th>
               <th scope="col">Tgl. Pembukuan</th>
             </tr>
           </thead>
@@ -116,7 +117,7 @@
                     <i class="ri-arrow-right-line align-middle"></i>
                   </a>
                 </td>
-                <td colspan="5">
+                <td colspan="7">
                   <a href="{{ $detailUrl }}" class="link-primary">
                     <div class="d-flex align-items-center">
                       <h6 class="my-0">{{ $doc['no_dokumen'] . ' - ' }}</h6>
@@ -127,9 +128,8 @@
                   </a>
                 </td>
                 <td class="text-end">
-                  <h6 class="my-0 fw-bold text-primary">{{ $doc['total'] }}</h6>
+                  <h6 class="my-0 fw-bold text-primary">{{ number_format($doc['total'], 0, ',', '.') }}</h6>
                 </td>
-                <td></td>
                 <td></td>
               </tr>
 
@@ -143,6 +143,7 @@
                 <td>{{ $item['master_persediaan']['spesifikasi'] }}</td>
                 <td class="text-end">{{ $item['jumlah_barang'] }}</td>
                 <td>{{ $item['master_persediaan']['satuan'] }}</td>
+                <td class="text-end">{{ number_format($item['nilai_perolehan'], 0, ',', '.') }}</td>
                 <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
               </tr>
               @endforeach

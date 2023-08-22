@@ -33,12 +33,51 @@ class StockOpnameController extends Controller
             'search' => $request->query('search'),
         ];
 
-        $data = [];
+        $query = PersediaanOpname::query();
+        $query->with(['master_persediaan.kodefikasi']);
+        $query->orderBy('tgl_pembukuan', 'DESC');
+        $paginator = $query->paginate(25);
+
+        $collections = [];
+        foreach ($paginator as $item) {
+            $collection = collect($item);
+            $filtered = $collection->only([
+                'id',
+                'tgl_pembukuan',
+                'no_dokumen',
+                'slug_dokumen',
+                'barang_id',
+                'master_persediaan',
+                'jumlah_barang',
+                'keterangan',
+                'created_at',
+            ]);
+            array_push($collections, $filtered);
+        }
+
+        $grouped = collect($collections)->groupBy('slug_dokumen')->map(function ($item, $key) {
+            $findDoc = PersediaanOpname::where('slug_dokumen', $key)->first();
+
+            return [
+                'kode_pembukuan' => $findDoc['kode_pembukuan'],
+                'kode_perolehan' => $findDoc['kode_perolehan'],
+                'kode_jenis_dokumen' => $findDoc['kode_jenis_dokumen'],
+                'no_dokumen' => $findDoc['no_dokumen'],
+                'slug_dokumen' => $findDoc['slug_dokumen'],
+                'tgl_dokumen' => $findDoc['tgl_dokumen'],
+                'uraian_dokumen' => $findDoc['uraian_dokumen'],
+                'bidang_id' => $findDoc['bidang_id'],
+                'bidang' => $findDoc['bidang'],
+                'total' => collect($item)->sum('jumlah_barang'),
+                'data' => $item,
+            ];
+        })->values();
 
         return view('stock-opname.index', [
             'pageTitle' => $this->pageTitle,
             'filter' => $filter,
-            'data' => $data,
+            'paginator' => $paginator,
+            'data' => $grouped,
         ]);
     }
 

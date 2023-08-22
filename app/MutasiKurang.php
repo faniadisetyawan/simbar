@@ -38,6 +38,11 @@ class MutasiKurang extends Model
         return $this->belongsTo('App\Pembukuan', 'kode_pembukuan');
     }
 
+    public function jenis_dokumen() 
+    {
+        return $this->belongsTo('App\RefJenisDokumen', 'kode_jenis_dokumen');
+    }
+
     public function bidang() 
     {
         return $this->belongsTo('App\Bidang', 'bidang_id')->withTrashed();

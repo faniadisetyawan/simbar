@@ -137,13 +137,13 @@
                 </div>
               </li>
               <li class="nav-item">
-                <a href="{{ url('pembukuan/reklasifikasi') }}" class="nav-link {{ Request::is('pembukuan/reklasifikasi*') ? "active" : "" }}">Reklasifikasi</a>
+                <a href="{{ route('pembukuan.reklasifikasi.index') }}" class="nav-link {{ Request::is('pembukuan/reklasifikasi*') ? "active" : "" }}">Reklasifikasi</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('pembukuan/penghapusan') }}" class="nav-link {{ Request::is('pembukuan/penghapusan*') ? "active" : "" }}">Penghapusan</a>
+                <a href="{{ route('pembukuan.penghapusan.index') }}" class="nav-link {{ Request::is('pembukuan/penghapusan*') ? "active" : "" }}">Penghapusan</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('pembukuan/stock-opname') }}" class="nav-link {{ Request::is('pembukuan/stock-opname*') ? "active" : "" }}">Stock Opname</a>
+                <a href="{{ route('pembukuan.stock-opname.index') }}" class="nav-link {{ Request::is('pembukuan/stock-opname*') ? "active" : "" }}">Stock Opname</a>
               </li>
             </ul>
           </div>
@@ -207,34 +207,31 @@
                 <div id="laporanPerolehan" class="menu-dropdown collapse {{ Request::is('laporan/perolehan*') ? "show" : "" }}">
                   <ul class="nav nav-sm flex-column">
                     <li class="nav-item">
-                      <a href="{{ url('laporan/perolehan/pengadaan') }}" class="nav-link {{ Request::is('laporan/perolehan/pengadaan*') ? "active" : "" }}">Pengadaan</a>
+                      <a href="{{ route('laporan.perolehan', 'pengadaan') }}" class="nav-link {{ Request::is('laporan/perolehan/pengadaan*') ? "active" : "" }}">Pengadaan</a>
                     </li>
                     <li class="nav-item">
-                      <a href="{{ url('laporan/perolehan/hibah') }}" class="nav-link {{ Request::is('laporan/perolehan/hibah*') ? "active" : "" }}">Hibah</a>
+                      <a href="{{ route('laporan.perolehan', 'hibah') }}" class="nav-link {{ Request::is('laporan/perolehan/hibah*') ? "active" : "" }}">Hibah</a>
                     </li>
                   </ul>
                 </div>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/reklasifikasi') }}" class="nav-link">Laporan Reklasifikasi</a>
+                <a href="{{ route('laporan.reklasifikasi') }}" class="nav-link {{ Request::is('laporan/reklasifikasi*') ? "active" : "" }}">Laporan Reklasifikasi</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penghapusan') }}" class="nav-link">Laporan Penghapusan</a>
+                <a href="{{ route('laporan.penghapusan') }}" class="nav-link {{ Request::is('laporan/penghapusan*') ? "active" : "" }}">Laporan Penghapusan</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/stock-opname') }}" class="nav-link">Laporan Stock Opname</a>
+                <a href="{{ route('laporan.stock-opname') }}" class="nav-link {{ Request::is('laporan/stock-opname*') ? "active" : "" }}">Laporan Stock Opname</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/penyaluran') }}" class="nav-link">Laporan Penyaluran</a>
+                <a href="{{ route('laporan.penyaluran') }}" class="nav-link {{ Request::is('laporan/penyaluran*') ? "active" : "" }}">Laporan Penyaluran</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/persediaan-rusak') }}" class="nav-link">Laporan Persediaan Rusak</a>
+                <a href="{{ route('laporan.kartu-persediaan') }}" class="nav-link {{ Request::is('laporan/kartu-persediaan*') ? "active" : "" }}">Kartu Barang Persediaan</a>
               </li>
               <li class="nav-item">
-                <a href="{{ url('/laporan/kartu-persediaan') }}" class="nav-link {{ Request::is('laporan/kartu-persediaan*') ? "active" : "" }}">Kartu Barang Persediaan</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ url('/laporan/mutasi-persediaan') }}" class="nav-link {{ Request::is('laporan/mutasi-persediaan*') ? "active" : "" }}">Mutasi Persediaan</a>
+                <a href="{{ route('laporan.mutasi-persediaan') }}" class="nav-link {{ Request::is('laporan/mutasi-persediaan*') ? "active" : "" }}">Mutasi Persediaan</a>
               </li>
               <li class="nav-item">
                 <a href="{{ url('/laporan/usulan') }}" class="nav-link">Laporan Usulan</a>

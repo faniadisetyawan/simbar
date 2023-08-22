@@ -106,6 +106,50 @@
             </tr>
           </thead>
           <tbody>
+            @foreach ($data as $doc)
+              @php
+                $detailUrl = route('pembukuan.stock-opname.showByDocs', [$doc['slug_dokumen']]);
+              @endphp
+
+              <tr class="table-active fw-bold">
+                <td class="text-center">
+                  <a href="{{ $detailUrl }}" class="link-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Selengkapnya">
+                    <i class="ri-arrow-right-line align-middle"></i>
+                  </a>
+                </td>
+                <td colspan="5">
+                  <a href="{{ $detailUrl }}" class="link-primary">
+                    <div class="d-flex align-items-center">
+                      <h6 class="my-0">{{ $doc['no_dokumen'] . ' - ' }}</h6>
+                      <span class="ms-2 d-flex align-items-center">
+                        <i class="ri-calendar-line me-2"></i>{{ date('M d, Y', strtotime($doc['tgl_dokumen'])) }}
+                      </span>
+                    </div>
+                  </a>
+                </td>
+                <td class="text-end">
+                  <h6 class="my-0 fw-bold text-primary">{{ $doc['total'] }}</h6>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              @foreach ($doc['data'] as $item)
+              <tr>
+                <td class="text-center"></td>
+                <td>{{ $item['master_persediaan']['kode_barang'] }}</td>
+                <td>{{ $item['master_persediaan']['kodefikasi']['uraian'] }}</td>
+                <td>{{ $item['master_persediaan']['kode_register'] }}</td>
+                <td>{{ $item['master_persediaan']['nama_barang'] }}</td>
+                <td>{{ $item['master_persediaan']['spesifikasi'] }}</td>
+                <td class="text-end">{{ $item['jumlah_barang'] }}</td>
+                <td>{{ $item['master_persediaan']['satuan'] }}</td>
+                <td class="text-end">{{ $item['keterangan'] }}</td>
+                <td style="white-space: nowrap;">{{ date('d M, Y', strtotime($item['tgl_pembukuan'])) }}</td>
+              </tr>
+              @endforeach
+            @endforeach
           </tbody>
         </table>
 

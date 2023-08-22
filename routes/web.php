@@ -138,6 +138,10 @@ Route::get('/usulan', 'UsulanController@index');
 
 Route::group(['prefix' => 'laporan', 'middleware' => 'auth'], function () {
     Route::get('/perolehan/{slug}', 'MutasiController@perolehan')->name('laporan.perolehan');
+    Route::get('/reklasifikasi', 'MutasiController@reklasifikasi')->name('laporan.reklasifikasi');
+    Route::get('/penghapusan', 'MutasiController@penghapusan')->name('laporan.penghapusan');
+    Route::get('/stock-opname', 'MutasiController@stockOpname')->name('laporan.stock-opname');
+    Route::get('/penyaluran', 'MutasiController@penyaluran')->name('laporan.penyaluran');
     Route::get('/kartu-persediaan', 'MutasiController@kartuPersediaan')->name('laporan.kartu-persediaan');
     Route::get('/mutasi-persediaan', 'MutasiController@index')->name('laporan.mutasi-persediaan');
 });

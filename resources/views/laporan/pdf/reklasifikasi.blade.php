@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Laporan Perolehan {{ $pageTitle }}</title>
+  <title>Laporan {{ $pageTitle }}</title>
   <style>
     html, body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -30,7 +30,7 @@
 </head>
 <body>
   <div class="text-center" style="margin-bottom: 3rem;">
-    <h2 style="margin-bottom: 0px;">LAPORAN {{ strtoupper($pageTitle) }}</h2>
+    <h2 style="margin-bottom: 0px;">LAPORAN {{ strtoupper($pageTitle) }} PERSEDIAAN RUSAK BERAT ATAU USANG</h2>
     <small>per {{ date('d M, Y', strtotime($tglPembukuan)) }}</small>
   </div>
 

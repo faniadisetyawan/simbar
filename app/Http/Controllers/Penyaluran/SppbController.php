@@ -156,6 +156,9 @@ class SppbController extends Controller
                 return redirect()->back()->withErrors(['message' => 'Jumlah barang usulan SPB tidak boleh melebihi sisa stok barang.']);
             }
 
+            $hargaSatuan = $this->currentPrice($allRequests['barang_id'][$i]);
+            $nilaiPerolehan = $jumlahBarangUsulan * $hargaSatuan;
+
             $data[] = [
                 'kode_pembukuan' => '31',
                 'tgl_pembukuan' => $allRequests['tgl_pembukuan'],
@@ -167,8 +170,8 @@ class SppbController extends Controller
                 'bidang_id' => $allRequests['bidang_id'][$i],
                 'barang_id' => $allRequests['barang_id'][$i],
                 'jumlah_barang' => $jumlahBarangUsulan,
-                'harga_satuan' => 0,
-                'nilai_perolehan' => 0,
+                'harga_satuan' => $hargaSatuan,
+                'nilai_perolehan' => $nilaiPerolehan,
                 'saldo_jumlah_barang' => 0,
                 'saldo_harga_satuan' => 0,
                 'saldo_nilai_perolehan' => 0,
