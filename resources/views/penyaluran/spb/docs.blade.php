@@ -52,10 +52,12 @@
             <h5 class="card-title flex-grow-1 mb-0">
               <i class="mdi mdi-file-document-outline align-middle me-1 text-muted"></i> Dokumen
             </h5>
-            <div class="flex-shrink-0">
-              <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Edit</a>
-              <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a>
-            </div>
+            @if (auth()->user()->role_id !== 4)
+              <div class="flex-shrink-0">
+                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Edit</a>
+                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a>
+              </div>
+            @endif
           </div>
         </div>
         <div class="card-body">
@@ -103,18 +105,20 @@
                 </a>
               @endif
             </div>
-            <div class="my-2 border border-dashed"></div>
 
-            <div class="d-grid">
-              <button type="button" class="btn btn-success btn-label btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                <div class="d-flex">
-                  <div class="flex-shrink-0">
-                    <i class="ri-upload-line label-icon align-middle fs-16 me-2"></i>
+            @if (auth()->user()->role_id !== 4)
+              <div class="my-2 border border-dashed"></div>
+              <div class="d-grid">
+                <button type="button" class="btn btn-success btn-label btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <i class="ri-upload-line label-icon align-middle fs-16 me-2"></i>
+                    </div>
+                    <div class="flex-grow-1">Upload Dokumen</div>
                   </div>
-                  <div class="flex-grow-1">Upload Dokumen</div>
-                </div>
-              </button>
-            </div>
+                </button>
+              </div>
+            @endif
           </div>
         </div>
       </div>

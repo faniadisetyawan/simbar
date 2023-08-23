@@ -48,12 +48,15 @@
           </a>
           <div class="collapse menu-dropdown {{ Request::is('master*') ? "show" : "" }}" id="masterData">
             <ul class="nav nav-sm flex-column">
-              <li class="nav-item">
-                <a href="{{ route('master.bidang.index') }}" class="nav-link {{ Request::is('master/bidang*') ? "active" : "" }}">Bidang</a>
-              </li>
-              <li class="nav-item">
-                <a href="{{ route('master.users.index') }}" class="nav-link {{ Request::is('master/users*') ? "active" : "" }}">Users</a>
-              </li>
+              @if (auth()->user()->role_id !== 4)
+                <li class="nav-item">
+                  <a href="{{ route('master.bidang.index') }}" class="nav-link {{ Request::is('master/bidang*') ? "active" : "" }}">Bidang</a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('master.users.index') }}" class="nav-link {{ Request::is('master/users*') ? "active" : "" }}">Users</a>
+                </li>
+              @endif
+
               <li class="nav-item">
                 <a href="{{ route('master.persediaan.index') }}" class="nav-link {{ Request::is('master/persediaan*') ? "active" : "" }}">Persediaan</a>
               </li>

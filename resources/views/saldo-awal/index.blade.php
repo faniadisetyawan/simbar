@@ -36,21 +36,23 @@
                 <h5 class="card-title mb-0">Saldo Awal {{ $pageTitle }}</h5>
               </div>
             </div>
-            <div class="col-sm-auto">
-              <div class="d-flex flex-wrap align-items-start gap-2">
-                @if ($slug == 'persediaan')
-                  <a href="{{ route('pembukuan.saldo-awal.create', $slug) }}" class="btn btn-success add-btn waves-effect">
-                    <i class="ri-add-line align-bottom me-1"></i> Tambah
-                  </a>
-                @endif
+            @if (auth()->user()->role_id !== 4)
+              <div class="col-sm-auto">
+                <div class="d-flex flex-wrap align-items-start gap-2">
+                  @if ($slug == 'persediaan')
+                    <a href="{{ route('pembukuan.saldo-awal.create', $slug) }}" class="btn btn-success add-btn waves-effect">
+                      <i class="ri-add-line align-bottom me-1"></i> Tambah
+                    </a>
+                  @endif
 
-                @if ($slug !== 'aset-lain')
-                  <button type="button" class="btn btn-info waves-effect" data-bs-toggle="modal" data-bs-target="#importModal">
-                    <i class="ri-upload-line align-bottom me-1"></i> Import
-                  </button>
-                @endif
+                  @if ($slug !== 'aset-lain')
+                    <button type="button" class="btn btn-info waves-effect" data-bs-toggle="modal" data-bs-target="#importModal">
+                      <i class="ri-upload-line align-bottom me-1"></i> Import
+                    </button>
+                  @endif
+                </div>
               </div>
-            </div>
+            @endif
           </div>
         </div>
 

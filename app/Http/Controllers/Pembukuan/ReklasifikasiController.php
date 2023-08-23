@@ -21,6 +21,8 @@ class ReklasifikasiController extends Controller
     {
         $this->pageTitle = 'Reklasifikasi';
         $this->kodePembukuan = '06';
+
+        $this->middleware('role:1,2,3', ['except' => ['index', 'showByDocs']]);
     }
 
     public function index(Request $request)

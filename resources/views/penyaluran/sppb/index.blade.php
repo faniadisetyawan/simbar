@@ -35,13 +35,15 @@
                 <h5 class="card-title mb-0">Daftar {{ $pageTitle }}</h5>
               </div>
             </div>
-            <div class="col-sm-auto">
-              <div class="d-flex gap-2 flex-wrap">
-                <a href="{{ route('penyaluran.sppb.create') }}" class="btn btn-success add-btn waves-effect">
-                  <i class="ri-add-line align-bottom me-1"></i> Tambah
-                </a>
+            @if (auth()->user()->role_id !== 4)
+              <div class="col-sm-auto">
+                <div class="d-flex gap-2 flex-wrap">
+                  <a href="{{ route('penyaluran.sppb.create') }}" class="btn btn-success add-btn waves-effect">
+                    <i class="ri-add-line align-bottom me-1"></i> Tambah
+                  </a>
+                </div>
               </div>
-            </div>
+            @endif
           </div>
         </div>
         <div class="card-body bg-light-subtle">

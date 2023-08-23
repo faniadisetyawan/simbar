@@ -57,10 +57,12 @@
             <h5 class="card-title flex-grow-1 mb-0">
               <i class="mdi mdi-file-document-outline align-middle me-1 text-muted"></i> Dokumen
             </h5>
-            <div class="flex-shrink-0">
-              <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Edit</a>
-              <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a>
-            </div>
+            @if (auth()->user()->role_id !== 4)
+              <div class="flex-shrink-0">
+                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Edit</a>
+                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a>
+              </div>
+            @endif
           </div>
         </div>
         <div class="card-body">
@@ -102,18 +104,20 @@
                 </a>
               @endif
             </div>
-            <div class="my-2 border border-dashed"></div>
 
-            <div class="d-grid">
-              <button type="button" class="btn btn-success btn-label btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#uploadModal">
-                <div class="d-flex">
-                  <div class="flex-shrink-0">
-                    <i class="ri-upload-line label-icon align-middle fs-16 me-2"></i>
+            @if (auth()->user()->role_id !== 4)
+              <div class="my-2 border border-dashed"></div>
+              <div class="d-grid">
+                <button type="button" class="btn btn-success btn-label btn-sm waves-effect" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                  <div class="d-flex">
+                    <div class="flex-shrink-0">
+                      <i class="ri-upload-line label-icon align-middle fs-16 me-2"></i>
+                    </div>
+                    <div class="flex-grow-1">Upload Dokumen</div>
                   </div>
-                  <div class="flex-grow-1">Upload Dokumen</div>
-                </div>
-              </button>
-            </div>
+                </button>
+              </div>
+            @endif
           </div>
         </div>
       </div>
@@ -124,11 +128,13 @@
         <div class="card-header">
           <div class="d-flex align-items-center">
             <h5 class="card-title flex-grow-1 mb-0">Daftar Barang</h5>
-            <div class="flex-shrink-0">
-              <button type="button" class="btn btn-success btn-sm waves-effect" onclick="openFormModal({ data: null, doc: {{ json_encode($data) }} })">
-                <i class="ri-add-fill align-middle me-1"></i> Tambah
-              </button>
-            </div>
+            @if (auth()->user()->role_id !== 4)
+              <div class="flex-shrink-0">
+                <button type="button" class="btn btn-success btn-sm waves-effect" onclick="openFormModal({ data: null, doc: {{ json_encode($data) }} })">
+                  <i class="ri-add-fill align-middle me-1"></i> Tambah
+                </button>
+              </div>
+            @endif
           </div>
         </div>
         <div class="card-body">
@@ -150,17 +156,19 @@
                 @foreach ($data['data'] as $item)
                 <tr>
                   <td class="text-center">
-                    <a href="javascript: void(0);" class="link-danger fs-15" 
-                      data-bs-toggle="tooltip"
-                      title="Hapus"
-                      onclick="handleDestroy({{ $item }})"
-                    >
-                      <i class="ri-delete-bin-line"></i>
-                    </a>
-                    <form id="formDestroy-{{ $item['id'] }}" action="{{ route('pembukuan.reklasifikasi.destroyBarang', $item['id']) }}" method="post">
-                      @csrf
-                      @method('DELETE')
-                    </form>
+                    @if (auth()->user()->role_id !== 4)
+                      <a href="javascript: void(0);" class="link-danger fs-15" 
+                        data-bs-toggle="tooltip"
+                        title="Hapus"
+                        onclick="handleDestroy({{ $item }})"
+                      >
+                        <i class="ri-delete-bin-line"></i>
+                      </a>
+                      <form id="formDestroy-{{ $item['id'] }}" action="{{ route('pembukuan.reklasifikasi.destroyBarang', $item['id']) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                      </form>
+                    @endif
                   </td>
                   <td>
                     <h5 class="fs-15">{{ $item['master_persediaan']['kode_barang'] }}</h5>

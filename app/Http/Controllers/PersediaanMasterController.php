@@ -18,7 +18,7 @@ class PersediaanMasterController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('role:1,2,3', ['except' => ['index']]);
     }
 
     public function index(Request $request)

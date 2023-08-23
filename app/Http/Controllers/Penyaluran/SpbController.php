@@ -20,6 +20,8 @@ class SpbController extends Controller
     public function __construct() 
     {
         $this->pageTitle = 'Surat Permintaan Barang';
+
+        $this->middleware('role:1,2,3', ['except' => ['index', 'showByDocs']]);
     }
 
     private function _getNotaPermintaanGroupByDate($tglPembukuan) 

@@ -9,6 +9,11 @@ use Storage;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:1,2,3', ['only' => ['index']]);
+    }
+    
     public function index(Request $request)
     {
         $search = $request->query('search');

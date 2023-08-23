@@ -20,6 +20,8 @@ class PenghapusanController extends Controller
     {
         $this->pageTitle = 'Penghapusan';
         $this->kodePembukuan = '14';
+
+        $this->middleware('role:1,2,3', ['except' => ['index', 'showByDocs']]);
     }
 
     public function index(Request $request) 

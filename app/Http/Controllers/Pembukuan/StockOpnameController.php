@@ -25,6 +25,8 @@ class StockOpnameController extends Controller
         $this->pageTitle = 'Stock Opname';
         $this->kodePembukuan = '32';
         $this->kodeJenisDokumen = '99';
+
+        $this->middleware('role:1,2,3', ['except' => ['index', 'showByDocs']]);
     }
 
     public function index(Request $request) 

@@ -22,6 +22,8 @@ class SppbController extends Controller
     public function __construct() 
     {
         $this->pageTitle = 'Surat Perintah Penyaluran Barang (SPPB)';
+
+        $this->middleware('role:1,2,3', ['except' => ['index', 'showByDocs']]);
     }
 
     private function _getSpbGroupByDate($tglPembukuan) 

@@ -25,6 +25,16 @@
       </div>
     </div>
 
+    @if($errors->any())
+      {!! implode('', $errors->all('
+        <div class="alert alert-danger alert-border-left alert-dismissible fade show" role="alert">
+          <i class="ri-error-warning-line me-3 align-middle fs-16"></i><strong>Error</strong>
+          - :message
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      ')) !!}
+    @endif
+
     <div class="col-12">
       <form action="{{ route('penyaluran.nota-permintaan.store') }}" method="POST">
         @csrf

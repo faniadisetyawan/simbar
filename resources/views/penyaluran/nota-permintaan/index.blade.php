@@ -79,7 +79,7 @@
                   <select name="bidang_id" class="form-select bg-light border-light">
                     <option value="">Select</option>
                     @foreach ($appBidang as $item)
-                    <option value="{{ $item->id }}" @if($filter['bidang_id'] == $item['id']) selected @endif>{{ $item->id . '. ' . $item->nama }}</option>
+                    <option value="{{ $item->id }}" @if($filter['bidang_id'] == $item['id'] || auth()->user()->bidang_id == $item['id']) selected @endif>{{ $item->id . '. ' . $item->nama }}</option>
                     @endforeach
                   </select>
                 </div>

@@ -24,6 +24,11 @@ class SaldoAwalController extends Controller
 {
     use ProviderTraits;
 
+    public function __construct()
+    {
+        $this->middleware('role:1,2,3', ['except' => ['index']]);
+    }
+
     public function index(Request $request, $slug) 
     {
         $search = $request->query('search');
