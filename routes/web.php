@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('storage-link', function (){
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    echo 'ok';
+});
+
 Route::get('/', function () {
     return redirect('/dashboard');
 });
