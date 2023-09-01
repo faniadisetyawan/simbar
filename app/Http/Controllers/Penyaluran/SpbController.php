@@ -239,4 +239,18 @@ class SpbController extends Controller
             'data' => $grouped,
         ]);
     }
+
+    public function updateDoc(Request $request, $docSlug) 
+    {
+        $validated = $request->validate([
+            'no_dokumen' => ['required'],
+            'tgl_dokumen' => ['required', 'date'],
+            'uraian_dokumen' => ['nullable'],
+        ]);
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
+
+        Penyaluran::where('slug_dokumen', $docSlug)->where('kode_jenis_dokumen', '09')->update($validated);
+
+        return redirect()->route('penyaluran.spb.showByDocs', $validated['slug_dokumen'])->with('success', 'Dokumen berhasil diupdate.');
+    }
 }

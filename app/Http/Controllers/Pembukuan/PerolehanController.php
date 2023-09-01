@@ -259,4 +259,28 @@ class PerolehanController extends Controller
 
         return redirect()->back()->with('success', 'Dokumen berhasil diupload.');
     }
+
+    public function updateDoc(Request $request, $slug, $docSlug) 
+    {
+        $validated = $request->validate([
+            'no_dokumen' => ['required'],
+            'tgl_dokumen' => ['required', 'date'],
+            'uraian_dokumen' => ['nullable'],
+        ]);
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
+
+        $kodePerolehan = '';
+        if ($slug === 'pengadaan') {
+            $kodePerolehan = '01';
+        } elseif ($slug === 'hibah') {
+            $kodePerolehan = '02';
+        }
+
+        MutasiTambah::where('kode_pembukuan', '01')
+            ->where('kode_perolehan', $kodePerolehan)
+            ->where('slug_dokumen', $docSlug)
+            ->update($validated);
+
+        return redirect()->route('pembukuan.perolehan.showByDocs', [$slug, $validated['slug_dokumen']])->with('success', 'Dokumen berhasil diupdate.');
+    }
 }

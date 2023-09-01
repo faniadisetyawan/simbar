@@ -77,6 +77,7 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::get('/{slug}/docs/{docSlug}', 'Pembukuan\PerolehanController@showByDocs')->name('pembukuan.perolehan.showByDocs');
         Route::post('/{slug}', 'Pembukuan\PerolehanController@store')->name('pembukuan.perolehan.store');
         Route::put('/{slug}/barang/{id}', 'Pembukuan\PerolehanController@updateBarang')->name('pembukuan.perolehan.updateBarang');
+        Route::put('/{slug}/docs/{docSlug}', 'Pembukuan\PerolehanController@updateDoc')->name('pembukuan.perolehan.updateDoc');
         Route::put('/{slug}/upload', 'Pembukuan\PerolehanController@uploadDokumen')->name('pembukuan.perolehan.uploadDokumen');
         Route::delete('/barang/{id}', 'Pembukuan\PerolehanController@destroyBarang')->name('pembukuan.perolehan.destroyBarang');
     });
@@ -87,6 +88,7 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::get('/docs/{docSlug}', 'Pembukuan\ReklasifikasiController@showByDocs')->name('pembukuan.reklasifikasi.showByDocs');
         Route::post('/', 'Pembukuan\ReklasifikasiController@store')->name('pembukuan.reklasifikasi.store');
         Route::put('/barang/{id}', 'Pembukuan\ReklasifikasiController@updateBarang')->name('pembukuan.reklasifikasi.updateBarang');
+        Route::put('/docs/{docSlug}', 'Pembukuan\ReklasifikasiController@updateDoc')->name('pembukuan.reklasifikasi.updateDoc');
         Route::put('/upload', 'Pembukuan\ReklasifikasiController@uploadDokumen')->name('pembukuan.reklasifikasi.uploadDokumen');
         Route::delete('/barang/{id}', 'Pembukuan\ReklasifikasiController@destroyBarang')->name('pembukuan.reklasifikasi.destroyBarang');
     });
@@ -98,6 +100,7 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::post('/', 'Pembukuan\PenghapusanController@store')->name('pembukuan.penghapusan.store');
         Route::put('/upload', 'Pembukuan\PenghapusanController@uploadDokumen')->name('pembukuan.penghapusan.uploadDokumen');
         Route::put('/barang/{id}', 'Pembukuan\PenghapusanController@updateBarang')->name('pembukuan.penghapusan.updateBarang');
+        Route::put('/docs/{docSlug}', 'Pembukuan\PenghapusanController@updateDoc')->name('pembukuan.penghapusan.updateDoc');
         Route::delete('/{id}', 'Pembukuan\PenghapusanController@destroyBarang')->name('pembukuan.penghapusan.destroyBarang');
     });
 
@@ -107,6 +110,7 @@ Route::group(['prefix' => 'pembukuan', 'middleware' => 'auth'], function () {
         Route::get('/docs/{docSlug}', 'Pembukuan\StockOpnameController@showByDocs')->name('pembukuan.stock-opname.showByDocs');
         Route::post('/store', 'Pembukuan\StockOpnameController@store')->name('pembukuan.stock-opname.store');
         Route::put('/upload', 'Pembukuan\StockOpnameController@uploadDokumen')->name('pembukuan.stock-opname.uploadDokumen');
+        Route::put('/docs/{docSlug}', 'Pembukuan\StockOpnameController@updateDoc')->name('pembukuan.stock-opname.updateDoc');
         Route::delete('/{id}', 'Pembukuan\StockOpnameController@destroyBarang')->name('pembukuan.stock-opname.destroyBarang');
     });
 });
@@ -128,6 +132,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
         Route::get('/docs/{docSlug}', 'Penyaluran\SpbController@showByDocs')->name('penyaluran.spb.showByDocs');
         Route::post('/', 'Penyaluran\SpbController@store')->name('penyaluran.spb.store');
         Route::put('/upload', 'Penyaluran\SpbController@uploadDokumen')->name('penyaluran.spb.uploadDokumen');
+        Route::put('/docs/{docSlug}', 'Penyaluran\SpbController@updateDoc')->name('penyaluran.spb.updateDoc');
         Route::delete('/barang/{id}', 'Penyaluran\SpbController@destroyBarang')->name('penyaluran.spb.destroyBarang');
     });
 
@@ -136,6 +141,7 @@ Route::group(['prefix' => 'penyaluran', 'middleware' => 'auth'], function () {
         Route::get('/create', 'Penyaluran\SppbController@create')->name('penyaluran.sppb.create');
         Route::get('/docs/{docSlug}', 'Penyaluran\SppbController@showByDocs')->name('penyaluran.sppb.showByDocs');
         Route::post('/', 'Penyaluran\SppbController@store')->name('penyaluran.sppb.store');
+        Route::put('/docs/{docSlug}', 'Penyaluran\SppbController@updateDoc')->name('penyaluran.sppb.updateDoc');
     });
 });
 

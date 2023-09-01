@@ -229,4 +229,20 @@ class ReklasifikasiController extends Controller
 
         return redirect()->back()->with('success', 'Dokumen berhasil diupload.');
     }
+
+    public function updateDoc(Request $request, $docSlug) 
+    {
+        $validated = $request->validate([
+            'no_dokumen' => ['required'],
+            'tgl_dokumen' => ['required', 'date'],
+            'uraian_dokumen' => ['nullable'],
+        ]);
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
+
+        MutasiKurang::where('kode_pembukuan', $this->kodePembukuan)
+            ->where('slug_dokumen', $docSlug)
+            ->update($validated);
+
+        return redirect()->route('pembukuan.reklasifikasi.showByDocs', $validated['slug_dokumen'])->with('success', 'Dokumen berhasil diupdate.');
+    }
 }

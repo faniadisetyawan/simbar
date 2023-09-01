@@ -59,8 +59,8 @@
             </h5>
             @if (auth()->user()->role_id !== 4)
               <div class="flex-shrink-0">
-                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Edit</a>
-                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a>
+                <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11" data-bs-toggle="modal" data-bs-target="#editDocModal">Edit</a>
+                {{-- <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a> --}}
               </div>
             @endif
           </div>
@@ -185,6 +185,43 @@
             <div class="hstack gap-2 justify-content-end">
               <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
               <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade zoomIn" id="editDocModal" tabindex="-1" aria-labelledby="editDocModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content border-0">
+        <div class="modal-header p-3 bg-info-subtle">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Dokumen</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+        </div>
+  
+        <form action="{{ route('penyaluran.sppb.updateDoc', $data['slug_dokumen']) }}" method="post" class="tablelist-form">
+          @csrf
+          @method("PUT")
+    
+          <div class="modal-body" id="modal-container">
+            <div class="mb-3">
+              <label class="form-label">No. Dokumen <code>*</code></label>
+              <input type="text" name="no_dokumen" class="form-control" value="{{ $data['no_dokumen'] }}" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tgl. Dokumen <code>*</code></label>
+              <input type="text" name="tgl_dokumen" class="form-control" value="{{ $data['tgl_dokumen'] }}" data-provider="flatpickr" data-date-format="Y-m-d" data-deafult-date="{{ $data['tgl_dokumen'] }}" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Uraian Dokumen</label>
+              <textarea name="uraian_dokumen" class="form-control" rows="3">{{ $data['uraian_dokumen'] }}</textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="hstack gap-2 justify-content-end">
+              <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Update</button>
             </div>
           </div>
         </form>

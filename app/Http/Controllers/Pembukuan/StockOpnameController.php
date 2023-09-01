@@ -200,4 +200,18 @@ class StockOpnameController extends Controller
             'data' => $grouped,
         ]);
     }
+
+    public function updateDoc(Request $request, $docSlug) 
+    {
+        $validated = $request->validate([
+            'no_dokumen' => ['required'],
+            'tgl_dokumen' => ['required', 'date'],
+            'uraian_dokumen' => ['nullable'],
+        ]);
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
+
+        PersediaanOpname::where('slug_dokumen', $docSlug)->update($validated);
+
+        return redirect()->route('pembukuan.stock-opname.showByDocs', $validated['slug_dokumen'])->with('success', 'Dokumen berhasil diupdate.');
+    }
 }

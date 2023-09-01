@@ -194,7 +194,7 @@ class NotaPermintaanController extends Controller
             'tgl_dokumen' => ['required', 'date'],
             'uraian_dokumen' => ['nullable'],
         ]);
-        $validated['slug_dokumen'] = $slug = Str::of($validated['no_dokumen'])->slug('-');
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
 
         Penyaluran::where('slug_dokumen', $docSlug)->where('kode_jenis_dokumen', '08')->update($validated);
 

@@ -59,7 +59,7 @@
             </h5>
             <div class="flex-shrink-0">
               <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11" data-bs-toggle="modal" data-bs-target="#editDocModal">Edit</a>
-              <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a>
+              {{-- <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary fs-11">Hapus</a> --}}
             </div>
           </div>
         </div>

@@ -195,6 +195,7 @@ class SppbController extends Controller
     {
         $query = MutasiKurang::query();
         $query->with(['master_persediaan.kodefikasi', 'get_created_by']);
+        $query->where('kode_pembukuan', '31');
         $query->where('slug_dokumen', $docSlug);
         $results = $query->get();
 
@@ -241,5 +242,19 @@ class SppbController extends Controller
             'pageTitle' => $this->pageTitle,
             'data' => $grouped,
         ]);
+    }
+
+    public function updateDoc(Request $request, $docSlug) 
+    {
+        $validated = $request->validate([
+            'no_dokumen' => ['required'],
+            'tgl_dokumen' => ['required', 'date'],
+            'uraian_dokumen' => ['nullable'],
+        ]);
+        $validated['slug_dokumen'] = Str::of($validated['no_dokumen'])->slug('-');
+
+        MutasiKurang::where('kode_pembukuan', '31')->where('slug_dokumen', $docSlug)->update($validated);
+
+        return redirect()->route('penyaluran.sppb.showByDocs', $validated['slug_dokumen'])->with('success', 'Dokumen berhasil diupdate.');
     }
 }
